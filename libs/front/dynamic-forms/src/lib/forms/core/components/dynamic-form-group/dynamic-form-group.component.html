@@ -1,0 +1,29 @@
+<form (ngSubmit)="handleSubmit()" *ngIf="!!form" [formGroup]="form" class="dynamic-form {{ formCssClass }}" novalidate>
+  <div class="row {{ formRowCssClass }}">
+    <ng-container *ngFor="let field of config">
+      <fnx-nx-dynamic-form-control #formGroupEl *ngIf="!!field?.field && !!form.controls[field.field]"
+                                   [dynamicControl]="field" [group]="form"
+                                   [template]="template"
+                                   class="col {{ field?.bodyStyle?.field.styleClass }}">
+      </fnx-nx-dynamic-form-control>
+    </ng-container>
+    <div [ngClass]="{ 'mb-3': !!errorMessages }" class="col-12 position-relative">
+      <app-validation-messages *ngIf="!!validation?.length" [control]="form" [messages]="errorMessages">
+      </app-validation-messages>
+    </div>
+  </div>
+  <ng-container *ngIf="!!showSubmitButton && !!form">
+    <button *ngIf="!submitting; else submittingIndicator" [disabled]="!form.valid" class="btn btn-primary" translate
+            type="submit">
+      {{ submitText || 'שמור' }}
+    </button>
+    <ng-template #submittingIndicator>
+      <button [disabled]="true" class="btn btn-primary">
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </button>
+    </ng-template>
+  </ng-container>
+  <button (click)="cancel()" *ngIf="!!showCancelButton && !!form" class="btn btn-info" translate type="button">
+    {{ cancelText || 'בטל' }}
+  </button>
+</form>

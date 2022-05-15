@@ -1,0 +1,35 @@
+<!--<div class=" flex" *ngIf="pages as pagesVar">-->
+<!--  <div *ngIf="totalRecords>(pageSize*pagesLength)" (click)="carouselRef.prev()"-->
+<!--       class='w-8 h-8 cursor-pointer mr-2 md:mr-0 md:ml-3 ml-3 border-2 bg-white border-prime-blue-30 rounded-full flex items-center justify-around'-->
+<!--       [ngClass]="!startPosition ? 'bg-background-gray cursor-default' : 'bg-white cursor-pointer'">-->
+<!--    &lt;!&ndash;      <app-icon class='h-4 w-4' [customClass]="!startPosition ?'gray': 'transform rotate-180' "&ndash;&gt;-->
+<!--    &lt;!&ndash;        [iconName]="iconClass.chevronRight">&ndash;&gt;-->
+<!--    &lt;!&ndash;      </app-icon>&ndash;&gt;-->
+<!--  </div>-->
+<!--  <owl-carousel-o-->
+<!--    [style.width.px]="(30 + owlOptions.margin)*(pagesVar.length < pagesLength ? pagesVar.length : pagesLength ) "-->
+<!--    [options]="owlOptions" #carouselRef (changed)="handleChange($event)">-->
+<!--    <ng-container *ngFor="let _ of pagesVar; let i = index">-->
+<!--      <ng-template carouselSlide [id]="id(i) " [width]="30 * px">-->
+<!--        <div class='cursor-pointer mt-1.5 md:mx-1 mx-2 caption-1 text-med-gray' (click)="handleIndex(i)">-->
+<!--          <span class='w-8 mx-4' [ngClass]="{'caption-1-bold  text-prime-blue' : i===page} ">{{i + 1}}</span>-->
+<!--        </div>-->
+<!--      </ng-template>-->
+<!--    </ng-container>-->
+<!--  </owl-carousel-o>-->
+<!--  <div *ngIf="totalRecords>(pageSize*pagesLength) && ((pagesVar?.length - pagesLength) >startPosition ) "-->
+<!--       class='w-8 h-8 cursor-pointer mr-2 md:mr-0 md:ml-3 ml-3 border-2 bg-white border-prime-blue-30 rounded-full flex items-center justify-around'-->
+<!--       (click)="carouselRef.next()" [ngClass]="{'bg-white cursor-pointer':true}">-->
+<!--    &lt;!&ndash;      <app-icon class='h-4 w-4' [iconName]="iconClass.chevronLeft"></app-icon>&ndash;&gt;-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; {{ {totalRecords:totalRecords,-->
+<!--    pageSize:pageSize,-->
+<!--    pagesLength:pagesLength,-->
+<!--    pagesVar:pagesVar,-->
+<!--    page:page,-->
+<!--    startPosition:startPosition-->
+<!--  }-->
+<!--  | log-->
+<!-- }} &ndash;&gt;-->
+<!--</div>-->

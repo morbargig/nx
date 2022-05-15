@@ -1,0 +1,35 @@
+<!-- <ng-container [formGroup]="control" *ngIf="!deleted">
+  <button
+    *ngIf="!!config.data?.editMode"
+    class="btn btn-danger btn-delete btn-sm"
+    (click)="deleteGroup(control)"
+    type="button"
+  >
+    <i class="fas fa-minus"></i>
+    <input type="hidden" formControlName="isCustom" />
+  </button>
+  <div class="d-flex align-items-center header">
+    <app-checkbox
+      #checkbox
+      (checkedChange)="toggleAll($event)"
+      [checked]="allChecked$ | async"
+      class="pr-1"
+    ></app-checkbox>
+    <h6 (click)="checkbox.handleClick(true)">{{ config.name }}</h6>
+  </div>
+  <div class="btn-group btn-group-toggle {{ config?.inputStyleClass }}" *ngIf="controlNames">
+    <label
+      [ngClass]="config?.data?.classDictionary[name]"
+      ngbButtonLabel
+      *ngFor="let name of controlNames; let i = index"
+      class="{{ config?.data?.labelClass }}"
+    >
+      <input type="checkbox" (change)="onChange(name, $event.target.checked)" [formControlName]="name" ngbButton />
+      {{ name }}
+
+      <button *ngIf="!!config.data?.editMode" class="btn btn-sm btn-danger" (click)="deleteControl(i)" type="button">
+        <i class="fas fa-minus"></i>
+      </button>
+    </label>
+  </div>
+</ng-container> -->

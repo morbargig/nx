@@ -1,0 +1,14 @@
+<!-- <div
+  class="custom-control custom-radio"
+  *ngFor="let option of !!config.optionsArr$ ? (config.optionsArr$ | async) : config.optionsArr; let i = index"
+>
+  <input
+    type="radio"
+    class="custom-control-input"
+    [value]="option.value"
+    [id]="id + i"
+    [formControl]="control"
+    (change)="!!config.onChange && config.onChange($event, control)"
+  />
+  <label class="custom-control-label" [for]="id + i">{{ option.label }}</label>
+</div> -->

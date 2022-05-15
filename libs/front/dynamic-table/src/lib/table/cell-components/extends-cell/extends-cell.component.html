@@ -1,0 +1,28 @@
+<ng-container *ngIf="!!myValue">
+  <ng-container *ngIf="!col?.data?.title else titleTemp">
+    <div *ngIf="!false as isDesktop ; else iconTemp" class="relative">
+      <div class="absolute" style="margin-top: -55%; margin-right: -50%;">
+        <ng-container [ngTemplateOutletContext]="{ isDesktop: isDesktop }" [ngTemplateOutlet]="iconTemp">
+        </ng-container>
+      </div>
+    </div>
+    <ng-template #iconTemp let-isDesktop="isDesktop">
+      <!--      <app-icon class="flex justify-center items-center rounded-full bg-background-gray" [ngClass]="{-->
+      <!--      'transform rotate-180' : !panelOpenState, -->
+      <!--      'w-10 h-10': isDesktop,-->
+      <!--      'w-6 h-6': !isDesktop-->
+      <!--    }" [iconName]="icon" (click)="togglePanel()"></app-icon>-->
+    </ng-template>
+  </ng-container>
+
+  <ng-template #titleTemp>
+    <div (click)="togglePanel()" class="flex items-center text-caption-1 font-medium text-prime-blue">
+      <div>
+        {{ (col?.data?.title$ |async) || col?.data?.title  }}
+      </div>
+      <!--      <app-icon class="flex mr-1 justify-center max-h-max min-h-min items-center" [ngClass]="{-->
+      <!--      'transform rotate-180' : !panelOpenState-->
+      <!--    }" [iconName]="icon"></app-icon>-->
+    </div>
+  </ng-template>
+</ng-container>

@@ -5,6 +5,8 @@
     "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
     "fnx-nx": "apps/fnx-nx",
-    "fnx-nx-e2e": "apps/fnx-nx-e2e"
+    "fnx-nx-e2e": "apps/fnx-nx-e2e",
+    "front-dynamic-forms": "libs/front/dynamic-forms",
+    "front-dynamic-table": "libs/front/dynamic-table"
   }
 }

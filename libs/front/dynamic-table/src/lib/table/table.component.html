@@ -1,0 +1,103 @@
+<div class="w-full table-wrapper shadow-full-light rounded-md">
+  <table class="w-full" [ngClass]="getElStyleClassString('table')">
+    <thead *ngIf="!!shoHeader" class="bg-gradient-to-b rounded-t-md from-white via-F9F9F9 via-white shadow-full-light">
+      <tr>
+        <th
+          class="md:py-23px md:px-16px md:first:pr-34px md:last:pl-34px caption-1-bold px-2 py-5 first:pr-4 last:pl-4 first:rounded-tr-md last:rounded-tl-md"
+          [class]="'text-med-gray opacity-60'"
+          [ngClass]="getElStyleClass('th', (!!col?.headerStyleFunc ? col.headerStyleFunc()?.styleClass :null) ,{ 'hidden-cell' :(!!col?.hiddenFunc && col.hiddenFunc({isHeader:true,items:items})) })"
+          *ngFor="let col of columns"
+          [ngStyle]="getElStyle('th', (!!col?.headerStyleFunc ? col.headerStyleFunc()?.style :null))"
+          [hidden]="!!col.hidden" [style]=" col?.style">
+          <span class="flex items-center">
+<!--            <app-tooltip *ngIf="col?.labelTooltipText" [iconSize]="24" [message]="col?.labelTooltipText"-->
+            <!--              class="self-start">-->
+            <!--            </app-tooltip>-->
+            {{ col.label }}
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bg-white" [ngClass]="getElStyleClassString('tbody')">
+      <ng-container *ngFor="let item of items; let i = index;let lastTr =last">
+        <tr class="relative" [ngClass]="getElStyleClassString('tr') + ((!shoHeader && !i) ? ' rounded-t-md ' : '')">
+          <td
+            class="md:py-33px md:px-16px md:first:pr-34px md:last:pl-34px md:text-caption-1 px-2 py-5 first:pr-4 last:pl-4 caption-2"
+            [class]="' ' + (!!lastTr ? (' first:rounded-br-md ' + + ' ' +  (!!lastTd ? ' rounded-bl-md  ' : '')) : '' ) + (!shoHeader ? ' first:rounded-tr-md last:rounded-tl-md ' : '')"
+            [ngClass]="getElStyleClass('td',col?.styleClass,{ 'hidden-cell' :(!!col?.hiddenFunc && col.hiddenFunc({val: item ? item[col.field] : null ,item:item ,items:items} )) })"
+            [ngStyle]="getElStyle('td', col?.style)" [attr.colspan]="col?.colspan || 1"
+            *ngFor="let col of  (!notFoundMode ?  columns : notFoundColumns); let lastTd = last"
+            [hidden]="!!col.hidden ">
+            <span>
+              <ng-container *ngIf="!loading; else cellLoader">
+                <ng-template #colTempRefTemp>
+                  <ng-container [ngTemplateOutlet]="colTempRef" [ngTemplateOutletContext]="{
+                      $implicit:item && item[col.field],
+                      item:item,
+                      col:col
+                    }">
+                  </ng-container>
+                </ng-template>
+                <ng-container *ngIf="!colTempRef else colTempRefTemp" [tableCell]="col" [item]="item"
+                  (extends)="(!!extendsColumns?.length || !!getExtendsColumnsArr) && togglePanel(i,$event)">
+                </ng-container>
+
+              </ng-container>
+            </span>
+          </td>
+          <div class="absolute tr-border-bottom"></div>
+        </tr>
+        <ng-container *ngIf="(getExtendsData ? getExtendsData(item) : null) as extendsItem">
+          <tr *ngIf="extendsColumns?.length" class="extends-tr relative" [ngClass]="{active:panelOpenState[i] }">
+            <td *ngFor="let col of extendsColumns; let lastTd = last"
+              [attr.colspan]="col?.colspan || getExtendsColSpan(lastTd)"
+              [hidden]="!!col.hidden || (!!col?.hiddenFunc && !!col.hiddenFunc({val:extendsItem[col.field],item:extendsItem,items:getExtendsDataItems(items)}))"
+              class='extends-td md:py-31px md:px-16px md:first:pr-34px md:last:pl-34px md:text-caption-1 px-2 py-5 first:pr-4 last:pl-4 caption-2 first:rounded-tr-md last:rounded-tl-md'
+              [class]="(col?.styleClass || '')  + ' ' +  (!!showLimitNumber ? '' : (!!lastTr ? (' first:rounded-br-md extends '  + + ' ' +  (!!lastTd ? ' rounded-bl-md  ' : '')) : '' ))"
+              [ngStyle]="col?.style" [ngClass]="{inActive:!panelOpenState[i]}">
+              <div class="extends-div">
+                <ng-container [tableCell]="col" [item]="extendsItem">
+                </ng-container>
+              </div>
+            </td>
+            <div *ngIf="panelOpenState[i]" class="absolute tr-border-bottom"></div>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="(!!getExtendsColumnsArr && !!getExtendsColumnsArr(item))">
+          <tr *ngFor="let extendsColumns of getExtendsColumnsArr(item)" class="extends-tr relative"
+            [ngClass]="{active:panelOpenState[i] }">
+            <td *ngFor="let col of extendsColumns; let lastTd = last"
+              [attr.colspan]="col?.colspan || getExtendsColSpan(lastTd)"
+              class='extends-td md:py-31px md:px-16px md:first:pr-34px md:last:pl-34px md:text-caption-1 px-2 first:pr-4 last:pl-4 caption-2 py-5 first:rounded-tr-md last:rounded-tl-md'
+              [class]="(col?.styleClass || '') + ' ' +  (!!showLimitNumber ? '' : (!!lastTr ? (' first:rounded-br-md extends '  + + ' ' +  (!!lastTd ? ' rounded-bl-md  ' : '')) : '' ))"
+              [ngClass]="{inActive:!panelOpenState[i]}">
+              <div class="extends-div">
+                <ng-container [tableCell]="col" [item]="getExtendsData(item)">
+                </ng-container>
+              </div>
+            </td>
+            <div *ngIf="panelOpenState[i]" class="absolute tr-border-bottom"></div>
+          </tr>
+        </ng-container>
+
+      </ng-container>
+      <tr *ngIf="!!showLimitNumber" class="relative rounded-b-md">
+        <td colspan="10" class="py-31px px-34px caption-1 rounded-b-md">
+          <div class="flex flex-row justify-between">
+            <span class="body-2-medium">
+              {{!!showAll ? showMoreTextsObj.less : showMoreTextsObj.more}}
+            </span>
+            <app-icon class="flex justify-center items-center rounded-full w-10 h-10 bg-background-gray"
+              [ngClass]="{'transform rotate-180' : !!showAll }" [iconName]="moreIcon" (click)="moreItems()"></app-icon>
+          </div>
+        </td>
+        <div class="absolute tr-border-bottom"></div>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #cellLoader>
+  <div class="loading w-4/5 h-full">
+  </div>
+</ng-template>

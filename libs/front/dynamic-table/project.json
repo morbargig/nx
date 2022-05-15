@@ -1,0 +1,25 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/front/dynamic-table/src",
+  "prefix": "fnx-nx",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/front/dynamic-table"],
+      "options": {
+        "jestConfig": "libs/front/dynamic-table/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/front/dynamic-table/**/*.ts",
+          "libs/front/dynamic-table/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

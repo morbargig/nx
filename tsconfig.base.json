@@ -15,7 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@fnx-nx/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@fnx-nx/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@fnx-nx/front/dynamic-forms": ["libs/front/dynamic-forms/src/index.ts"],
+      "@fnx-nx/front/dynamic-table": ["libs/front/dynamic-table/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
