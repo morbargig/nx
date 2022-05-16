@@ -1,45 +1,45 @@
 export type FilterObject<T = any> = {
-    [P in keyof T]?: FilterInsideObject<T[P]>;
+  [P in keyof T]?: FilterInsideObject<T[P]>;
 };
 
 export interface LazyLoadEvent<T = any> {
-    page?: number;
-    pageSize?: number;
-    filters?: FilterObject<T>[];
+  page?: number;
+  pageSize?: number;
+  filters?: FilterObject<T>[];
 }
 
 export interface FilterDataResponse<T = any> {
-    totalRecords: number;
-    data: T[];
+  totalRecords: number;
+  data: T[];
 }
 
 export interface FilterInsideObject<V = any> {
-    value?: V;
-    matchMode?: MatchMode;
-    // innerFilter?: FilterObject<V>
+  value?: V;
+  matchMode?: MatchMode;
+  // innerFilter?: FilterObject<V>
 }
 
 export enum MatchMode {
-    // any
-    Equals = 2000,
-    NotEquals = 2001,
-    // number
-    LessThan = 2002,
-    LessThanOrEquals = 2003,
-    GreaterThan = 2004,
-    GreaterThanOrEquals = 2005,
-    // date
-    Before = 2012, // 2002 before 
-    BeforeOrEquals = 2013, // 2003 before
-    After = 2014, // 2004 before
-    EqualsOrAfter = 2015, // 2005 before
-    // string & number
-    Contains = 2250,
-    StartsWith = 2251,
-    EndsWith = 2252,
-    // any value
-    Any = 2500,
-    // no value
-    NotAny = 2502,
+  /** @property {Equals} any value that Equals {value} */ Equals = 2000,
+  /** @property {NotEquals} any value that NotEquals {value} */ NotEquals = 2001,
+  // number
+  /** @property {LessThan} number LessThan {value} */ LessThan = 2002,
+  /** @property {LessThanOrEquals} number LessThanOrEquals {value} */ LessThanOrEquals = 2003,
+  /** @property {GreaterThan} number GreaterThan {value} */ GreaterThan = 2004,
+  /** @property {GreaterThanOrEquals} number GreaterThanOrEquals {value} */ GreaterThanOrEquals = 2005,
+  // date
+  /** @property {Before} Date as (string or number Date) that Before {value} */ Before = 2012, // 2002 before
+  /** @property {BeforeOrEquals} Date as (string or number Date) that BeforeOrEquals {value} */ BeforeOrEquals = 2013, // 2003 before
+  /** @property {After}  Date as (string or number Date) that After {value} */ After = 2014, // 2004 before
+  /** @property {EqualsOrAfter} Date as (string or number Date) that EqualsOrAfter {value} */ EqualsOrAfter = 2015, // 2005 before
+  // number & string
+  /** @property {Contains} string or number that Contains {value} */ Contains = 2250,
+  /** @property {StartsWith} string or number that EndsWith {value} */ StartsWith = 2251,
+  /** @property {EndsWith} string or number that EndsWith {value} */ EndsWith = 2252,
+  // any
+  /** @property {Any} any truthy value */
+  Any = 2500,
+  // not any
+  /** @property {NotAny} any falsy value */
+  NotAny = 2502,
 }
-

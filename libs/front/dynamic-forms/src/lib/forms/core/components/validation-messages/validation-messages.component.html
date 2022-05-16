@@ -1,5 +1,5 @@
 <div *ngIf="(!!control?.dirty)" class="position-absolute validation-wrapper">
-  <ng-container *ngFor="let ctrlErr of ( control?.errors | controlErrorsMap);">
+  <ng-container *ngFor="let ctrlErr of (control?.errors | keyvalue);">
     <ng-container *ngIf="hasCustomErrorMessage(ctrlErr?.key) as errMsg; else defaultError">
       <ng-container *ngIf="control.hasError(errMsg.errorName)">
         <ng-container *ngTemplateOutlet="customError; context:{errMsg:errMsg}"></ng-container>

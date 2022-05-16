@@ -1,9 +1,8 @@
-<div style="text-align: center">
-  <h1>Welcome to fnx-nx!</h1>
-  <img
-    width="450"
-    src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-    alt="Nx - Smart, Fast and Extensible Build System"
-  />
-</div>
-<div>Message: {{ hello$ | async | json }}</div>
+<fnx-nx-dynamic-form-control *ngIf="group && dy" [dynamicControl]="dy" [group]="group"></fnx-nx-dynamic-form-control>
+
+<h1 (click)="click()">Generate new form from text-area</h1>
+<h1 (click)="clickServer()">Generate new form from server</h1>
+
+<!-- <input type="datetime-local"/> -->
+
+<fnx-nx-app-dynamic-form-group *ngIf="config" [config]="config"  (formOnSubmit)="formOnSubmit($event)"></fnx-nx-app-dynamic-form-group>

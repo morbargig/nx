@@ -8,11 +8,11 @@ import {DynamicFormControl} from '../../interfaces/field-config';
   templateUrl: './dynamic-form-group.component.html',
   styleUrls: ['./dynamic-form-group.component.scss'],
 })
-export class DynamicFormGroupComponent implements OnInit {
+export class DynamicFormGroupComponent<T = any> implements OnInit {
   @ViewChild('submitBtn', {static: false})
   public submitBtn: ElementRef<HTMLButtonElement>;
 
-  @Input() public config: DynamicFormControl[] = [];
+  @Input() public config: DynamicFormControl<any>[] = [];
   @Input() public mode: DynamicFormStepMode = DynamicFormStepMode.Default;
   @Input() public validation: ValidatorFn[];
   @Input() public errorMessages?: { [error: string]: string };

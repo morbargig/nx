@@ -18,10 +18,11 @@
     "strict": true,
     "noImplicitOverride": true,
     "strictNullChecks": false,
+    "emitDecoratorMetadata": false,
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true
   },
   "angularCompilerOptions": {

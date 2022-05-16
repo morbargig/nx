@@ -1,28 +1,35 @@
-import {Observable, timer} from 'rxjs';
-import {AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn,} from '@angular/forms';
-import {map, switchMap} from 'rxjs/operators';
+import { Observable, timer } from 'rxjs';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
+import { map, switchMap } from 'rxjs/operators';
 
 export class AppValidators {
-
   public static greaterThanOrEquals(controlName: string): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
-      if (!!control?.parent) {
+      if (control?.parent) {
         const otherControl = control.parent?.get(controlName);
-        if (!!otherControl) {
+        if (otherControl) {
           const current = parseFloat(control?.value || '0');
           const other = parseFloat(otherControl?.value || '0');
-          let inValid = current <= other;
+          const inValid = current <= other;
           if (inValid) {
             setTimeout(() => {
-              otherControl.updateValueAndValidity({onlySelf: false, emitEvent: true});
+              otherControl.updateValueAndValidity({
+                onlySelf: false,
+                emitEvent: true,
+              });
             });
           }
           return inValid
             ? {
-              [controlName]: {
-                valid: false,
-              },
-            }
+                [controlName]: {
+                  valid: false,
+                },
+              }
             : null;
         }
       }
@@ -32,24 +39,27 @@ export class AppValidators {
 
   public static smallerThanOrEquals(controlName: string): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
-      if (!!control?.parent) {
+      if (control?.parent) {
         const otherControl = control.parent?.get(controlName);
-        if (!!otherControl) {
+        if (otherControl) {
           const current = parseFloat(control?.value || '0');
           const other = parseFloat(otherControl?.value || '0');
           const inValid = current >= other;
           if (inValid) {
             setTimeout(() => {
-              otherControl.updateValueAndValidity({onlySelf: false, emitEvent: true});
+              otherControl.updateValueAndValidity({
+                onlySelf: false,
+                emitEvent: true,
+              });
             });
           }
 
           return inValid
             ? {
-              [controlName]: {
-                valid: false,
-              },
-            }
+                [controlName]: {
+                  valid: false,
+                },
+              }
             : null;
         }
       }
@@ -81,7 +91,7 @@ export class AppValidators {
     };
     return (control: AbstractControl): { [key: string]: any } => {
       const tz = control?.value;
-      if (!!tz) {
+      if (tz) {
         const valid = validation(tz);
         if (!valid) {
           return {
@@ -113,7 +123,7 @@ export class AppValidators {
     };
     return (control: AbstractControl): ValidationErrors => {
       const tz = control?.value;
-      if (!!tz) {
+      if (tz) {
         const valid = validation(tz);
         if (!valid) {
           return {
@@ -134,7 +144,7 @@ export class AppValidators {
     };
     return (control: AbstractControl): { [key: string]: any } => {
       const tz = control?.value;
-      if (!!tz) {
+      if (tz) {
         const valid = validation(tz);
         if (!valid) {
           return {
@@ -147,30 +157,51 @@ export class AppValidators {
   }
 
   public static greaterThanToday(): ValidatorFn {
-    return this.afterThan(new Date().toISOString(), null, this.greaterThanToday.name);
+    return this.afterThan(
+      new Date().toISOString(),
+      null,
+      this.greaterThanToday.name
+    );
   }
 
   public static afterThanNow(): ValidatorFn {
-    return this.afterThan(new Date().toISOString(), null, this.afterThanNow.name);
+    return this.afterThan(
+      new Date().toISOString(),
+      null,
+      this.afterThanNow.name
+    );
   }
 
   public static beforeThanNow(): ValidatorFn {
-    return this.beforeThan(new Date().toISOString(), null, this.beforeThanNow.name);
+    return this.beforeThan(
+      new Date().toISOString(),
+      null,
+      this.beforeThanNow.name
+    );
   }
 
-  public static beforeThan(date: string, secundCtrl?: AbstractControl, errorName: string = this.beforeThan.name): ((control: AbstractControl) => { [key: string]: Date }) {
+  public static beforeThan(
+    date: string,
+    secundCtrl?: AbstractControl,
+    errorName: string = this.beforeThan.name
+  ): (control: AbstractControl) => { [key: string]: Date } {
     const validation = (currentD: string): Date => {
       date = secundCtrl?.value || date;
-      const validDate = (d: string) => (!!d ? Date.parse(d) || null : null);
-      if (!!validDate(currentD) && !!validDate(date) && +validDate(currentD) > +validDate(date)) {
+      const validDate = (d: Readonly<string>) =>
+        d ? Date.parse(d) || null : null;
+      if (
+        !!validDate(currentD) &&
+        !!validDate(date) &&
+        +validDate(currentD) > +validDate(date)
+      ) {
         return new Date(validDate(date));
       }
     };
     return (control: AbstractControl): { [key: string]: Date } => {
-      const {value} = control;
-      if (!!value) {
+      const { value } = control;
+      if (value) {
         const anValid = validation(value);
-        if (!!anValid) {
+        if (anValid) {
           return {
             [errorName]: anValid,
           };
@@ -179,15 +210,23 @@ export class AppValidators {
     };
   }
 
-  public static afterThan(date: string, secundCtrl?: AbstractControl, errorName: string = this.afterThan.name): ValidatorFn {
+  public static afterThan(
+    date: string,
+    secundCtrl?: AbstractControl,
+    errorName: string = this.afterThan.name
+  ): ValidatorFn {
     const validation = (currentD: string) => {
       date = secundCtrl?.value || date;
       const validDate = (d: string): number => Date.parse(d) || null;
-      return !!validDate(currentD) && !!validDate(date) && +validDate(currentD) < +validDate(date);
+      return (
+        !!validDate(currentD) &&
+        !!validDate(date) &&
+        +validDate(currentD) < +validDate(date)
+      );
     };
     return (control: AbstractControl): { [key: string]: any } => {
       const d = control?.value;
-      if (!!d) {
+      if (d) {
         const anValid = validation(d);
         if (anValid) {
           return {
@@ -203,19 +242,19 @@ export class AppValidators {
     service: any,
     action: string,
     key: string,
-    formFields?: Function
+    formFields?: (c:AbstractControl)=>any[]
   ): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       return timer(350).pipe(
         switchMap(() => {
           const actionParams = [];
-          if (!!formFields) {
+          if (formFields) {
             actionParams.push(...formFields(control));
           }
           return service[action](control.value, ...actionParams).pipe(
             map((valid) => {
               if (!valid) {
-                return {[key]: true}
+                return { [key]: true };
               }
               return null;
             })

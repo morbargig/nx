@@ -5,7 +5,7 @@ import {FormTextData} from './form-text';
 import {FormControl} from '@angular/forms';
 
 @Component({
-  selector: 'app-form-text',
+  selector: 'fnx-nx-app-form-text',
   templateUrl: './form-text.component.html',
   styleUrls: ['./form-text.component.scss'],
 })

@@ -1,9 +1,14 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {FormArrayData} from './form-array';
-import {AbstractControlOptions, FormArray, FormBuilder, FormGroup,} from '@angular/forms';
-import {takeWhile} from 'rxjs/operators';
-import {BaseFieldComponent} from '../../core/directives/base-field.directive';
-import {FieldEvent} from '../../core/interfaces/events';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormArrayData } from './form-array';
+import {
+  AbstractControlOptions,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
+import { takeWhile } from 'rxjs/operators';
+import { BaseFieldComponent } from '../../core/directives/base-field.directive';
+import { FieldEvent } from '../../core/interfaces/events';
 
 @Component({
   selector: 'fnx-nx-app-form-array',
@@ -12,7 +17,8 @@ import {FieldEvent} from '../../core/interfaces/events';
 })
 export class FormArrayComponent<T = any, K extends keyof T = keyof T>
   extends BaseFieldComponent<T, FormArrayData<T, K>, K, FormArray>
-  implements OnInit {
+  implements OnInit
+{
   // public globalFilterQuery: string
   // public globalFilterDyn: FieldConfigObj = {
   //   field: 'globalFilter',
@@ -41,10 +47,10 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
     }
     return {
       ...(this.config?.data?.groupValidations?.length
-        ? {validators: this.config?.data?.groupValidations}
+        ? { validators: this.config?.data?.groupValidations }
         : {}),
       ...(this.config?.data?.asyncGroupValidations?.length
-        ? {asyncValidators: this.config?.data?.asyncGroupValidations}
+        ? { asyncValidators: this.config?.data?.asyncGroupValidations }
         : {}),
     };
   }
@@ -100,8 +106,10 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
         .subscribe((setter) => {
           switch (setter.type) {
             case 'onPatchValue': {
-              const {value: values} = setter as FieldEvent<T,
-                typeof setter.type>;
+              const { value: values } = setter as FieldEvent<
+                T,
+                typeof setter.type
+              >;
               if (values) {
                 this.control.clear();
                 for (const value of <any>values) {
@@ -116,8 +124,10 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
               break;
             }
             case 'setValue': {
-              const {value: values} = setter as FieldEvent<T,
-                typeof setter.type>;
+              const { value: values } = setter as FieldEvent<
+                T,
+                typeof setter.type
+              >;
               if (values) {
                 for (const value of <any>values) {
                   const keys = Object.keys(
@@ -200,7 +210,7 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
   //   });
   // }
 
-  // public addConfig() {
-  //   this.control?.push(this.fb.group({}, this.groupValidators()));
-  // }
+  public addConfig() {
+    this.control?.push(this.fb.group({}, this.groupValidators()));
+  }
 }

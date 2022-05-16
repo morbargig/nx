@@ -3,14 +3,18 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {NxWelcomeComponent} from './nx-welcome.component';
 import {HttpClientModule} from '@angular/common/http';
-import {DynamicFormsModule} from "../../../../libs/front/dynamic-forms/src/lib/forms/forms.module";
+import { FrontDynamicFormsModule } from '@fnx-nx/front/dynamic-forms';
+
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent],
+  declarations: [
+    AppComponent,
+    NxWelcomeComponent
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    DynamicFormsModule
+    FrontDynamicFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

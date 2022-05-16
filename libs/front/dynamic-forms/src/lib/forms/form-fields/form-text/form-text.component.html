@@ -1,14 +1,14 @@
-<input (input)="onChange($event.target)" (keyup)="!!group?.controls[config?.field].valid && keyUp($event)" *ngIf="!config.data?.rows else textareaTemp"
-       [attr.disabled]="disabled"
-       [formControl]="group?.controls[config?.field]" [id]="id" [ngClass]="{ 'is-invalid': !!control.touched && !control.valid }"
-       [placeholder]="config?.placeholder || ''" [step]="config.data?.step || 1"
-       [type]="config?.data?.inputType" class="form-control {{ config?.bodyStyle?.input.styleClass }}"/>
+<input (input)="onChange($event.target)" (keyup)="!!group?.controls[config?.field].valid && keyUp($event)"
+  *ngIf="!config.data?.rows else textareaTemp" [attr.disabled]="disabled" [formControl]="group?.controls[config?.field]"
+  [id]="id" [ngClass]="{ 'is-invalid': !!control.touched && !control.valid }" [placeholder]="config?.placeholder || ''"
+  [step]="config.data?.step || 1" [type]="config?.data?.inputType"
+  class="form-control {{ config?.bodyStyle?.input.styleClass }}" />
 <!-- [prxKeyfilter]="config.data?.keyFilter" -->
 <ng-template #textareaTemp>
   <textarea (input)="onChange($event.target)" [cols]="config.data?.cols" [formControl]="group?.controls[config?.field]"
-            [id]="id" [ngClass]="{ 'is-invalid': !!control.touched && !control.valid }" [placeholder]="config?.placeholder"
-            [rows]="config.data.rows"
-            class="form-control {{ config?.bodyStyle?.input.styleClass }}"></textarea>
+    [id]="id" [ngClass]="{ 'is-invalid': !!control.touched && !control.valid }"
+    [placeholder]="config?.placeholder || ''" [rows]="config.data.rows"
+    class="form-control {{ config?.bodyStyle?.input.styleClass }}"></textarea>
   <span (click)="autoGeneratorClicked()" *ngIf="config.data?.autoGenerator" class="auto-generator">
     {{ config.data.autoGeneratorLabel }}
   </span>

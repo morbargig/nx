@@ -11,12 +11,16 @@ import {
   TemplateRef,
   Type,
 } from '@angular/core';
-import {AbstractControl, FormGroup, Validators} from '@angular/forms';
-import {distinctUntilChanged, filter, takeWhile} from 'rxjs/operators';
-import {FormTextComponent} from '../../../form-fields/form-text/form-text.component';
-import {DynamicFormStepMode} from '../../interfaces/dynamic-stepped-form';
-import {FieldEvent} from '../../interfaces/events';
-import {DynamicFormControl, Field, FormFieldsDic,} from '../../interfaces/field-config';
+import { AbstractControl, FormGroup, Validators } from '@angular/forms';
+import { distinctUntilChanged, filter, takeWhile } from 'rxjs/operators';
+import { FormTextComponent } from '../../../form-fields/form-text/form-text.component';
+import { DynamicFormStepMode } from '../../interfaces/dynamic-stepped-form';
+import { FieldEvent } from '../../interfaces/events';
+import {
+  DynamicFormControl,
+  Field,
+  FormFieldsDic,
+} from '../../interfaces/field-config';
 
 @Component({
   selector: 'fnx-nx-dynamic-form-control',
@@ -24,8 +28,9 @@ import {DynamicFormControl, Field, FormFieldsDic,} from '../../interfaces/field-
   styleUrls: ['./dynamic-form-control.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DynamicFormControlComponent<T extends any = any>
-  implements OnInit, AfterViewInit {
+export class DynamicFormControlComponent<T = any>
+  implements OnInit, AfterViewInit
+{
   public type: Type<Field<T, any, any, any>>;
   public config: DynamicFormControl<T>;
   public id = `control-${(Math.random() + 1).toString(36).substring(4)}`;
@@ -41,8 +46,7 @@ export class DynamicFormControlComponent<T extends any = any>
   @HostBinding('class.d-none') hide: boolean;
   private isActive = true;
 
-  constructor(private cd: ChangeDetectorRef) {
-  }
+  constructor(private cd: ChangeDetectorRef) {}
 
   @Input()
   public set dynamicControl(dynamicControl: DynamicFormControl<T>) {
@@ -81,7 +85,7 @@ export class DynamicFormControlComponent<T extends any = any>
         .subscribe((event) => {
           switch (event?.type) {
             case 'requiredSetter': {
-              const {value} = event as FieldEvent<T, typeof event.type>;
+              const { value } = event as FieldEvent<T, typeof event.type>;
               if (this.isRequired !== value) {
                 this.control.clearValidators();
                 this.config.validation = [
@@ -100,7 +104,7 @@ export class DynamicFormControlComponent<T extends any = any>
             }
             case 'setValidation': {
               const {
-                value: {active, validation},
+                value: { active, validation },
               } = event as FieldEvent<T, typeof event.type>;
               if ((!!active || active === false) && validation) {
                 const strFunc = validation?.toString();
@@ -133,12 +137,11 @@ export class DynamicFormControlComponent<T extends any = any>
               }
               break;
             }
-            case 'setVisibility':
-              const {
-                value
-              } = event as FieldEvent<T, typeof event.type>;
+            case 'setVisibility': {
+              const { value } = event as FieldEvent<T, typeof event.type>;
               this.setVisibility(value);
               break;
+            }
             default:
               break;
           }

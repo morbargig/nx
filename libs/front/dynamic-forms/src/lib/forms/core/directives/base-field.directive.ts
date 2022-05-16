@@ -3,7 +3,6 @@ import {AbstractControl, FormArray, FormGroup} from '@angular/forms';
 import {BaseFieldData, Field, FieldConfigObj, FiledParentControl} from '../interfaces/field-config';
 
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
 export abstract class BaseFieldComponent<T = any,
   D extends BaseFieldData<T, K> = BaseFieldData<T>,
   K extends keyof { [key in keyof T]: any } = keyof { [key in keyof T]: any },
