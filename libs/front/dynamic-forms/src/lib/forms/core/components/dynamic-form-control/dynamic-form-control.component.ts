@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  ChangeDetectionStrategy,
   HostBinding,
   Input,
   OnInit,
@@ -15,7 +16,6 @@ import { distinctUntilChanged, filter, takeWhile } from 'rxjs/operators';
 import { FormTextComponent } from '../../../form-fields/form-text/form-text.component';
 import { DynamicFormStepMode } from '../../interfaces/dynamic-stepped-form';
 import { FieldEvent } from '../../interfaces/events';
-import { ChangeDetectionStrategy } from '@angular/core';
 import {
   DynamicFormControl,
   Field,
@@ -43,7 +43,7 @@ export class DynamicFormControlComponent<T = any>
   @Input() public group: FormGroup;
   @Input() public wrapStyleClass: string;
   @Output() public controlOnChange: EventEmitter<any> = new EventEmitter<any>();
-  @HostBinding('class.d-none') hide = !this.visible;
+  @HostBinding('class.d-none') hide  :boolean;
   private isActive = true;
 
   constructor(private cd: ChangeDetectorRef) {}
@@ -61,6 +61,7 @@ export class DynamicFormControlComponent<T = any>
     this.isRequired =
       dynamicControl.validation &&
       !!dynamicControl.validation.find((x) => x === Validators.required);
+    this.cd.detectChanges();
   }
 
   ngAfterViewInit(): void {

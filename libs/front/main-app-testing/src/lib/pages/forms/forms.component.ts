@@ -51,6 +51,15 @@ export class FormsComponent {
     {
       type: 'Default',
       field: 'DynamicFormConfigurationObject',
+      label: 'From Config',
+      placeholder: `[{
+        type: 'Default',
+        field: 'description',
+        label: 'Description',
+        placeholder: 'Description',
+        data: { rows:5 },
+      }
+    ]`,
       validation: [Validators.required, Validators.minLength(10)],
       errorMessages: {
         required: 'Required',

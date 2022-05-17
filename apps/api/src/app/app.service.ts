@@ -27,7 +27,7 @@ export class AppService {
             {
               type: 'FormArray',
               field: 'friends',
-              label: 'Phone',
+              label: 'Friends',
               data: {
                 formGroupConfig: [
                   {

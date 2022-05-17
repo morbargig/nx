@@ -8,7 +8,7 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { takeWhile, take, debounceTime } from 'rxjs/operators';
+import { takeWhile } from 'rxjs/operators';
 import { BaseFieldComponent } from '../../core/directives/base-field.directive';
 import { FieldEvent } from '../../core/interfaces/events';
 import { DynamicFormControl } from '../../core/interfaces/field-config';
@@ -238,18 +238,50 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
     this.control?.push(this.fb.group({}, this.groupValidators()));
   }
   saveToForm() {
+    const buildForm = (state: any) =>
+      (() => {
+        switch (typeof state) {
+          case 'object': {
+            switch (Array.isArray(state)) {
+              case true:
+                return this.fb.array(
+                  state?.reduce((pp, cc) => [...pp, buildForm(cc)], []) || []
+                );
+                break;
+              default:
+                return this.fb.group(
+                  Object.keys(state || {}).reduce(
+                    (p, c) => ({
+                      ...p,
+                      [c]: buildForm(state?.[c]),
+                    }),
+                    {}
+                  )
+                );
+            }
+            break;
+          }
+          default:
+            return this.fb.control(state);
+            break;
+        }
+      })();
     const state = this.addingCtrl.getRawValue();
-    const newControl = this.fb.group(state);
+    // const buildFormValue = ;
+    // debugger;
+    const newControl = buildForm(state);
     this.control.push(newControl);
     // newControl?.valueChanges
     //   ?.pipe(
     //     takeWhile(() => this.isActive),
-    //     debounceTime(200),
-    //     take(1),
+    //     // debounceTime(200),
+    //     take(1)
     //   )
     //   .subscribe(() => {
-    newControl?.patchValue(state);
-    // });
+    //     this;
+    //     state;
+    //     newControl?.patchValue(state);
+    //   });
     const defaultVal = (<DynamicFormControl[]>(
       this.config.data.formGroupConfig
     ))?.reduce(

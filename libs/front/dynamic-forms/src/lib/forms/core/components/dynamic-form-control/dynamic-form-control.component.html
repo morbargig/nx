@@ -1,7 +1,7 @@
-<div *ngIf="!!config && !!group" [class]="wrapStyleClass" [hidden]="!visible || config?.hidden"  [ngClass]="{
+<div *ngIf="!!config && !!group" [class]="wrapStyleClass" [hidden]="!visible || config?.hidden" [ngClass]="{
     'mb-3': !wrapStyleClass,
     invalid: control?.touched && !control?.valid && !control?.disabled
-  }" class="form-group">
+  }" class="form-group -ml-1">
   <ng-container *ngIf="!mode">
     <label *ngIf="config.label" [class]="config?.bodyStyle?.label.styleClass" [for]="id">
       <span *ngIf="!hideLabel">
@@ -10,8 +10,8 @@
       <i *ngIf="!!isRequired" class="fas fa-star-of-life text-danger mt-1 ml-1"
         style="font-size: 5px; vertical-align: top"></i>
     </label>
-    <ng-container [ngTemplateOutlet]="actual"></ng-container>
   </ng-container>
+  <ng-container [ngTemplateOutlet]="actual"></ng-container>
 </div>
 
 <ng-template #actual>
