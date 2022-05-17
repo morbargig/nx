@@ -2,7 +2,7 @@
   <div class="row {{ formRowCssClass }}">
     <ng-container *ngFor="let field of config">
       <fnx-nx-dynamic-form-control #formGroupEl *ngIf="!!field?.field && !!form.controls[field.field]"
-        [dynamicControl]="field" [group]="form" [template]="template"
+        [dynamicControl]="field" [parentFormGroupOrFormArray]="form" [template]="template"
         class="col {{ field?.bodyStyle?.field?.styleClass }}">
       </fnx-nx-dynamic-form-control>
     </ng-container>
@@ -12,7 +12,7 @@
     </div>
   </div>
   <ng-container *ngIf="!!showSubmitButton && !!form">
-    <button role="button" *ngIf="!submitting; else submittingIndicator" [disabled]="!form.valid" class="btn btn-primary"
+    <button role="button" *ngIf="!submitting; else submittingIndicator" [disabled]="!form.valid" class="btn btn-default"
       translate type="submit">
       {{ submitText || 'שמור' }}
     </button>

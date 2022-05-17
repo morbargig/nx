@@ -43,3 +43,10 @@ export enum MatchMode {
   /** @property {NotAny} any falsy value */
   NotAny = 2502,
 }
+
+enum MoreMatchMode {
+  /** @property {Regex} any value that match {value} regex */ Regex = 'Regex',
+}
+
+const FiledValidatiorsMatchMode = { ...MatchMode, ...MoreMatchMode };
+FiledValidatiorsMatchMode.Regex

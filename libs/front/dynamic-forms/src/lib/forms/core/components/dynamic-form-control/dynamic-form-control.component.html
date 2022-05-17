@@ -1,4 +1,4 @@
-<div *ngIf="!!config && !!group" [class]="wrapStyleClass" [hidden]="!visible || config?.hidden" [ngClass]="{
+<div *ngIf="!!config && !!parentFormGroupOrFormArray" [class]="wrapStyleClass" [hidden]="!visible || config?.hidden" [ngClass]="{
     'mb-3': !wrapStyleClass,
     invalid: control?.touched && !control?.valid && !control?.disabled
   }" class="form-group -ml-1">
@@ -15,10 +15,10 @@
 </div>
 
 <ng-template #actual>
-  <div *ngIf="!!config && !!group" class="row">
+  <div *ngIf="!!config && !!parentFormGroupOrFormArray" class="row">
     <div class="col position-relative">
       <ng-container #formContainer (setVisibility)="setVisibility($event)" [(control)]="control"
-        [fnxNxDynamicField]="config" [group]="group" [id]="id" [type]="type">
+        [fnxNxDynamicField]="config" [group]="parentFormGroupOrFormArray" [id]="id" [type]="type">
       </ng-container>
       <fnx-nx-app-validation-messages *ngIf="config?.validation?.length || config?.asyncValidation?.length"
         [control]="control" [filedLabel]="config?.label" [messages]="config?.errorMessages"

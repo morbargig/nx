@@ -1,36 +1,6 @@
-// th.input-column {
-//  min-width: 80px;
-// }
-
-// :host::ng-deep {
-//  .group-validation-wrapper {
-//    .validation-wrapper {
-//      transform: translateY(-100%);
-//    }
-//  }
-// }
-
-// .form-btn {
-//  height: calc(1.5em + 1.1rem + 2px);
-// }
-
-// .add-row {
-//  td {
-//    &:first-of-type {
-//      border-top-left-radius: 8px;
-//      border-bottom-left-radius: 8px;
-//    }
-
-//    &:last-of-type {
-//      border-top-right-radius: 8px;
-//      border-bottom-right-radius: 8px;
-//    }
-//  }
-// }
-
-// thead th {
-//  position: sticky;
-//  top: -15px;
-//  z-index: 1;
-//  background-color: #fff;
-// }
+tr:nth-child(even) {
+  background: #ccc;
+}
+tr:nth-child(odd) {
+  background: #fff;
+}

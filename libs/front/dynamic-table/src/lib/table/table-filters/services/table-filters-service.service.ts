@@ -132,7 +132,7 @@ export class TableFiltersServiceService {
       return null;
     }
   }
-  
+
   public filter = <T>(
     items: T[],
     evt: LazyLoadEvent<T>

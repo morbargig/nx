@@ -147,31 +147,31 @@ export type ITableColumn<T = any> = {
 // tslint:disable-next-line:no-shadowed-variable
 export type getColumnType<T> = T extends ITableColumn<infer T>[] ? T : never;
 
-// interface User {
-//   name: string;
-//   age: number;
-// }
+interface User {
+  name: string;
+  age: number;
+}
 
-// const simpleTest: ITableColumn<User>[] = [
-//   {
-//     parsedHtmlData: (v) => 'null',
-//     field: 'age',
-//     type: 'Default',
-//     headerStyleFunc: function () {
-//       return this.style;
-//     },
-//     data: {
-//       // title$: of(),
-//     },
-//   },
-//   {
-//     field: 'name',
-//     parsedHtmlData: (v) => 'null',
-//     type: 'Extends',
-//     // headerStyleFunc: () => ({}),
-//     // headerStyleFunc: (x) => {return x },
-//     // data: {
-//     //   // title$: of(),
-//     // }
-//   },
-// ];
+const simpleTest: ITableColumn<User>[] = [
+  {
+    parsedHtmlData: (v) => 'null',
+    field: 'age',
+    type: 'Default',
+    headerStyleFunc: function () {
+      return this.style;
+    },
+    data: {
+      // title$: of(),
+    },
+  },
+  {
+    field: 'name',
+    parsedHtmlData: (v) => 'null',
+    type: 'Extends',
+    // headerStyleFunc: () => ({}),
+    // headerStyleFunc: (x) => {return x },
+    // data: {
+    //   // title$: of(),
+    // }
+  },
+];

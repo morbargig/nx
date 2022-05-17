@@ -11,11 +11,17 @@ import {
   TemplateRef,
   Type,
 } from '@angular/core';
-import { AbstractControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormGroup,
+  Validators,
+  FormArray,
+} from '@angular/forms';
 import { distinctUntilChanged, filter, takeWhile } from 'rxjs/operators';
 import { FormTextComponent } from '../../../form-fields/form-text/form-text.component';
 import { DynamicFormStepMode } from '../../interfaces/dynamic-stepped-form';
 import { FieldEvent } from '../../interfaces/events';
+import { BaseFieldComponent } from '../../directives/base-field.directive';
 import {
   DynamicFormControl,
   Field,
@@ -31,7 +37,7 @@ import {
 export class DynamicFormControlComponent<T = any>
   implements OnInit, AfterViewInit
 {
-  public type: Type<Field<T, any, any, any>>;
+  public type: Type<BaseFieldComponent<T, any, any, any>>;
   public config: DynamicFormControl<T>;
   public id = `control-${(Math.random() + 1).toString(36).substring(4)}`;
   public control: AbstractControl;
@@ -40,10 +46,10 @@ export class DynamicFormControlComponent<T = any>
   @Input() public mode: DynamicFormStepMode;
   @Input() public isRequired: boolean;
   @Input() public hideLabel: boolean;
-  @Input() public group: FormGroup;
+  @Input() public parentFormGroupOrFormArray: FormGroup | FormArray;
   @Input() public wrapStyleClass: string;
   @Output() public controlOnChange: EventEmitter<any> = new EventEmitter<any>();
-  @HostBinding('class.d-none') hide  :boolean;
+  @HostBinding('class.d-none') hide: boolean;
   private isActive = true;
 
   constructor(private cd: ChangeDetectorRef) {}

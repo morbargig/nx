@@ -21,12 +21,11 @@ export class FormTextComponent<T = any, K extends keyof T = keyof T>
   public get disabled(): boolean {
     return this.config?.disabled || this.control?.disabled || null;
   }
-
   ngOnInit(): void {
     if (this.config.disabled) {
       this.control.disable();
     }
-    this.control.registerOnDisabledChange((/*isDisabled*/) =>
+    this.control?.registerOnDisabledChange((/*isDisabled*/) =>
       this.cd.markForCheck());
     // this.control.valueChanges
     //   .pipe(
@@ -37,10 +36,11 @@ export class FormTextComponent<T = any, K extends keyof T = keyof T>
     //     this.cd.detectChanges();
     //     this.cd.markForCheck();
     //   });
+    debugger;
   }
 
   public onChange({ value: val }: any) {
-      this.config?.onChange!?.({ currentValue: val, control: this.control });
+    this.config?.onChange!?.({ currentValue: val, control: this.control });
   }
 
   public keyUp(evt: any) {

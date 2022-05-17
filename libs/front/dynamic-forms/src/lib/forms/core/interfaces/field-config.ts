@@ -13,6 +13,7 @@ import { BaseFieldComponent } from '../directives/base-field.directive';
 import { FieldEvent } from './events';
 import { FormArrayComponent } from '../../form-fields/form-array/form-array.component';
 import { asConst } from '../functions/as-const.func';
+import { Validators } from '@angular/forms';
 
 export type elStyleObj = {
   styleClass?: string;
@@ -29,7 +30,7 @@ export enum FormFieldType {
 
 class FormsFieldClassType<T = any, K extends keyof T = keyof T> {
   FieldDicType = asConst<{
-    [key in keyof typeof FormFieldType]-?: Type<Field>;
+    [key in keyof typeof FormFieldType]-?: Type<BaseFieldComponent>;
   }>()({
     Default: FormTextComponent as Type<FormTextComponent<T, K>>,
     FormArray: FormArrayComponent as Type<FormArrayComponent<T, K>>,
@@ -99,11 +100,12 @@ export interface FieldConfigObj<
   data?: DModel;
   // colspan?: number;
   hidden?: boolean;
+  validationFuncString?: (keyof Validators)[];
   // hiddenFunc?: (data: { item?: T }) => boolean;
   styleFunc?:
     | ((this: FieldConfigObj<T, DModel, K, E, C>) => elStyleObj)
     | (() => elStyleObj);
-  customFieldComponent?: Type<Field<T, DModel, K>>;
+  customFieldComponent?: Type<BaseFieldComponent<T, DModel, K>>;
   controlType?: 'control' | 'group' | 'array' | 'none';
   disabled?: boolean;
   disabled$?: CustomSubscribable<boolean>;

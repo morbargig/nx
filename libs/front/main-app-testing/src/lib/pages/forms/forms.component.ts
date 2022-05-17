@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { DynamicFormControl } from '@fnx-nx/front/dynamic-forms';
 import { User } from '@fnx-nx/api-interfaces';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -13,38 +13,37 @@ import { HttpClient } from '@angular/common/http';
 export class FormsComponent {
   constructor(private http: HttpClient) {}
   group = new FormGroup({});
-  config: DynamicFormControl<User>[];
-  /**
-     =  [
-      {
-        type: 'Default',
-        field: 'username',
-        label: 'UserName',
-        placeholder: 'UserName',
-      },
-      {
-        type: 'Default',
-        field: 'password',
-        label: 'Password',
-        placeholder: 'Password',
-        data: { inputType: 'password' },
-      },
-      {
-        type: 'Default',
-        field: 'date',
-        label: 'Date',
-        placeholder: 'Date',
-        data: { inputType: 'datetime-local' },
-      },
-      {
-        type: 'Default',
-        field: 'description',
-        label: 'Description',
-        placeholder: 'Description',
-        data: { rows:5 },
-      },
-    ]
- */
+  config: DynamicFormControl<any>[] = [
+    {
+      type: 'Default',
+      field: 'username',
+      label: 'UserName',
+      placeholder: 'UserName',
+    },
+    {
+      type: 'Default',
+      field: 'password',
+      label: 'Password',
+      placeholder: 'Password',
+      // validation: [Validators.required, Validators.maxLength(10)],
+      // validation: ['Validators.required'],
+      data: { inputType: 'password' },
+    },
+    {
+      type: 'Default',
+      field: 'date',
+      label: 'Date',
+      placeholder: 'Date',
+      data: { inputType: 'datetime-local' },
+    },
+    {
+      type: 'Default',
+      field: 'description',
+      label: 'Description',
+      placeholder: 'Description',
+      data: { rows: 5 },
+    },
+  ];
 
   dy: DynamicFormControl<any> =
     // { DynamicFormConfigurationObject: string, '_': string }
@@ -76,14 +75,14 @@ export class FormsComponent {
   clickServer() {
     firstValueFrom(this.hello$).then((x) => {
       this.config = null;
-      setTimeout(() => {
+      firstValueFrom(timer(0)).then(() => {
         this.config = x;
       });
     });
   }
   click() {
     this.config = null;
-    setTimeout(() => {
+    firstValueFrom(timer(0)).then(() => {
       this.config = JSON.parse(
         JSON.stringify(
           new Function(
