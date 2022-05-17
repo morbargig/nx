@@ -7,6 +7,9 @@
     "fnx-nx": "apps/fnx-nx",
     "fnx-nx-e2e": "apps/fnx-nx-e2e",
     "front-dynamic-forms": "libs/front/dynamic-forms",
-    "front-dynamic-table": "libs/front/dynamic-table"
+    "front-dynamic-table": "libs/front/dynamic-table",
+    "front-main-app-testing": "libs/front/main-app-testing",
+    "main-app": "apps/main-app",
+    "main-app-e2e": "apps/main-app-e2e"
   }
 }

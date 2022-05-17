@@ -1,0 +1,7 @@
+<fnx-nx-dynamic-form-control *ngIf="group && dy" [dynamicControl]="dy" [group]="group"></fnx-nx-dynamic-form-control>
+
+<h1 (click)="click()">Generate new form from text-area</h1>
+<h1 (click)="clickServer()">Generate new form from server</h1>
+
+<fnx-nx-app-dynamic-form-group *ngIf="config" [config]="config" (formOnSubmit)="formOnSubmit($event)">
+</fnx-nx-app-dynamic-form-group>

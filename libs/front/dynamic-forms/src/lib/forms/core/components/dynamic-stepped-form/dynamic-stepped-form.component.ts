@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   ChangeDetectorRef,
   Component,
@@ -107,7 +109,7 @@ export class DynamicSteppedFormComponent
     this.formValue.pipe(takeWhile(() => this.isAlive)).subscribe((res) => {
       if (this.form?.controls?.forms?.controls?.length) {
         const forms = this.form?.controls?.forms?.controls;
-        for (let i: number = 0; i < forms.length; i++) {
+        for (let i = 0; i < forms.length; i++) {
           const form: FormGroup = forms[i] as any;
           form.patchValue(res, {onlySelf: false, emitEvent: true});
           setTimeout(() => {

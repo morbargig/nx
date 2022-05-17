@@ -1,0 +1,147 @@
+<div class="dynamic-field form-input" style="width: 100%; padding: 25px; border: 1px solid black;" [formGroup]="group">
+    <table [formArrayName]="config.field" class="table" style="width: 100%;">
+        <ng-container>
+            <thead *ngIf="config.data.formGroupConfig as ctrls">
+                <tr *ngIf="!!ctrls">
+                    <th *ngFor="let field of ctrls" [style]="field?.config?.style" class="input-column">
+                        {{ field.label }}
+                    </th>
+                    <th style="max-width: 40em" class="d-flex pr-0 justify-content-end align-item-center">
+                        <div class="btn-group">
+                            <button class="btn btn-secondary btn-sm" (click)="addConfig()" type="button"
+                                [disabled]="!!config?.disabled || (config?.disabled$ | async)">
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+        </ng-container>
+        <tbody>
+            <ng-container *ngFor="let ctrl of control?.controls; let i = index; let odd = odd;"
+                [formGroup]="$any(ctrl)">
+                <tr *ngIf="config.data.formGroupConfig as ctrls">
+                    <td *ngFor="let field of ctrls" [ngClass]="{ 'd-none': field?.hidden }">
+                        <fnx-nx-dynamic-form-control [mode]="mode.TableCell" [dynamicControl]="field"
+                            [group]="$any(ctrl)" [wrapStyleClass]="'mb-0'">
+                        </fnx-nx-dynamic-form-control>
+                    </td>
+                    <td class="align-top" style="max-width: 40em">
+                        <button class="btn btn-md form-btn" (click)="removeConfig(i)" type="button">
+                            &#10060;
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="!!ctrl && !ctrl.valid && config?.data?.groupValidations?.length">
+                    <!-- [colSpan]="config.data.formGroupConfig?.length" -->
+                    <td class="px-0 pb-1 border-0 group-validation-wrapper">
+                        <fnx-nx-app-validation-messages [control]="ctrl" [filedLabel]="config?.label"
+                            [messages]="config?.errorMessages">
+                        </fnx-nx-app-validation-messages>
+                    </td>
+                </tr>
+
+                <!-- <ng-container *ngIf="!!config.data.dynamicConfig">
+                        <tr *ngFor="let item of config.data; let i = index"
+                            >
+                            <td *ngFor="let field of config.data.dynamicConfig(i, item)"
+                                [ngClass]="{ 'd-none': field?.hidden }" [colSpan]="config.data.formGroupConfig?.length">
+                                <fnx-nx-dynamic-form-control [dynamicControl]="field" [group]="ctrl" [mode]="2">
+                                </fnx-nx-dynamic-form-control>
+                            </td>
+                        </tr>
+                    </ng-container> -->
+            </ng-container>
+
+            <ng-container *ngIf="!!addingCtrl">
+                <tr class="add-row bg-light-blue">
+                    <td *ngFor="let field of config.data.formGroupConfig" [ngClass]="{ 'd-none': field?.hidden   }"
+                        class="pt-2">
+                        <fnx-nx-dynamic-form-control [mode]="mode.TableCell" [dynamicControl]="field"
+                            [group]="addingCtrl" [wrapStyleClass]="'mb-0'">
+                        </fnx-nx-dynamic-form-control>
+                    </td>
+                    <td class="align-bottom">
+                        <button class="btn btn-primary btn-md form-btn" (click)="!!addingCtrl?.valid && saveToForm()"
+                            type="button" [disabled]="!addingCtrl?.valid">
+                            {{ 'Add' }}
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="!!addingCtrl && !addingCtrl?.valid && config?.data?.groupValidations?.length">
+                    <!-- [colSpan]="config.data.formGroupConfig?.length" -->
+                    <td class="px-0 pb-1 border-0 group-validation-wrapper">
+                        <fnx-nx-app-validation-messages [filedLabel]="config?.label" *ngIf="!!addingCtrl"
+                            [control]="addingCtrl" [messages]="config?.errorMessages">
+                        </fnx-nx-app-validation-messages>
+                    </td>
+                </tr>
+            </ng-container>
+            <tr>
+                <fnx-nx-app-validation-messages [filedLabel]="config?.label" style="font-size: 1.5rem;"
+                    *ngIf="!!config?.validation?.length || !!config?.asyncValidation?.length" [control]="control"
+                    [messages]="config?.errorMessages">
+                </fnx-nx-app-validation-messages>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <ng-template #globalFilter>
+    <div class="row">
+        <label for="globalFilter" class="d-block col-12"> Filter results</label>
+        <fnx-nx-dynamic-form-control id="globalFilter" *ngIf="globalFilterDyn?.config?.name"
+            [class]="globalFilterDyn?.config?.styleClass" (onChange)="globalFilterQuery =  $event"
+            [dynamicControl]="globalFilterDyn" [group]="group" [mode]="2">
+        </fnx-nx-dynamic-form-control>
+    </div>
+</ng-template> -->
+
+<!-- <ng-template #filters>
+    <ideo-dynamic-form-group [(form)]="group.controls.filters" [config]="data?.filters" [showSubmitButton]="true"
+      [showCancelButton]="true" cancelText="Reset" [submitText]="'Apply'" (onSubmit)="applyFilters($event)"
+      (onCancel)="resetFilters()">
+    </ideo-dynamic-form-group>
+  </ng-template> -->

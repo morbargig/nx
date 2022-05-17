@@ -5,6 +5,11 @@ import { DynamicFormControl } from '@fnx-nx/front/dynamic-forms';
 import { User } from '@fnx-nx/api-interfaces';
 import { firstValueFrom } from 'rxjs';
 
+type EmailLocaleIDs = "welcome_email" | "email_heading";
+type FooterLocaleIDs = "footer_title" | "footer_sendoff";
+ 
+type AllLocaleIDs = `${EmailLocaleIDs | FooterLocaleIDs}_id`;
+
 @Component({
   selector: 'fnx-nx-root',
   templateUrl: './app.component.html',

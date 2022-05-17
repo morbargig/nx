@@ -1,4 +1,4 @@
-<div *ngIf="!!config && !!group" [class]="wrapStyleClass" [hidden]="!visible || config?.hidden" [ngClass]="{
+<div *ngIf="!!config && !!group" [class]="wrapStyleClass" [hidden]="!visible || config?.hidden"  [ngClass]="{
     'mb-3': !wrapStyleClass,
     invalid: control?.touched && !control?.valid && !control?.disabled
   }" class="form-group">
@@ -8,7 +8,7 @@
         {{ config.label }}
       </span>
       <i *ngIf="!!isRequired" class="fas fa-star-of-life text-danger mt-1 ml-1"
-         style="font-size: 5px; vertical-align: top"></i>
+        style="font-size: 5px; vertical-align: top"></i>
     </label>
     <ng-container [ngTemplateOutlet]="actual"></ng-container>
   </ng-container>
@@ -17,14 +17,13 @@
 <ng-template #actual>
   <div *ngIf="!!config && !!group" class="row">
     <div class="col position-relative">
-      <ng-container #formContainer (setVisibility)="setVisibility($event)" [(control)]="control" [fnxNxDynamicField]="config"
-                    [group]="group" [id]="id" [type]="type">
+      <ng-container #formContainer (setVisibility)="setVisibility($event)" [(control)]="control"
+        [fnxNxDynamicField]="config" [group]="group" [id]="id" [type]="type">
       </ng-container>
-      <app-validation-messages *ngIf="config?.validation?.length || config?.asyncValidation?.length" [control]="control"
-                               [filedLabel]="config?.label"
-                               [messages]="config?.errorMessages"
-                               [takeOne]="config.controlType !== 'group'">
-      </app-validation-messages>
+      <fnx-nx-app-validation-messages *ngIf="config?.validation?.length || config?.asyncValidation?.length"
+        [control]="control" [filedLabel]="config?.label" [messages]="config?.errorMessages"
+        [takeOne]="config.controlType !== 'group'">
+      </fnx-nx-app-validation-messages>
     </div>
   </div>
 </ng-template>

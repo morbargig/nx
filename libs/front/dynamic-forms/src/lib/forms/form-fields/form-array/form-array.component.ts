@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArrayData } from './form-array';
 import {
@@ -6,9 +8,11 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { takeWhile } from 'rxjs/operators';
+import { takeWhile, take, debounceTime } from 'rxjs/operators';
 import { BaseFieldComponent } from '../../core/directives/base-field.directive';
 import { FieldEvent } from '../../core/interfaces/events';
+import { DynamicFormControl } from '../../core/interfaces/field-config';
+import { DynamicFormStepMode } from '../../core/interfaces/dynamic-stepped-form';
 
 @Component({
   selector: 'fnx-nx-app-form-array',
@@ -19,16 +23,15 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
   extends BaseFieldComponent<T, FormArrayData<T, K>, K, FormArray>
   implements OnInit
 {
-  // public globalFilterQuery: string
-  // public globalFilterDyn: FieldConfigObj = {
-  //   field: 'globalFilter',
-  //   type: 'Default',
-  //   label: 'Result Filter',
-  //   placeholder: 'search in result',
-  //   onChange: ({currentValue}) => (this.globalFilterQuery = currentValue, this.cd.markForCheck()),
-  // }
+  public addingCtrl: FormGroup;
+  groupValidators = (): AbstractControlOptions => ({
+    validators: this.config?.data?.groupValidations || [],
+    asyncValidators: this.config?.data?.asyncGroupValidations || [],
+  });
 
-  public addingCtrl: FormGroup = this.fb.group({}, this.groupValidators());
+  public get mode() {
+    return DynamicFormStepMode;
+  }
 
   constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
     super();
@@ -36,23 +39,6 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
 
   public get data() {
     return this?.config?.data;
-  }
-
-  groupValidators(): AbstractControlOptions | null {
-    if (
-      !this.config?.data?.groupValidations?.length &&
-      !this.config?.data?.asyncGroupValidations?.length
-    ) {
-      return null;
-    }
-    return {
-      ...(this.config?.data?.groupValidations?.length
-        ? { validators: this.config?.data?.groupValidations }
-        : {}),
-      ...(this.config?.data?.asyncGroupValidations?.length
-        ? { asyncValidators: this.config?.data?.asyncGroupValidations }
-        : {}),
-    };
   }
 
   // public filtersForm: FormGroup
@@ -67,7 +53,48 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
   // }
 
   ngOnInit(): void {
-    this.addingCtrl = this.fb.group({}, this.groupValidators());
+    this.addingCtrl = this.fb.group(
+      (<DynamicFormControl[]>this.data.formGroupConfig).reduce(
+        (p, c) => ({
+          ...p,
+          [c.field]: (() => {
+            switch (c.type) {
+              case 'FormArray': {
+                return this.fb.array(
+                  [], // this.config.createItem ? [this.config.createItem()] : [],
+                  {
+                    validators: c?.validation || [],
+                    asyncValidators: c?.asyncValidation || [],
+                    updateOn: 'change',
+                  }
+                );
+                break;
+              }
+              // case 'Default': {
+              //   return this.fb.array(
+              //     [], // this.config.createItem ? [this.config.createItem()] : [],
+              //     c?.validation,
+              //     c?.asyncValidation
+              //   );
+              //   break;
+              // }
+              default:
+                return this.fb.control(
+                  { value: c.value, disabled: c.disabled },
+                  {
+                    validators: c?.validation || [],
+                    asyncValidators: c?.asyncValidation || [],
+                    updateOn: 'change',
+                  }
+                );
+                break;
+            }
+          })(),
+        }),
+        {}
+      ),
+      this.groupValidators()
+    );
     if (!(this.control instanceof FormArray)) {
       this.group.removeControl(this.config.field);
       this.group.addControl(
@@ -198,19 +225,47 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
     // }
   }
 
-  // public removeConfig(index: number) {
-  //   if (this.config.data?.onRemove) {
-  //     this.config.data.onRemove(this.control.value[index]);
-  //   }
-  //   this.control.removeAt(index);
-  //   // tslint:disable-next-line:no-non-null-assertion
-  //   this.config?.onChange!?.({
-  //     currentValue: this.control.value,
-  //     control: this.control
-  //   });
-  // }
+  public removeConfig(index: number) {
+    this.config?.data?.onRemove!?.(this.control.value[index]);
+    this.control.removeAt(index);
+    this.config?.onChange!?.({
+      currentValue: this.control.value,
+      control: this.control,
+    });
+  }
 
   public addConfig() {
     this.control?.push(this.fb.group({}, this.groupValidators()));
+  }
+  saveToForm() {
+    const state = this.addingCtrl.getRawValue();
+    const newControl = this.fb.group(state);
+    this.control.push(newControl);
+    // newControl?.valueChanges
+    //   ?.pipe(
+    //     takeWhile(() => this.isActive),
+    //     debounceTime(200),
+    //     take(1),
+    //   )
+    //   .subscribe(() => {
+    newControl?.patchValue(state);
+    // });
+    const defaultVal = (<DynamicFormControl[]>(
+      this.config.data.formGroupConfig
+    ))?.reduce(
+      (p, c) => ({
+        ...p,
+        [c.field]: {
+          value: c.value,
+          disabled: c.disabled,
+        },
+      }),
+      {}
+    );
+    this.addingCtrl.reset(defaultVal);
+    this.config?.onChange!?.({
+      currentValue: this.control.value,
+      control: this.control,
+    });
   }
 }

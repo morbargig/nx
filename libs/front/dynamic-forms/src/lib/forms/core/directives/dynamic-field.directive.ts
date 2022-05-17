@@ -10,11 +10,11 @@ import {
   Type,
   ViewContainerRef,
 } from '@angular/core';
-import {AbstractControl, FormBuilder} from '@angular/forms';
-import {filter, takeWhile} from 'rxjs/operators';
-import {DynamicFormControl, Field} from '../interfaces/field-config';
-import {BaseFieldComponent} from './base-field.directive';
-import {FieldEvent} from "../interfaces/events";
+import { AbstractControl, FormBuilder } from '@angular/forms';
+import { filter, takeWhile } from 'rxjs/operators';
+import { DynamicFormControl, Field } from '../interfaces/field-config';
+import { BaseFieldComponent } from './base-field.directive';
+import { FieldEvent } from '../interfaces/events';
 
 @Directive({
   selector: '[fnxNxDynamicField]',
@@ -23,7 +23,8 @@ import {FieldEvent} from "../interfaces/events";
 })
 export class DynamicFieldDirective<T = any>
   extends BaseFieldComponent
-  implements OnInit, OnChanges, OnDestroy {
+  implements OnInit, OnChanges, OnDestroy
+{
   public component: ComponentRef<Field<T>>;
   @Input('fnxNxDynamicField') public override config: DynamicFormControl<T>;
   @Input() public type: Type<Field<T>>;
@@ -36,7 +37,8 @@ export class DynamicFieldDirective<T = any>
   constructor(
     private container: ViewContainerRef,
     private fb: FormBuilder
-  ) {
+  ) // private cd: ChangeDetectorRef
+  {
     super();
   }
 
@@ -78,16 +80,12 @@ export class DynamicFieldDirective<T = any>
             this.group.controls[this.config.field].setValue(evt.value);
             break;
           case 'setDisabled': {
-            const {
-              value
-            } = evt as FieldEvent<T, typeof evt.type>;
+            const { value } = evt as FieldEvent<T, typeof evt.type>;
             this.setDisabled(value);
             break;
           }
           case 'setVisibility': {
-            const {
-              value
-            } = evt as FieldEvent<T, typeof evt.type>;
+            const { value } = evt as FieldEvent<T, typeof evt.type>;
             this.setFieldVisibility(value);
             break;
           }
@@ -137,7 +135,7 @@ export class DynamicFieldDirective<T = any>
           this.group.addControl(
             this.config.field,
             this.fb.control(
-              {value: this.config.value, disabled: this.config.disabled},
+              { value: this.config.value, disabled: this.config.disabled },
               this.config.validation,
               this.config.asyncValidation ? this.config.asyncValidation : null
             )
@@ -149,6 +147,16 @@ export class DynamicFieldDirective<T = any>
     if (this.config.registerControl) {
       this.config.registerControl(this.control);
     }
+    // this.control.valueChanges
+    //   .pipe(
+    //     takeWhile(() => this.isActive),
+    //     debounceTime(200),
+    //     take(1)
+    //   )
+    //   .subscribe(() => {
+    //     this.cd.detectChanges();
+    //     this.cd.markForCheck();
+    //   });
   }
 
   private createComponent() {

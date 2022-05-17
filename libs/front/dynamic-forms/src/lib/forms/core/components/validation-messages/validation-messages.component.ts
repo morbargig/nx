@@ -5,18 +5,24 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
-  OnInit
+  OnInit,
 } from '@angular/core';
-import {AbstractControl} from '@angular/forms';
-import {debounceTime, distinctUntilChanged, skip, takeUntil, takeWhile} from 'rxjs/operators';
-import {merge} from 'rxjs';
-import {KeyValue} from '@angular/common';
+import { AbstractControl } from '@angular/forms';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  skip,
+  takeUntil,
+  takeWhile,
+} from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { KeyValue } from '@angular/common';
 
 export interface TranslateSelectItem {
   /**
    * filed label
    */
-  filedLabel?: string
+  filedLabel?: string;
   /**
    * error name
    */
@@ -35,39 +41,47 @@ export interface TranslateSelectItem {
   data?: { [key: string]: string | number };
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export type IntelligenceKeys<T extends U, U = string> = T | (U & {});
-type supportedDefaultValuationsErrors = ('required' | 'max' | 'min' | 'minLength' | 'email' | 'pattern')
 
-@Component({
-  selector: 'app-validation-messages',
+type supportedDefaultValuationsErrors =
+  | 'required'
+  | 'max'
+  | 'min'
+  | 'minLength'
+  | 'email'
+  | 'pattern';
+
+  @Component({
+  selector: 'fnx-nx-app-validation-messages',
   templateUrl: './validation-messages.component.html',
   styleUrls: ['./validation-messages.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class ValidationMessagesComponent implements OnInit, OnDestroy {
   public errorMessages: TranslateSelectItem[];
-  public ended: EventEmitter<void> = new EventEmitter<void>()
-  @Input() public takeOne: boolean = true;
+  public ended: EventEmitter<void> = new EventEmitter<void>();
+  @Input() public takeOne = true;
   @Input() public filedLabel: string;
   @Input() public control: AbstractControl;
 
-  constructor(private cd: ChangeDetectorRef) {
-  }
+  constructor(private cd: ChangeDetectorRef) {}
 
   @Input()
-  public set messages(msgObj: { [error: string]: string | TranslateSelectItem }) {
-    if (!!msgObj) {
+  public set messages(msgObj: {
+    [error: string]: string | TranslateSelectItem;
+  }) {
+    if (msgObj) {
       this.errorMessages = [...this.getErrorMessages(msgObj)];
-      this.render()
+      this.render();
     }
   }
 
-  private static getDefaultErrorMessage = ({
-                                             key,
-                                             value
-                                           }: { key: supportedDefaultValuationsErrors, value: any }, filedLabel: string): TranslateSelectItem => {
-    const baseErrorBody: TranslateSelectItem = {errorName: key, filedLabel}
+  private static getDefaultErrorMessage = (
+    { key, value }: { key: supportedDefaultValuationsErrors; value: any },
+    filedLabel: string
+  ): TranslateSelectItem => {
+    const baseErrorBody: TranslateSelectItem = { errorName: key, filedLabel };
     switch (key) {
       // case Validators.required.name: {
       //   return { ...baseErrorBody, label: 'Portal.Common.Required', value: filedLabel }
@@ -190,22 +204,23 @@ export class ValidationMessagesComponent implements OnInit, OnDestroy {
       default: {
         if (typeof value === 'string') {
           return {
-            ...baseErrorBody, label: value,
-            data: {entity: baseErrorBody?.filedLabel}
-          }
+            ...baseErrorBody,
+            label: value,
+            data: { entity: baseErrorBody?.filedLabel },
+          };
         }
-        return baseErrorBody
-        break
+        return baseErrorBody;
+        break;
       }
     }
-  }
+  };
 
   // public translateParamObject(errMsg: TranslateSelectItem): Object {
   //   return { ...errMsg, value: errMsg.value, ...errMsg?.data }
   // }
 
   private static handleErrors(key: string, val: string): TranslateSelectItem {
-    const baseErrorBody: TranslateSelectItem = {errorName: key, label: val,}
+    const baseErrorBody: TranslateSelectItem = { errorName: key, label: val };
     switch (key) {
       // case (Validators.required.name): {
       //   // const keyTranslateVal = this.translatePipe.transform('Portal.Common.Required')?.replace(/{{.*}}/, '')?.trim()
@@ -219,50 +234,72 @@ export class ValidationMessagesComponent implements OnInit, OnDestroy {
       // }
       // can handle any error validation
       default:
-        return {...baseErrorBody}
+        return { ...baseErrorBody };
     }
   }
 
   ngOnDestroy(): void {
-    this.ended.next()
-    this.ended.complete()
+    this.ended.next();
+    this.ended.complete();
   }
 
-  public hasCustomErrorMessage = (key: string) => !!key ? this.errorMessages?.find(i => i.errorName === key) : null
+  public hasCustomErrorMessage = (key: string) =>
+    key ? this.errorMessages?.find((i) => i.errorName === key) : null;
 
-  render = () => this.cd.detectChanges()
+  render = () => this.cd.detectChanges();
 
   ngOnInit() {
-    merge(this.control.statusChanges?.pipe(distinctUntilChanged(), skip(1)), this.control?.valueChanges?.pipe(skip(1), distinctUntilChanged(), debounceTime(200))).pipe(takeUntil(this.ended), takeWhile(() => !this.ended?.closed), debounceTime(200)).subscribe(this.render)
+    merge(
+      this.control.statusChanges?.pipe(distinctUntilChanged(), skip(1)),
+      this.control?.valueChanges?.pipe(
+        skip(1),
+        distinctUntilChanged(),
+        debounceTime(200)
+      )
+    )
+      .pipe(
+        takeUntil(this.ended),
+        takeWhile(() => !this.ended?.closed),
+        debounceTime(200)
+      )
+      .subscribe(this.render);
   }
 
   getDefaultErrorMessage = ({
-                              key,
-                              value
-                            }: KeyValue<IntelligenceKeys<supportedDefaultValuationsErrors>, any>):
-    TranslateSelectItem => ValidationMessagesComponent.getDefaultErrorMessage({
     key,
-    value
-  } as KeyValue<supportedDefaultValuationsErrors, any>, this.filedLabel)
+    value,
+  }: KeyValue<
+    IntelligenceKeys<supportedDefaultValuationsErrors>,
+    any
+  >): TranslateSelectItem =>
+    ValidationMessagesComponent.getDefaultErrorMessage(
+      {
+        key,
+        value,
+      } as KeyValue<supportedDefaultValuationsErrors, any>,
+      this.filedLabel
+    );
 
-  private getErrorMessages(msgObj: { [error: string]: string | TranslateSelectItem }): TranslateSelectItem[] {
+  private getErrorMessages(msgObj: {
+    [error: string]: string | TranslateSelectItem;
+  }): TranslateSelectItem[] {
     const keys: string[] = Object.keys(msgObj);
     return keys.map((key: string) => {
       const item: TranslateSelectItem | string = msgObj?.[key];
       switch (typeof item) {
         case 'string': {
-          return ValidationMessagesComponent.handleErrors(key, item)
+          return ValidationMessagesComponent.handleErrors(key, item);
         }
         case 'object': {
-          item.label = item?.label || `Portal.Common.Errors.${key}`
-          item.errorName = key
-          return item
+          item.label = item?.label || `Portal.Common.Errors.${key}`;
+          item.errorName = key;
+          return item;
         }
         default: {
-          return null
-          break
+          return null;
+          break;
         }
       }
-    })
+    });
   }
 }

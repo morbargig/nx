@@ -9,7 +9,4 @@
     [id]="id" [ngClass]="{ 'is-invalid': !!control.touched && !control.valid }"
     [placeholder]="config?.placeholder || ''" [rows]="config.data.rows"
     class="form-control {{ config?.bodyStyle?.input.styleClass }}"></textarea>
-  <span (click)="autoGeneratorClicked()" *ngIf="config.data?.autoGenerator" class="auto-generator">
-    {{ config.data.autoGeneratorLabel }}
-  </span>
 </ng-template>

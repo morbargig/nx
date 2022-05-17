@@ -6,18 +6,47 @@ import { DynamicFormControl } from '@fnx-nx/front/dynamic-forms';
 export class AppService {
   getHelloFormConf(): DynamicFormControl<User>[] {
     return [
-      // {
-      //   field: 'test',
-      //   type: 'FormArray',
-      //   bodyStyle: {},
-      //   data: {
-      //     formControlConfig: {
-      //       type: 'Default',
-      //       field: '_',
-      //       // onChange: ({currentValue}) => null,
-      //     },
-      //   },
-      // },
+      {
+        field: 'friends',
+        type: 'FormArray',
+        label: 'Friends List',
+        data: {
+          formGroupConfig: [
+            {
+              type: 'Default',
+              field: 'name',
+              label: 'Name',
+              // onChange: ({currentValue}) => null,
+            },
+            {
+              type: 'Default',
+              field: 'phoneNumber',
+              label: 'Phone',
+              // onChange: ({currentValue}) => null,
+            },
+            {
+              type: 'FormArray',
+              field: 'friends',
+              label: 'Phone',
+              data: {
+                formGroupConfig: [
+                  {
+                    type: 'Default',
+                    field: 'name',
+                    label: 'Name',
+                  },
+                  {
+                    type: 'Default',
+                    field: 'phoneNumber',
+                    label: 'Phone',
+                  },
+                ],
+              },
+              // onChange: ({currentValue}) => null,
+            },
+          ],
+        },
+      },
       // {
       //   field: 'payment',
       //   type: 'FormArray',
