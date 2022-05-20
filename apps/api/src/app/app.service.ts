@@ -8,7 +8,7 @@ export class AppService {
     return [
       {
         field: 'job',
-        label: 'Label',
+        label: 'Job',
         type: 'FormGroup',
         data: {
           formConfig: [
@@ -20,6 +20,7 @@ export class AppService {
             {
               type: 'FormArray',
               field: 'coworkers',
+              label: 'Coworkers',
               data: {
                 formGroupConfig: [
                   {
@@ -48,7 +49,7 @@ export class AppService {
         placeholder: 'Matrix',
         data: {
           formArrayConfig: {
-            field: '___' as any,
+            field: '_',
             type: 'FormArray',
             label: 'Matrix',
             placeholder: 'Matrix',
@@ -72,10 +73,10 @@ export class AppService {
           formControlConfig: {
             field: '_',
             type: 'Default',
-            label: 'Age',
-            placeholder: 'Age',
+            label: 'Role',
+            placeholder: 'Role',
             data: {
-              inputType: 'number',
+              // inputType: 'number',
               // title$: of(),
             },
           },

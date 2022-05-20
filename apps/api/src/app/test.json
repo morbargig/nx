@@ -1,16 +1,71 @@
 {
     "job": {
-        "title": "developer",
-        "salary": "24",
+        "title": "Developer",
+        "salary": "22",
         "coworkers": [
             {
-                "name": "oren",
+                "name": "omri",
                 "phoneNumber": "1"
             },
             {
-                "name": "omri",
+                "name": "oren",
                 "phoneNumber": "2"
             }
         ]
-    }
+    },
+    "matrix": [
+        [
+            "1",
+            "2",
+            "3",
+            null
+        ],
+        [
+            "2",
+            "4"
+        ]
+    ],
+    "roles": [
+        "10",
+        "20",
+        "30"
+    ],
+    "friends": [
+        {
+            "name": "nik",
+            "phoneNumber": "1",
+            "friends": [
+                {
+                    "name": "zalina",
+                    "phoneNumber": "2",
+                    "friends": [
+                        {
+                            "name": "alon",
+                            "phoneNumber": "3"
+                        },
+                        {
+                            "name": "anabel",
+                            "phoneNumber": "4"
+                        }
+                    ]
+                },
+                {
+                    "name": "ortal",
+                    "phoneNumber": "5",
+                    "friends": [
+                        {
+                            "name": "ziv",
+                            "phoneNumber": "6"
+                        },
+                        {
+                            "name": "adi",
+                            "phoneNumber": "7"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "age": "24",
+    "name": "Mor Bargig"
 }
