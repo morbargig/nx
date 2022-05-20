@@ -1,26 +1,13 @@
 import { AbstractControl } from '@angular/forms';
-import {
-  BaseFieldData,
-  FieldConfigObj,
-} from '../../core/interfaces/field-config';
-import { BaseFieldComponent } from '../../core/directives/base-field.directive';
+import { BaseFieldData } from '../../core/interfaces/field-config';
 
-type AutoGeneratorAction<T = any, K extends keyof T = keyof T> = (
-  config: FieldConfigObj<T, FormTextData<T, K>, K>,
-  form: BaseFieldComponent['parentForm']
-) => string | void;
-
-export class FormTextData<T = any, K extends keyof T = keyof T>
-  implements BaseFieldData<T, K>
-{
-  public autoGenerator?: boolean;
-  public autoGeneratorLabel?: string;
-  public autoGeneratorAction?: AutoGeneratorAction<T, K>;
-  public rows?: number;
-  public cols? = 4;
-  public step?: number;
-  public enterClicked?: (val: any, ctrl: AbstractControl) => void;
-  public inputType?:
+export interface FormTextData<T = any, K extends keyof T = keyof T>
+  extends BaseFieldData<T, K> {
+  rows?: number;
+  cols?: number;
+  step?: number;
+  enterClicked?: (val: any, ctrl: AbstractControl) => void;
+  inputType?:
     | 'hidden'
     | 'text'
     | 'password'
@@ -33,12 +20,7 @@ export class FormTextData<T = any, K extends keyof T = keyof T>
     | 'tel'
     | 'color'
     | 'label'
-    | 'separator' = 'text';
+    | 'separator';
 
-  constructor(obj?: FormTextData) {
-    (Object.keys(obj || {}) as (keyof FormTextData<T, K>)[])?.forEach(
-      (key) => ((<any>this)[key] = obj[key])
-    );
-  }
   // public keyFilter: DefaultMasks;
 }

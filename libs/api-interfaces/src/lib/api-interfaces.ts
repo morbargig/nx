@@ -11,6 +11,12 @@ export interface JsonObject {
 }
 
 export interface User {
+  job: {
+    title: string;
+    salary: number;
+    coworkers: { name: string; phoneNumber: number }[];
+  };
+  matrix: string[][];
   roles: string[];
   test: { t: { b: string } };
   name: string;

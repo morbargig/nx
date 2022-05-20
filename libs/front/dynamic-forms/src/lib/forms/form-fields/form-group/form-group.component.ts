@@ -1,16 +1,28 @@
-// import { Component } from '@angular/core';
-// import { BaseFieldDirective } from '../../@core/directives/base-field.directive';
-// import { Field, FieldConfig } from '../../@core/interfaces';
-// import { FormGroupData } from './form-group';
-// import { FormGroup } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
+import { BaseFieldComponent } from '../../core/directives/base-field.directive';
+import { FormGroupData } from './form-group';
+import { Component } from '@angular/core';
 
-// @Component({
-//   selector: 'app-form-group',
-//   templateUrl: './form-group.component.html',
-//   styleUrls: ['./form-group.component.scss'],
-// })
-// export class FormGroupComponent extends BaseFieldDirective implements Field<FormGroupData> {
-//   public config: FieldConfig<FormGroupData>;
-//   public group: FormGroup;
-//   public id: string;
-// }
+@Component({
+  selector: 'fnx-nx-app-form-group',
+  templateUrl: './form-group.component.html',
+  styleUrls: ['./form-group.component.scss'],
+})
+export class FormGroupComponent<
+  T = any,
+  K extends keyof T = keyof T
+> extends BaseFieldComponent<T, FormGroupData<T, K>, K, FormGroup> {
+  setForm(form: FormGroup) {
+    switch (this.parentForm.constructor) {
+      case FormGroup: {
+        this.control.setParent(this.parentForm);
+        (this.parentForm as FormGroup).setControl(this.config.field, form);
+        this.control = form;
+        break;
+      }
+      case FormArray: {
+        break;
+      }
+    }
+  }
+}

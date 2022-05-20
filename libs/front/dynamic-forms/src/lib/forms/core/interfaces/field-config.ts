@@ -14,6 +14,7 @@ import { FieldEvent } from './events';
 import { FormArrayComponent } from '../../form-fields/form-array/form-array.component';
 import { asConst } from '../functions/as-const.func';
 import { Validators } from '@angular/forms';
+import { FormGroupComponent } from '../../form-fields/form-group/form-group.component';
 
 export type elStyleObj = {
   styleClass?: string;
@@ -26,6 +27,8 @@ export enum FormFieldType {
   Default = 'Default',
   /** this component made to answer arrays types */
   FormArray = 'FormArray',
+  /** this component made to answer object types */
+  FormGroup = 'FormGroup',
 }
 
 class FormsFieldClassType<T = any, K extends keyof T = keyof T> {
@@ -34,6 +37,7 @@ class FormsFieldClassType<T = any, K extends keyof T = keyof T> {
   }>()({
     Default: FormTextComponent as Type<FormTextComponent<T, K>>,
     FormArray: FormArrayComponent as Type<FormArrayComponent<T, K>>,
+    FormGroup: FormGroupComponent as Type<FormGroupComponent<T, K>>,
   } as const);
 }
 
@@ -45,6 +49,7 @@ type FieldComponentType<
 export const FormFieldsDic = asConst<FieldComponentType>()({
   Default: FormTextComponent,
   FormArray: FormArrayComponent,
+  FormGroup: FormGroupComponent,
 } as const);
 
 // tslint:disable-next-line:no-empty-interface
@@ -144,18 +149,19 @@ export type DynamicFormControl<
 }[K];
 
 /** @author Mor Bargig <morbargig@gmail.com>*/
-export type DynamicFormControlArray<
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface DynamicFormControlArray<
   T = any,
   K extends keyof T = keyof T
   // V extends T[K] = T[K]
   // CT extends keyof FieldComponentType = keyof FieldComponentType
-> = Array<
-  DynamicFormControl<
-    T,
-    K
-    // , V
-  >
->;
+> extends Array<
+    DynamicFormControl<
+      T,
+      K
+      // , V
+    >
+  > {}
 
 // tslint:disable-next-line:no-shadowed-variable
 export type getFieldType<T> = T extends DynamicFormControl<infer T>[]

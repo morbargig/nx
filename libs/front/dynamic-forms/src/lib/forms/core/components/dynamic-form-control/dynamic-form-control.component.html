@@ -1,4 +1,4 @@
-<div *ngIf="!!config && !!parentForm" [class]="wrapStyleClass" [hidden]="!visible || config?.hidden" [ngClass]="{
+<div *ngIf="config && parentForm" [class]="wrapStyleClass" [hidden]="config?.hidden || notVisible" [ngClass]="{
     'mb-3': !wrapStyleClass,
     invalid: control?.touched && !control?.valid && !control?.disabled
   }" class="form-group ">
@@ -17,7 +17,6 @@
 <ng-template #actual>
   <div *ngIf="!!config && !!parentForm" class="row">
     <div class="col position-relative">
-      {{ ['control ,parentForm',control ,parentForm] | log }}
       <ng-container (setVisibility)="setVisibility($event)" [(control)]="control" [fnxNxDynamicField]="config"
         [parentForm]="parentForm" [id]="id" [type]="type">
       </ng-container>

@@ -50,8 +50,7 @@ export class DynamicFieldDirective<
     super();
   }
 
-  @Input()
-  public override set control(ctrl) {
+  @Input() public override set control(ctrl) {
     this._control = ctrl;
     this.controlChange.emit(this._control);
   }
@@ -60,19 +59,6 @@ export class DynamicFieldDirective<
   }
 
   public override ngOnDestroy() {
-    // switch (this.parentForm.constructor) {
-    //   // case FormArray: {
-    //   //   this.control.setParent(null);
-    //   //   break;
-    //   // }
-    //   // case FormGroup: {
-    //   //   (this.parentForm as FormGroup).removeControl(this.config.field);
-    //   //   break;
-    //   // }
-    //   default: {
-    //     break;
-    //   }
-    // }
     this?.component?.instance?.ngOnDestroy?.();
     super.ngOnDestroy();
   }
@@ -116,57 +102,8 @@ export class DynamicFieldDirective<
   }
 
   public createAbstractControl() {
-    // switch (this.parentForm instanceof FormArray) {
-    //   case true: {
-    //     const c = this.config;
-    //     control = this.fb.control(null, {
-    //       validators: c?.validation || [],
-    //       asyncValidators: c?.asyncValidation || [],
-    //       updateOn: 'change',
-    //     });
-    //     (this.parentForm as FormArray).push(control);
-    //     break;
-    //   }
-    //   default: {
-    //     const c = this.config;
-    //     const ctrl = this.parentForm?.get(c.field);
-    //     if (ctrl) {
-    //       if (c.validation?.length) {
-    //         ctrl.setValidators(c.validation);
-    //       }
-    //       if (c?.asyncValidation?.length) {
-    //         ctrl.setAsyncValidators(c.asyncValidation);
-    //       }
-    //       control = ctrl;
-    //     } else {
-    //       const c = this.config;
-    //       control = this.fb.control(
-    //         { value: c.value, disabled: c.disabled },
-    //         {
-    //           validators: c?.validation || [],
-    //           asyncValidators: c?.asyncValidation || [],
-    //           updateOn: 'change',
-    //         }
-    //       );
-    //       (this.parentForm as FormGroup).addControl(
-    //         this.config.field,
-    //         control
-    //       );
-    //     }
-    //     break;
-    //   }
-    // }
-    // if (this.parentForm instanceof FormArray) {
-    //   this.parentForm.push(this.control);
-    // } else
-    // switch (this.parentForm.constructor) {
-    //   case FormArray: {
-    //     break
-    //   }
     switch (this.parentForm.constructor) {
       case FormArray: {
-        // this.control = this.dfb.buildChild(this.config as any) as A;
-        // (this.parentForm as FormArray).push(this.control);
         break;
       }
       case FormGroup: {
@@ -188,18 +125,7 @@ export class DynamicFieldDirective<
         break;
       }
     }
-
     this.config?.registerControl!?.(this.control);
-    // this.control.valueChanges
-    //   .pipe(
-    //     takeWhile(() => this.isActive),
-    //     debounceTime(200),
-    //     take(1)
-    //   )
-    //   .subscribe(() => {
-    //     this.cd.detectChanges();
-    //     this.cd.markForCheck();
-    //   });
   }
 
   private createComponent() {
@@ -225,15 +151,6 @@ export class DynamicFieldDirective<
   }
 
   private setDisabled(enabled: boolean) {
-    // switch (this.parentForm instanceof FormArray) {
-    //   case true: {
-    //     this.control;
-    //     break;
-    //   }
-
-    //   default:
-    //     break;
-    // }
     if (!enabled) {
       this.control.disable();
     } else {

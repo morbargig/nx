@@ -1,49 +1,16 @@
 {
-    "age": "321432",
-    "name": "VFREVWERV",
-    "roles": [],
-    "friends": [
-        {
-            "name": "ILAN",
-            "phoneNumber": "0528612379",
-            "friends": [
-                {
-                    "name": "432",
-                    "phoneNumber": "2344",
-                    "friends": [
-                        {
-                            "name": "4321",
-                            "phoneNumber": "4321"
-                        },
-                        {
-                            "name": "4123",
-                            "phoneNumber": "4123"
-                        },
-                        {
-                            "name": "4123",
-                            "phoneNumber": "412"
-                        }
-                    ]
-                },
-                {
-                    "name": {},
-                    "phoneNumber": {},
-                    "friends": [
-                        {
-                            "name": {},
-                            "phoneNumber": {}
-                        },
-                        {
-                            "name": {},
-                            "phoneNumber": {}
-                        },
-                        {
-                            "name": {},
-                            "phoneNumber": {}
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+    "job": {
+        "title": "developer",
+        "salary": "24",
+        "coworkers": [
+            {
+                "name": "oren",
+                "phoneNumber": "1"
+            },
+            {
+                "name": "omri",
+                "phoneNumber": "2"
+            }
+        ]
+    }
 }

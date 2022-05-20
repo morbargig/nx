@@ -24,15 +24,14 @@ export abstract class BaseFieldComponent<
 
   protected _control: A;
   public get control(): A {
-    // if (this._control) {
     return this._control;
-    // }
-    // if (!(this.parentForm instanceof FormArray)) {
-    //   return this.parentForm?.get(this.config?.field) as A;
-    // }
   }
   public set control(v: A) {
     this._control = v;
+  }
+
+  public get data(): D {
+    return this.config.data;
   }
 
   public ngOnDestroy() {

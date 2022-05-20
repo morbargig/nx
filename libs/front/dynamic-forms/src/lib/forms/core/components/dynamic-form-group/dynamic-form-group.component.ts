@@ -57,7 +57,15 @@ export class DynamicFormGroupComponent<T = any> implements OnInit {
   }
 
   ngOnInit(): void {
-    this.form = this.createGroup();
+    switch (this.form?.constructor) {
+      case FormGroup: {
+        break;
+      }
+      default: {
+        this.form = this.createGroup();
+        break;
+      }
+    }
   }
 
   public cancel() {
@@ -74,7 +82,6 @@ export class DynamicFormGroupComponent<T = any> implements OnInit {
   public handleSubmit() {
     this.form.updateValueAndValidity();
     if (this.form.valid) {
-      debugger;
       this.formOnSubmit.emit(this.form.getRawValue());
     }
   }

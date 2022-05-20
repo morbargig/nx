@@ -12,28 +12,9 @@ import {
   FieldConfigObj,
 } from '../../core/interfaces/field-config';
 
-// export type ArrayElement<ArrayType extends readonly unknown[]> =
-//   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
-
-// type FixedSizeArray<N extends number, T> = N extends 0 ? never[] : {
-//   0: T;
-//   length: N;
-// } & ReadonlyArray<T>;
-
-// type ArrayLengthMutationKeys = 'splice' | 'push' | 'pop' | 'shift' | 'unshift' | number
-// type ArrayItems<T extends Array<any>> = T extends Array<infer TItems> ? TItems : never
-// type FixedLengthArray<T extends any[]> =
-//   Pick<T, Exclude<keyof T, ArrayLengthMutationKeys>>
-//   & { [Symbol.iterator]: () => IterableIterator<ArrayItems<T>> }
-
-// const myFixedLengthArray: FixedSizeArray<3,string> = ['s', 's', '']
-
-// export type FormArraySetter = { controlIndex?: number | 'add', controlName: string, setter: FieldEvent, control?: FormGroup }
-export class FormArrayData<T = any, K extends keyof T = keyof T>
-  implements BaseFieldData<T, K>
-{
-  // , U, keyof Omit<typeof FormFieldType, 'FormArray'>
-  public formGroupConfig?: K extends '_'
+export interface FormArrayData<T = any, K extends keyof T = keyof T>
+  extends BaseFieldData<T, K> {
+  formGroupConfig?: K extends '_'
     ? never
     : T[K] extends (infer U)[]
     ? U extends object
@@ -42,8 +23,7 @@ export class FormArrayData<T = any, K extends keyof T = keyof T>
         : DynamicFormControlArray<U>
       : never
     : never;
-  // public formControlConfig?: T[K] extends (infer U)[] ? (U extends JsonPrimitive ? DynamicFormControl<{ '_': U }> : never) : never;
-  public formControlConfig?: T[K] extends (infer U)[]
+  formControlConfig?: T[K] extends (infer U)[]
     ? U extends object
       ? never
       : U extends JsonPrimitive
@@ -58,10 +38,10 @@ export class FormArrayData<T = any, K extends keyof T = keyof T>
         //   (DynamicFormControl<{ '_': U }, keyof { '_': U }, U, keyof Omit<typeof FormFieldType, 'FormArray'>>)>
         // FieldConfigObj<{ '_': U }>
         never
-    : // FieldComponentTypeObject<{ '_': U }, keyof { '_': U }, U, keyof Omit<typeof FormFieldType, 'FormArray'>>
-      // DynamicFormControl<{ '_': U }, keyof { '_': U }, U, keyof Omit<typeof FormFieldType, 'FormArray'>>
-      never;
-  public formArrayConfig?: K extends '_'
+    : never;
+  // FieldComponentTypeObject<{ '_': U }, keyof { '_': U }, U, keyof Omit<typeof FormFieldType, 'FormArray'>>
+  // DynamicFormControl<{ '_': U }, keyof { '_': U }, U, keyof Omit<typeof FormFieldType, 'FormArray'>>
+  formArrayConfig?: K extends '_'
     ? never
     : T[K] extends (infer U)[]
     ? U extends any[]
@@ -74,16 +54,10 @@ export class FormArrayData<T = any, K extends keyof T = keyof T>
         >
       : never
     : never;
-  public groupValidations?: ValidatorFn[] = [];
-  public asyncGroupValidations?: AsyncValidatorFn[] = [];
+  groupValidations?: ValidatorFn[];
+  asyncGroupValidations?: AsyncValidatorFn[];
 
-  constructor(obj?: FormArrayData<T, K>) {
-    (Object.keys(obj || {}) as (keyof FormArrayData<T, K>)[])?.forEach(
-      (key) => ((<any>this)[key] = obj[key])
-    );
-  }
-
-  public onRemove?: ({ ctrl, val }: { ctrl: AbstractControl; val: T }) => void;
+  onRemove?: ({ ctrl, val }: { ctrl: AbstractControl; val: T }) => void;
   // public setter?: (Observable<FormArraySetter> | Subject<FormArraySetter>)[];
   // public dynamicConfig?: (index: number, item: any) => FieldConfigObj[];
   // public formConfig: any;

@@ -1,15 +1,13 @@
-// import { DynamicFormControl } from '../../@core/interfaces/dynamic-form-control';
+import {
+  BaseFieldData,
+  DynamicFormControlArray,
+} from '../../core/interfaces/field-config';
 
-// export class FormGroupData {
-//   constructor(obj: FormGroupData = null) {
-//     if (!!obj) {
-//       const keys: string[] = Object.keys(obj);
-//       for (let i = 0; i < keys.length; i++) {
-//         const key = keys[i];
-//         this[key] = obj[key];
-//       }
-//     }
-//   }
-//   public formConfig: DynamicFormControl[];
-//   public title?: string;
-// }
+export interface FormGroupData<T = any, K extends keyof T = keyof T>
+  extends BaseFieldData<T, K> {
+  formConfig: T extends { [key in K]: infer V }
+    ? V extends object
+      ? DynamicFormControlArray<V>
+      : never
+    : never;
+}

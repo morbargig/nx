@@ -2,32 +2,67 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@fnx-nx/api-interfaces';
 import { DynamicFormControl } from '@fnx-nx/front/dynamic-forms';
 
-// let t: User = {
-//   age: '324234',
-//   name: 'dwedwefew',
-//   friends: [
-//     {
-//       name: 'ad',
-//       phoneNumber: 'adc',
-//       friends: [
-//         {
-//           name: 'adc',
-//           phoneNumber: 'adsc',
-//           friends: [
-//             {
-//               name: 'cdas',
-//               phoneNumber: 'cadsc',
-//             },
-//           ],
-//         },
-//       ],
-//     },
-//   ],
-// };
 @Injectable()
 export class AppService {
   getHelloFormConf(): DynamicFormControl<User>[] {
     return [
+      {
+        field: 'job',
+        label: 'Label',
+        type: 'FormGroup',
+        data: {
+          formConfig: [
+            { field: 'title', label: 'Title' },
+            {
+              field: 'salary',
+              label: 'Salary',
+            },
+            {
+              type: 'FormArray',
+              field: 'coworkers',
+              data: {
+                formGroupConfig: [
+                  {
+                    type: 'Default',
+                    field: 'name',
+                    label: 'Name',
+                  },
+                  {
+                    type: 'Default',
+                    field: 'phoneNumber',
+                    label: 'Phone',
+                    data: {
+                      inputType: 'tel',
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+      {
+        field: 'matrix',
+        type: 'FormArray',
+        label: 'Matrix',
+        placeholder: 'Matrix',
+        data: {
+          formArrayConfig: {
+            field: '___' as any,
+            type: 'FormArray',
+            label: 'Matrix',
+            placeholder: 'Matrix',
+            data: {
+              formControlConfig: {
+                field: '_',
+                type: 'Default',
+                label: 'Matrix',
+                placeholder: 'Matrix',
+              },
+            },
+          },
+        },
+      },
       {
         field: 'roles',
         type: 'FormArray',
@@ -117,26 +152,26 @@ export class AppService {
           ],
         },
       },
-      // {
-      //   field: 'age',
-      //   type: 'Default',
-      //   label: 'Age',
-      //   placeholder: 'Age',
-      //   data: {
-      //     inputType: 'number',
-      //     // title$: of(),
-      //   },
-      // },
-      // {
-      //   field: 'name',
-      //   type: 'Default',
-      //   label: 'Name',
-      //   placeholder: 'Name',
-      //   data: {
-      //     inputType: 'text',
-      //     // title$: of(),
-      //   },
-      // },
+      {
+        field: 'age',
+        type: 'Default',
+        label: 'Age',
+        placeholder: 'Age',
+        data: {
+          inputType: 'number',
+          // title$: of(),
+        },
+      },
+      {
+        field: 'name',
+        type: 'Default',
+        label: 'Name',
+        placeholder: 'Name',
+        data: {
+          inputType: 'text',
+          // title$: of(),
+        },
+      },
     ];
   }
 }

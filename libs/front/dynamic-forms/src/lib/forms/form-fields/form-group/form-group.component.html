@@ -1,11 +1,5 @@
-<!-- <div class="row mb-3" *ngIf="config.data?.title as title">
-  <div class="col f-16">
-    {{ title }}
-    <hr class="m-0 mt-1" />
-  </div>
-</div>
-<div class="row">
-  <div *ngFor="let field of config.data?.formConfig" class="col {{ field.config.styleClass }}">
-    <app-dynamic-form-control [dynamicControl]="field" [group]="control"> </app-dynamic-form-control>
-  </div>
-</div> -->
+<fnx-nx-app-dynamic-form-group *ngIf="config?.data?.formConfig"
+  style=" display: flex; border: 1px solid black; padding: 10px;" (formChange)="setForm($event)"
+  [config]="config?.data?.formConfig" [errorMessages]="config?.errorMessages || {}" [hideSubmitButton]="true"
+  [validation]="config?.validation || []">
+</fnx-nx-app-dynamic-form-group>

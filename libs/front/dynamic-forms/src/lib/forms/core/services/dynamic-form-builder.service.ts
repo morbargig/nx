@@ -26,6 +26,16 @@ export class DynamicFormBuilderService {
         );
         break;
       }
+      case 'FormGroup': {
+        return this.fb.group(
+          {},
+          {
+            validators: c?.validation || [],
+            asyncValidators: c?.asyncValidation || [],
+            // updateOn: 'change',
+          }
+        );
+      }
       default: {
         return this.fb.control(
           { value: c.value, disabled: c.disabled },
@@ -58,7 +68,25 @@ export class DynamicFormBuilderService {
     return this.fb.array([], abstractControlOptions);
   }
 
-  recursionBuildForm = <T = any>(state: DynamicFormControl<T>) => {
+  recursionBuildGroup = <T = any>(
+    configs: DynamicFormControl<T>[],
+    abstractControlOptions: AbstractControlOptions = {}
+  ): FormGroup => {
+    return this.fb.group(
+      configs?.reduce(
+        (p, c) => ({
+          ...p,
+          [c.field]: this.recursionBuildChild(c),
+        }),
+        {} as FormGroup['controls']
+      ),
+      abstractControlOptions
+    );
+  };
+
+  recursionBuildChild = <T = any>(
+    state: DynamicFormControl<T>
+  ): AbstractControl => {
     switch (state.type) {
       case 'FormArray': {
         switch (
@@ -70,36 +98,21 @@ export class DynamicFormBuilderService {
           case undefined: {
             break;
           }
-          // case state.data?.formGroupConfig: {
-          //   const config: DynamicFormControl[] = <DynamicFormControl[]>(
-          //     state.data?.formGroupConfig
-          //   );
-          //   config[0].field;
-          //   return this.fb.array(
-          //     config?.reduce(
-          //       (pp, cc) => ({
-          //         ...pp,
-          //         [cc.field]: this.recursionBuildForm(cc),
-          //       }),
-          //       {}
-          //     ) || []
-          //     // TODO add
-          //   );
-          //   break;
-          // }
-          // TODO add matrix support
-          // case state.data?.formArrayConfig: {
-          //   const config: DynamicFormControl = <DynamicFormControl>(
-          //     state.data?.formArrayConfig
-          //   );
-          //   return this.fb.array(
-          //     // config?.reduce(
-          //     //   (pp, cc) => [...pp, this.recursionBuildForm(cc)],
-          //     //   []
-          //     // ) || []
-          //   );
-          //   break;
-          // }
+          case state.data?.formGroupConfig: {
+            const configs: DynamicFormControl[] = <DynamicFormControl[]>(
+              state.data?.formGroupConfig
+            );
+            return this.fb.array(
+              [
+                this.recursionBuildGroup(configs, {
+                  validators: state?.data?.groupValidations || [],
+                  asyncValidators: state?.data?.asyncGroupValidations || [],
+                }),
+              ]
+            );
+            break;
+          }
+
           case state.data?.formControlConfig: {
             const config: DynamicFormControl = <DynamicFormControl>(
               state.data?.formControlConfig
@@ -108,6 +121,13 @@ export class DynamicFormBuilderService {
             break;
           }
         }
+        break;
+      }
+      case 'FormGroup': {
+        const config: DynamicFormControl[] = <DynamicFormControl[]>(
+          state.data?.formConfig
+        );
+        return this.recursionBuildGroup(config);
         break;
       }
       default:

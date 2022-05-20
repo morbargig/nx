@@ -2,20 +2,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArrayData } from './form-array';
-import {
-  AbstractControlOptions,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-} from '@angular/forms';
+import { AbstractControlOptions, FormArray, FormGroup } from '@angular/forms';
 import { BaseFieldComponent } from '../../core/directives/base-field.directive';
 import { DynamicFormControl } from '../../core/interfaces/field-config';
 import { DynamicFormStepMode } from '../../core/interfaces/dynamic-stepped-form';
 import { DynamicFormBuilderService } from '../../core/services/dynamic-form-builder.service';
 import { FormControl } from '@angular/forms';
-import { skip, firstValueFrom } from 'rxjs';
-import { take, debounceTime } from 'rxjs/operators';
-import { delay } from 'lodash';
+import { timer, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'fnx-nx-app-form-array',
@@ -26,9 +19,16 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
   extends BaseFieldComponent<T, FormArrayData<T, K>, K, FormArray>
   implements OnInit
 {
+  // array of array
+  public get addingFormArrayCtrl(): FormControl {
+    return this.addingFormArrayCtrlGroupWarper.get(
+      (<any>this.data?.formArrayConfig)?.field
+    ) as FormControl;
+  }
+  public addingFormArrayCtrlGroupWarper: FormGroup;
+  // array of groups
   public addingFormGroupCtrl: FormGroup;
-  public addingFormArrayCtrl: FormArray;
-  // form array of primitive (not object or arrays)
+  // array of primitive (not object or arrays)
   public get addingFormCtrl(): FormControl {
     return this.addingFormCtrlGroupWarper.get(
       (<any>this.data?.formControlConfig)?.field
@@ -46,15 +46,10 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
   }
 
   constructor(
-    private fb: FormBuilder,
     private cd: ChangeDetectorRef,
     private dfb: DynamicFormBuilderService
   ) {
     super();
-  }
-
-  public get data(): FormArrayData<T, K> {
-    return this?.config?.data;
   }
 
   ngOnInit(): void {
@@ -68,9 +63,6 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
         break;
       }
       case this.data?.formControlConfig: {
-        const config: DynamicFormControl = <DynamicFormControl>(
-          this.data?.formControlConfig
-        );
         this.addingFormCtrlGroupWarper = this.dfb.buildGroup([]);
         break;
       }
@@ -86,11 +78,7 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
       }
       case this.data?.formArrayConfig: {
         const config: DynamicFormControl = this.data?.formArrayConfig;
-        // this.addingFormArrayCtrl = this.dfb.buildArray({
-        //   validators: config?.validation || [],
-        //   asyncValidators: config?.asyncValidation || [],
-        //   updateOn: 'change',
-        // });
+        this.addingFormArrayCtrlGroupWarper = this.dfb.buildGroup([config]);
         break;
       }
     }
@@ -238,35 +226,32 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
         const config: DynamicFormControl[] = <DynamicFormControl[]>(
           this.data?.formGroupConfig
         );
-        const newFormGroup = this.dfb.buildGroup(
-          config,
-          this.groupValidators()
-        );
-        const state = this.addingFormGroupCtrl.getRawValue();
-        newFormGroup.patchValue(state);
-        newFormGroup.setParent(this.control);
-        this.control.push(newFormGroup);
-        firstValueFrom(this.control.valueChanges.pipe(debounceTime(200))).then(
-          () => {
-            newFormGroup;
-            this.control;
-            newFormGroup.patchValue(state);
-            debugger;
-          }
-        );
-        this.addingFormGroupCtrl.reset();
-        debugger;
+        this.control.push(this.addingFormGroupCtrl);
+        this.addingFormGroupCtrl = null;
+        this.cd.markForCheck();
+        firstValueFrom(timer(0)).then(() => {
+          this.addingFormGroupCtrl = this.dfb.recursionBuildGroup(
+            config,
+            this.groupValidators()
+          );
+          this.cd.markForCheck();
+          this.addingFormGroupCtrl.reset();
+        });
         break;
       }
-      // case this.data?.formArrayConfig: {
-      //   const config: DynamicFormControl = this.data?.formArrayConfig;
-      //   // this.addingFormArrayCtrl = this.dfb.buildArray({
-      //   //   validators: config?.validation || [],
-      //   //   asyncValidators: config?.asyncValidation || [],
-      //   //   updateOn: 'change',
-      //   // });
-      //   break;
-      // }
+      case this.data?.formArrayConfig: {
+        const config: DynamicFormControl = this.data?.formArrayConfig;
+        this.control.push(this.addingFormArrayCtrl);
+        this.addingFormArrayCtrlGroupWarper?.removeControl(config.field);
+        this.addingFormArrayCtrlGroupWarper = null;
+        this.cd.markForCheck();
+        firstValueFrom(timer(0)).then(() => {
+          this.addingFormArrayCtrlGroupWarper = this.dfb.buildGroup([config]);
+          this.cd.markForCheck();
+          this.addingFormArrayCtrlGroupWarper.reset();
+        });
+        break;
+      }
     }
     // const buildForm = (state: any) =>
     //   (() => {
@@ -329,7 +314,6 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
         );
         const newCtrl = this.dfb.buildChild(config);
         this.control.push(newCtrl);
-        this.parentForm;
         break;
       }
       case this.data?.formGroupConfig: {
@@ -342,18 +326,14 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
         );
         newFormGroup.setParent(this.control);
         this.control.push(newFormGroup);
-        debugger;
         break;
       }
-      // case this.data?.formArrayConfig: {
-      //   const config: DynamicFormControl = this.data?.formArrayConfig;
-      //   // this.addingFormArrayCtrl = this.dfb.buildArray({
-      //   //   validators: config?.validation || [],
-      //   //   asyncValidators: config?.asyncValidation || [],
-      //   //   updateOn: 'change',
-      //   // });
-      //   break;
-      // }
+      case this.data?.formArrayConfig: {
+        const config: DynamicFormControl = this.data?.formArrayConfig;
+        const newCtrl = this.dfb.buildChild(config);
+        this.control.push(newCtrl);
+        break;
+      }
     }
   }
 }

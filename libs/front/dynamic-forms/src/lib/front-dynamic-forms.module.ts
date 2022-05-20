@@ -13,6 +13,7 @@ import { FormArrayComponent } from './forms/form-fields/form-array/form-array.co
 import { FormStepperComponent } from './forms/core/components/form-stepper/form-stepper.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FrontDynamicFormsPipeModule } from './forms/core/pipes/pipes.module';
+import { FormGroupComponent } from './forms/form-fields/form-group/form-group.component';
 
 const EXPORTED: NgModule['declarations'] = [
   ValidationMessagesComponent,
@@ -31,6 +32,7 @@ const FIELDS: NgModule['declarations'] = [
   FormTextComponent,
   FormArrayComponent,
   FormStepperComponent,
+  FormGroupComponent,
 ];
 
 @NgModule({
@@ -42,7 +44,7 @@ const FIELDS: NgModule['declarations'] = [
     CdkStepperModule,
     FrontDynamicFormsPipeModule,
   ],
-  providers : [],
+  providers: [],
   exports: [...EXPORTED, ...FIELDS],
 })
 export class FrontDynamicFormsModule {}

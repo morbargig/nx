@@ -40,14 +40,14 @@ export class DynamicFormControlComponent<T = any>
   public config: DynamicFormControl<T>;
   public id = `control-${(Math.random() + 1).toString(36).substring(4)}`;
   @Input() public control: AbstractControl;
-  public visible = true;
+  public notVisible: boolean;
   @Input() template: TemplateRef<any>;
   @Input() public mode: DynamicFormStepMode;
   @Input() public isRequired: boolean;
   @Input() public hideLabel: boolean;
   @Input() public parentForm: FormGroup | FormArray;
   @Input() public wrapStyleClass: string;
-  @Output() public controlOnChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public controlChange: EventEmitter<any> = new EventEmitter<any>();
   @HostBinding('class.d-none') hide: boolean;
   private isActive = true;
 
@@ -55,29 +55,27 @@ export class DynamicFormControlComponent<T = any>
 
   @Input()
   public set dynamicControl(dynamicControl: DynamicFormControl<T>) {
-    if (!dynamicControl?.type) {
-      return;
-    }
     this.type =
       FormFieldsDic?.[dynamicControl?.type] ||
       dynamicControl?.customFieldComponent ||
       FormTextComponent;
     this.config = dynamicControl;
-    this.isRequired =
-      dynamicControl.validation &&
-      !!dynamicControl.validation.find((x) => x === Validators.required);
-    this.cd.detectChanges();
+    if (this.isRequired !== undefined) {
+      this.isRequired =
+        dynamicControl.validation &&
+        !!dynamicControl.validation.find((x) => x === Validators.required);
+    }
+    this.cd.markForCheck();
   }
 
   ngAfterViewInit(): void {
-    debugger;
-    if (!!this.config && !!this.control && !!this.controlOnChange) {
+    if (!!this.config && !!this.control && !!this.controlChange) {
       this.control.valueChanges
         .pipe(
           takeWhile(() => this.isActive),
           distinctUntilChanged()
         )
-        .subscribe((val) => this.controlOnChange.emit(val));
+        .subscribe((val) => this.controlChange.emit(val));
     }
   }
 
@@ -156,8 +154,8 @@ export class DynamicFormControlComponent<T = any>
   }
 
   public setVisibility(isVisible: boolean) {
-    this.visible = isVisible;
-    this.hide = !this.visible;
+    this.notVisible = !isVisible;
+    this.hide = this.notVisible;
     this.cd.markForCheck();
   }
 }
