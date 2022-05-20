@@ -8,11 +8,14 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { takeWhile } from 'rxjs/operators';
 import { BaseFieldComponent } from '../../core/directives/base-field.directive';
-import { FieldEvent } from '../../core/interfaces/events';
 import { DynamicFormControl } from '../../core/interfaces/field-config';
 import { DynamicFormStepMode } from '../../core/interfaces/dynamic-stepped-form';
+import { DynamicFormBuilderService } from '../../core/services/dynamic-form-builder.service';
+import { FormControl } from '@angular/forms';
+import { skip, firstValueFrom } from 'rxjs';
+import { take, debounceTime } from 'rxjs/operators';
+import { delay } from 'lodash';
 
 @Component({
   selector: 'fnx-nx-app-form-array',
@@ -25,10 +28,14 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
 {
   public addingFormGroupCtrl: FormGroup;
   public addingFormArrayCtrl: FormArray;
-  public addingFormCtrl: FormArray;
-  log(...args: any[]) {
-    console.log(args);
+  // form array of primitive (not object or arrays)
+  public get addingFormCtrl(): FormControl {
+    return this.addingFormCtrlGroupWarper.get(
+      (<any>this.data?.formControlConfig)?.field
+    ) as FormControl;
   }
+  public addingFormCtrlGroupWarper: FormGroup;
+
   groupValidators = (): AbstractControlOptions => ({
     validators: this.config?.data?.groupValidations || [],
     asyncValidators: this.config?.data?.asyncGroupValidations || [],
@@ -38,7 +45,11 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
     return DynamicFormStepMode;
   }
 
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
+  constructor(
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
+    private dfb: DynamicFormBuilderService
+  ) {
     super();
   }
 
@@ -56,145 +67,98 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
       case undefined: {
         break;
       }
+      case this.data?.formControlConfig: {
+        const config: DynamicFormControl = <DynamicFormControl>(
+          this.data?.formControlConfig
+        );
+        this.addingFormCtrlGroupWarper = this.dfb.buildGroup([]);
+        break;
+      }
       case this.data?.formGroupConfig: {
         const config: DynamicFormControl[] = <DynamicFormControl[]>(
           this.data?.formGroupConfig
         );
-        this.addingFormGroupCtrl = this.fb.group(
-          config?.reduce(
-            (p, c) => ({
-              ...p,
-              [c.field]: (() => {
-                switch (c.type) {
-                  case 'FormArray': {
-                    return this.fb.array(
-                      [], // this.config.createItem ? [this.config.createItem()] : [],
-                      {
-                        validators: c?.validation || [],
-                        asyncValidators: c?.asyncValidation || [],
-                        updateOn: 'change',
-                      }
-                    );
-                    break;
-                  }
-                  // case 'Default': {
-                  //   return this.fb.array(
-                  //     [], // this.config.createItem ? [this.config.createItem()] : [],
-                  //     c?.validation,
-                  //     c?.asyncValidation
-                  //   );
-                  //   break;
-                  // }
-                  default:
-                    return this.fb.control(
-                      { value: c.value, disabled: c.disabled },
-                      {
-                        validators: c?.validation || [],
-                        asyncValidators: c?.asyncValidation || [],
-                        updateOn: 'change',
-                      }
-                    );
-                    break;
-                }
-              })(),
-            }),
-            {}
-          ),
+        this.addingFormGroupCtrl = this.dfb.buildGroup(
+          config,
           this.groupValidators()
         );
         break;
       }
       case this.data?.formArrayConfig: {
-        const config: DynamicFormControl = <DynamicFormControl>(
-          this.data?.formArrayConfig
-        );
-        this.addingFormArrayCtrl = this.fb.array(
-          [], // this.config.createItem ? [this.config.createItem()] : [],
-          {
-            validators: config?.validation || [],
-            asyncValidators: config?.asyncValidation || [],
-            updateOn: 'change',
-          }
-        );
-        break;
-      }
-      case this.data?.formControlConfig: {
-        const config: DynamicFormControl = <DynamicFormControl>(
-          this.data?.formControlConfig
-        );
-        this.addingFormCtrl = this.fb.array([], {
-          validators: config?.validation || [],
-          asyncValidators: config?.asyncValidation || [],
-          updateOn: 'change',
-        });
+        const config: DynamicFormControl = this.data?.formArrayConfig;
+        // this.addingFormArrayCtrl = this.dfb.buildArray({
+        //   validators: config?.validation || [],
+        //   asyncValidators: config?.asyncValidation || [],
+        //   updateOn: 'change',
+        // });
         break;
       }
     }
 
-    if (!(this.control instanceof FormArray)) {
-      this.group.removeControl(this.config.field);
-      this.group.addControl(
-        this.config.field,
-        this.fb.array(
-          [],
-          this.config.validation || [],
-          this.config.asyncValidation || []
-        )
-      );
-    }
+    // if (!(this.control instanceof FormArray)) {
+    //   this.parentForm.removeControl(this.config.field);
+    //   this.parentForm.addControl(
+    //     this.config.field,
+    //     this.fb.array(
+    //       [],
+    //       this.config.validation || [],
+    //       this.config.asyncValidation || []
+    //     )
+    //   );
+    // }
 
-    if (this.config.setter) {
-      this.config.setter
-        ?.pipe(takeWhile(() => this.isActive))
-        .subscribe((setter) => {
-          switch (setter.type) {
-            case 'onPatchValue': {
-              const { value: values } = setter as FieldEvent<
-                T,
-                typeof setter.type
-              >;
-              if (values) {
-                this.control.clear();
-                for (const value of <any>values) {
-                  const group = this.fb.group({}, this.groupValidators());
-                  this.control.push(group);
-                  setTimeout(() => {
-                    group.patchValue(value);
-                  });
-                }
-                this.cd.markForCheck();
-              }
-              break;
-            }
-            case 'setValue': {
-              const { value: values } = setter as FieldEvent<
-                T,
-                typeof setter.type
-              >;
-              if (values) {
-                for (const value of <any>values) {
-                  const keys = Object.keys(value) as (keyof string)[];
-                  const group = this.fb.group(
-                    keys.reduce((acc, cur) => {
-                      acc[cur] = value[cur];
-                      return acc;
-                    }, this.groupValidators())
-                  );
-                  this.control.push(group);
-                  this.cd.markForCheck();
-                  setTimeout(() => {
-                    group.patchValue(value);
-                  });
-                }
-              }
-              break;
-            }
-            default: {
-              break;
-            }
-          }
-        });
-    }
+    // if (this.config.setter) {
+    //   this.config.setter
+    //     ?.pipe(takeWhile(() => this.isActive))
+    //     .subscribe((setter) => {
+    //       switch (setter.type) {
+    //         case 'onPatchValue': {
+    //           const { value: values } = setter as FieldEvent<
+    //             T,
+    //             typeof setter.type
+    //           >;
+    //           if (values) {
+    //             this.control.clear();
+    //             for (const value of <any>values) {
+    //               const group = this.fb.group({}, this.groupValidators());
+    //               this.control.push(group);
+    //               setTimeout(() => {
+    //                 group.patchValue(value);
+    //               });
+    //             }
+    //             this.cd.markForCheck();
+    //           }
+    //           break;
+    //         }
+    //         case 'setValue': {
+    //           const { value: values } = setter as FieldEvent<
+    //             T,
+    //             typeof setter.type
+    //           >;
+    //           if (values) {
+    //             for (const value of <any>values) {
+    //               const keys = Object.keys(value) as (keyof string)[];
+    //               const group = this.fb.group(
+    //                 keys.reduce((acc, cur) => {
+    //                   acc[cur] = value[cur];
+    //                   return acc;
+    //                 }, this.groupValidators())
+    //               );
+    //               this.control.push(group);
+    //               this.cd.markForCheck();
+    //               setTimeout(() => {
+    //                 group.patchValue(value);
+    //               });
+    //             }
+    //           }
+    //           break;
+    //         }
+    //         default: {
+    //           break;
+    //         }
+    //       }
+    //     });
+    // }
     // if (!!this.config?.data?.setter?.length) {
     //   this.config?.data?.setter?.forEach(
     //     s => s.pipe(
@@ -240,7 +204,8 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
   }
 
   public removeConfig(index: number) {
-    this.config?.data?.onRemove!?.(this.control.value[index]);
+    const ctrl = this.control?.at(index);
+    this.config?.data?.onRemove!?.({ val: ctrl.value, ctrl });
     this.control.removeAt(index);
     this.config?.onChange!?.({
       currentValue: this.control.value,
@@ -248,71 +213,147 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
     });
   }
 
-  public addConfig() {
-    this.control?.push(this.fb.group({}, this.groupValidators()));
-  }
   saveToForm() {
-    const buildForm = (state: any) =>
-      (() => {
-        switch (typeof state) {
-          case 'object': {
-            switch (Array.isArray(state)) {
-              case true:
-                return this.fb.array(
-                  state?.reduce((pp, cc) => [...pp, buildForm(cc)], []) || []
-                );
-                break;
-              default:
-                return this.fb.group(
-                  Object.keys(state || {}).reduce(
-                    (p, c) => ({
-                      ...p,
-                      [c]: buildForm(state?.[c]),
-                    }),
-                    {}
-                  )
-                );
-            }
-            break;
+    switch (
+      this.data?.formGroupConfig ||
+      this.data?.formControlConfig ||
+      this.data.formArrayConfig
+    ) {
+      case null:
+      case undefined: {
+        break;
+      }
+      case this.data?.formControlConfig: {
+        const config: DynamicFormControl = <DynamicFormControl>(
+          this.data?.formControlConfig
+        );
+        const newFormCtrl = this.dfb.buildChild(config);
+        newFormCtrl.patchValue(this.addingFormCtrl.value);
+        newFormCtrl.setParent(this.control);
+        this.control.push(newFormCtrl);
+        this.addingFormCtrlGroupWarper.reset();
+        break;
+      }
+      case this.data?.formGroupConfig: {
+        const config: DynamicFormControl[] = <DynamicFormControl[]>(
+          this.data?.formGroupConfig
+        );
+        const newFormGroup = this.dfb.buildGroup(
+          config,
+          this.groupValidators()
+        );
+        const state = this.addingFormGroupCtrl.getRawValue();
+        newFormGroup.patchValue(state);
+        newFormGroup.setParent(this.control);
+        this.control.push(newFormGroup);
+        firstValueFrom(this.control.valueChanges.pipe(debounceTime(200))).then(
+          () => {
+            newFormGroup;
+            this.control;
+            newFormGroup.patchValue(state);
+            debugger;
           }
-          default:
-            return this.fb.control(state);
-            break;
-        }
-      })();
-    const state = this.addingFormGroupCtrl.getRawValue();
-    // const buildFormValue = ;
-    // debugger;
-    const newControl = buildForm(state);
-    this.control.push(newControl);
-    // newControl?.valueChanges
+        );
+        this.addingFormGroupCtrl.reset();
+        debugger;
+        break;
+      }
+      // case this.data?.formArrayConfig: {
+      //   const config: DynamicFormControl = this.data?.formArrayConfig;
+      //   // this.addingFormArrayCtrl = this.dfb.buildArray({
+      //   //   validators: config?.validation || [],
+      //   //   asyncValidators: config?.asyncValidation || [],
+      //   //   updateOn: 'change',
+      //   // });
+      //   break;
+      // }
+    }
+    // const buildForm = (state: any) =>
+    //   (() => {
+    //     switch (typeof state) {
+    //       case 'object': {
+    //         switch (Array.isArray(state)) {
+    //           case true:
+    //             return this.fb.array(
+    //               state?.reduce((pp, cc) => [...pp, buildForm(cc)], []) || []
+    //             );
+    //             break;
+    //           default:
+    //             return this.fb.group(
+    //               Object.keys(state || {}).reduce(
+    //                 (p, c) => ({
+    //                   ...p,
+    //                   [c]: buildForm(state?.[c]),
+    //                 }),
+    //                 {}
+    //               )
+    //             );
+    //         }
+    //         break;
+    //       }
+    //       default:
+    //         return this.fb.control(state);
+    //         break;
+    //     }
+    //   })();
+
+    // addingFormCtrl?.valueChanges
     //   ?.pipe(
     //     takeWhile(() => this.isActive),
     //     // debounceTime(200),
     //     take(1)
     //   )
     //   .subscribe(() => {
-    //     this;
-    //     state;
     //     newControl?.patchValue(state);
     //   });
-    const defaultVal = (<DynamicFormControl[]>(
-      this.config.data.formGroupConfig
-    ))?.reduce(
-      (p, c) => ({
-        ...p,
-        [c.field]: {
-          value: c.value,
-          disabled: c.disabled,
-        },
-      }),
-      {}
-    );
-    this.addingFormGroupCtrl.reset(defaultVal);
     this.config?.onChange!?.({
       currentValue: this.control.value,
       control: this.control,
     });
     this.cd.markForCheck();
+  }
+
+  addConfig() {
+    switch (
+      this.data?.formGroupConfig ||
+      this.data?.formControlConfig ||
+      this.data.formArrayConfig
+    ) {
+      case null:
+      case undefined: {
+        break;
+      }
+      case this.data?.formControlConfig: {
+        const config: DynamicFormControl = <DynamicFormControl>(
+          this.data?.formControlConfig
+        );
+        const newCtrl = this.dfb.buildChild(config);
+        this.control.push(newCtrl);
+        this.parentForm;
+        break;
+      }
+      case this.data?.formGroupConfig: {
+        const config: DynamicFormControl[] = <DynamicFormControl[]>(
+          this.data?.formGroupConfig
+        );
+        const newFormGroup = this.dfb.buildGroup(
+          config,
+          this.groupValidators()
+        );
+        newFormGroup.setParent(this.control);
+        this.control.push(newFormGroup);
+        debugger;
+        break;
+      }
+      // case this.data?.formArrayConfig: {
+      //   const config: DynamicFormControl = this.data?.formArrayConfig;
+      //   // this.addingFormArrayCtrl = this.dfb.buildArray({
+      //   //   validators: config?.validation || [],
+      //   //   asyncValidators: config?.asyncValidation || [],
+      //   //   updateOn: 'change',
+      //   // });
+      //   break;
+      // }
+    }
   }
 }

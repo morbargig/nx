@@ -27,20 +27,6 @@ import { DynamicFormControl } from '@fnx-nx/front/dynamic-forms';
 @Injectable()
 export class AppService {
   getHelloFormConf(): DynamicFormControl<User>[] {
-    // return [
-    //   {
-    //     field: 'roles',
-    //     type: 'FormArray',
-    //     label: 'Roles',
-    //     placeholder: 'Roles',
-    //     data: {
-    //       formControlConfig: {
-    //         field: '_',
-    //         type: 'Default',
-    //       },
-    //     },
-    //   },
-    // ];
     return [
       {
         field: 'roles',
@@ -51,14 +37,20 @@ export class AppService {
           formControlConfig: {
             field: '_',
             type: 'Default',
+            label: 'Age',
+            placeholder: 'Age',
+            data: {
+              inputType: 'number',
+              // title$: of(),
+            },
           },
         },
       },
       {
         field: 'friends',
         type: 'FormArray',
-        onChange: ({ currentValue }) =>
-          currentValue[0].friends[0].friends[0].phoneNumber,
+        // onChange: ({ currentValue }) =>
+        //   currentValue[0].friends[0].friends[0].phoneNumber,
         label: 'Friends List',
         data: {
           formGroupConfig: [
@@ -72,6 +64,9 @@ export class AppService {
               type: 'Default',
               field: 'phoneNumber',
               label: 'Phone',
+              data: {
+                inputType: 'tel',
+              },
               // onChange: ({currentValue}) => null,
             },
             {
@@ -89,6 +84,9 @@ export class AppService {
                     type: 'Default',
                     field: 'phoneNumber',
                     label: 'Phone',
+                    data: {
+                      inputType: 'tel',
+                    },
                   },
                   {
                     type: 'FormArray',
@@ -105,6 +103,9 @@ export class AppService {
                           type: 'Default',
                           field: 'phoneNumber',
                           label: 'Phone',
+                          data: {
+                            inputType: 'tel',
+                          },
                         },
                       ],
                     },
@@ -117,81 +118,25 @@ export class AppService {
         },
       },
       // {
-      //   field: 'payment',
-      //   type: 'FormArray',
+      //   field: 'age',
+      //   type: 'Default',
+      //   label: 'Age',
+      //   placeholder: 'Age',
       //   data: {
-      //     formGroupConfig: [
-      //       {
-      //         field: 'obj',
-      //         type: 'FormArray',
-      //         data: {
-      //           formGroupConfig: [
-      //             {
-      //               field: 'obj2',
-      //               type: 'FormArray',
-      //               data: {
-      //                 formGroupConfig: [
-      //                   {
-      //                     field: 'obj3',
-      //                     type: 'FormArray',
-      //                     validation: [],
-      //                     data: {
-      //                       // formControlConfig: {
-      //                       //   field: '_',
-      //                       //   type: 'Default',
-      //                       // },
-      //                       formArrayConfig: {
-      //                         field: '_',
-      //                         type: 'FormArray',
-      //                         data: {
-      //                           // formGroupConfig: [],
-      //                           // formArrayConfig: [],
-      //                           formControlConfig: {
-      //                             field: '_',
-      //                             // onChange: ({currentValue}) => null,
-      //                             type: 'Default',
-      //                             data: {
-      //                               // formGroupConfig: [],
-      //                               // formControlConfig: {
-      //                               //   field: '_',
-      //                               //   type: 'FormArray',
-      //                               // },
-      //                               // formArrayConfig: [],
-      //                             },
-      //                           },
-      //                         },
-      //                       },
-      //                     },
-      //                   },
-      //                 ],
-      //               },
-      //             },
-      //           ],
-      //         },
-      //       },
-      //     ],
+      //     inputType: 'number',
+      //     // title$: of(),
       //   },
       // },
-      {
-        field: 'age',
-        type: 'Default',
-        label: 'Age',
-        placeholder: 'Age',
-        data: {
-          inputType: 'number',
-          // title$: of(),
-        },
-      },
-      {
-        field: 'name',
-        type: 'Default',
-        label: 'Name',
-        placeholder: 'Name',
-        data: {
-          inputType: 'text',
-          // title$: of(),
-        },
-      },
+      // {
+      //   field: 'name',
+      //   type: 'Default',
+      //   label: 'Name',
+      //   placeholder: 'Name',
+      //   data: {
+      //     inputType: 'text',
+      //     // title$: of(),
+      //   },
+      // },
     ];
   }
 }

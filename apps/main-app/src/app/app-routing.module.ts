@@ -5,7 +5,7 @@ export const ROUTES: Routes = [
   { path: '', component: AppComponent },
   {
     path: 'testing',
-    // canLoad:
+    // canLoad:[],
     loadChildren: () =>
       import('@fnx-nx/front/main-app-testing').then(
         (m) => m.FrontMainAppTestingModule

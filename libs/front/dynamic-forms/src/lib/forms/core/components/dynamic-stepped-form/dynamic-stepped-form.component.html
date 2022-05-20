@@ -2,11 +2,10 @@
   <div class="row {{ formRowCssClass }}">
     <div class="col-12 d-flex justify-content-start align-items-center">
       <app-form-stepper #cdkStepper
-                        (selectionChange)="stepChanged($event.previouslySelectedIndex, $event.selectedIndex)"
-                        *ngIf="!!config?.length"
-                        [bodyClass]="bodyClass" class="d-block w-100">
+        (selectionChange)="stepChanged($event.previouslySelectedIndex, $event.selectedIndex)" *ngIf="!!config?.length"
+        [bodyClass]="bodyClass" class="d-block w-100">
         <cdk-step *ngFor="let step of config; let i = index; let isLastStep = last" [editable]="!step?.disable"
-                  [optional]="false" [stepControl]="step">
+          [optional]="false" [stepControl]="step">
           <ng-template cdkStepLabel>
             <span [ngClass]="{ error: (selected?.interacted || dyn?.form?.touched) && dyn?.form?.invalid }">
               {{ step.title }}
@@ -16,8 +15,8 @@
             </span>
           </ng-template>
           <fnx-nx-app-dynamic-form-group #dyn [(form)]="form.controls['forms'].controls[i + '']" [config]="step.group"
-                                         [errorMessages]="errorMessages" [showSubmitButton]="false"
-                                         [validation]="validation"></fnx-nx-app-dynamic-form-group>
+            [errorMessages]="errorMessages" [hideSubmitButton]="true" [validation]="validation">
+          </fnx-nx-app-dynamic-form-group>
 
           <ng-content #sidebar></ng-content>
 
@@ -28,7 +27,7 @@
               </button>
 
               <button *ngIf="!isLastStep" [disabled]="dyn?.form?.invalid  || isNextDisable" cdkStepperNext
-                      class="btn btn-light btn-circle nav-button">
+                class="btn btn-light btn-circle nav-button">
                 <i class="fas fa-arrow-right"></i>
               </button>
               <button *ngIf="!!form" [disabled]="!validForm" class="btn btn-primary" type="submit">
@@ -40,19 +39,19 @@
                 <div class="nav-steps-number mr-2">Step {{ i + 1 }} of {{ config.length }}</div>
 
                 <button [disabled]="i === 0 || isPrevDisable" cdkStepperPrevious
-                        class="btn btn-light btn-sm btn-circle nav-button mr-2">
+                  class="btn btn-light btn-sm btn-circle nav-button mr-2">
                   <i class="fas fa-arrow-left"></i>
                 </button>
 
                 <div class="nav nav-steps mr-2">
                   <span *ngFor="let step of config; let b = index" [ngClass]="{ active: i === b, done: i > b }"
-                        class="bullet">
+                    class="bullet">
                     <i class="bullet-dot"></i>
                   </span>
                 </div>
 
                 <button *ngIf="!isLastStep" [disabled]="isNextDisable" cdkStepperNext
-                        class="btn btn-light btn-sm btn-circle nav-button">
+                  class="btn btn-light btn-sm btn-circle nav-button">
                   <i class="fas fa-arrow-right"></i>
                 </button>
               </div>

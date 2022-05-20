@@ -36,6 +36,8 @@ export enum MatchMode {
   /** @property {Contains} string or number that Contains {value} */ Contains = 2250,
   /** @property {StartsWith} string or number that EndsWith {value} */ StartsWith = 2251,
   /** @property {EndsWith} string or number that EndsWith {value} */ EndsWith = 2252,
+  // number & string & array
+  /** @property {Contained} string or number or array that Contains {value} */ Contained = 2260,
   // any
   /** @property {Any} any truthy value */
   Any = 2500,
@@ -48,5 +50,5 @@ enum MoreMatchMode {
   /** @property {Regex} any value that match {value} regex */ Regex = 'Regex',
 }
 
-const FiledValidatiorsMatchMode = { ...MatchMode, ...MoreMatchMode };
-FiledValidatiorsMatchMode.Regex
+export const FiledValidatiorsMatchMode = { ...MatchMode, ...MoreMatchMode };
+// FiledValidatiorsMatchMode.Regex; 

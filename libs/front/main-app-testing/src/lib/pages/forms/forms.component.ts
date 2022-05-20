@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { DynamicFormControl } from '@fnx-nx/front/dynamic-forms';
 import { User } from '@fnx-nx/api-interfaces';
@@ -10,10 +10,11 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './forms.component.html',
   styleUrls: ['./forms.component.scss'],
 })
-export class FormsComponent {
+export class FormsComponent implements OnInit {
   constructor(private http: HttpClient) {}
   group = new FormGroup({});
-  config: DynamicFormControl<any>[] = [
+  config: DynamicFormControl<any>[];
+  /** = [
     {
       type: 'Default',
       field: 'username',
@@ -44,7 +45,7 @@ export class FormsComponent {
       data: { rows: 5 },
     },
   ];
-
+*/
   dy: DynamicFormControl<any> =
     // { DynamicFormConfigurationObject: string, '_': string }
     {
@@ -79,6 +80,14 @@ export class FormsComponent {
         this.config = x;
       });
     });
+  }
+  ngOnInit(): void {
+    firstValueFrom(this.hello$).then((x) => {
+      this.config = x;
+      // console.log(this.dfb.recursionBuildForm(x[0]));
+    });
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
   }
   click() {
     this.config = null;

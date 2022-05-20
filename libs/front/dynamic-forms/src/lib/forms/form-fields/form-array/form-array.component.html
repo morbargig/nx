@@ -1,52 +1,37 @@
-<div *ngIf="group" class="dynamic-field form-input" style="  border: 1px solid black;" [formGroup]="group">
-    {{ log(config,group) }}
+<div *ngIf="parentForm" class="dynamic-field form-input" style="  border: 1px solid black;"
+    [formGroup]="$any(parentForm)">
+    {{ parentForm | log }}
     <table [formArrayName]="config?.field" class="table">
         <ng-container *ngIf="data?.formGroupConfig || data.formControlConfig as conf" [ngSwitch]="conf">
-            <thead *ngSwitchCase="data?.formGroupConfig as ctrls">
-                <tr *ngIf="!!ctrls">
-                    <th *ngFor="let field of ctrls" class="input-column">
+            <thead *ngSwitchCase="data?.formGroupConfig">
+                <tr *ngIf="data?.formGroupConfig as configs">
+                    <th *ngFor="let field of configs" class="input-column">
                         {{ field.label }}
                     </th>
-                    <!-- <th style="max-width: 40em" class="d-flex pr-0 justify-content-end align-item-center">
-                        <div class="btn-group">
-                            <button class="btn btn-secondary btn-sm" (click)="addConfig()" type="button"
-                                [disabled]="!!config?.disabled || (config?.disabled$ | async)">
-                            </button>
-                        </div>
-                    </th> -->
+                    <ng-container [ngTemplateOutlet]="headerAddButton"></ng-container>
                 </tr>
             </thead>
-            <thead *ngSwitchCase="$any(data.formControlConfig) as formControlConfig">
-                <tr>
+            <thead *ngSwitchCase="$any(data.formControlConfig)">
+                <tr *ngIf="$any(data.formControlConfig) as formControlConfig">
                     <th class="input-column">
                         {{ formControlConfig?.label }}
                     </th>
-                    <!-- <th style="max-width: 40em" class="d-flex pr-0 justify-content-end align-item-center">
-                        <div class="btn-group">
-                            <button class="btn btn-secondary btn-sm" (click)="addConfig()" type="button"
-                                [disabled]="!!config?.disabled || (config?.disabled$ | async)">
-                            </button>
-                        </div>
-                    </th> -->
+                    <ng-container [ngTemplateOutlet]="headerAddButton"></ng-container>
                 </tr>
             </thead>
         </ng-container>
 
         <ng-container *ngIf="data?.formGroupConfig || data.formControlConfig as conf" [ngSwitch]="conf">
-            <tbody *ngSwitchCase="data?.formGroupConfig as ctrls">
-                <ng-container *ngFor="let ctrl of control?.controls; let i = index; let odd = odd;"
-                    [formGroup]="$any(ctrl)">
+            <tbody *ngSwitchCase="data?.formGroupConfig">
+                <ng-container *ngFor="let ctrl of control?.controls; let i = index; let odd = odd;">
                     <tr *ngIf="config.data.formGroupConfig as ctrls">
                         <td [colSpan]="1" *ngFor="let field of ctrls" [ngClass]="{ 'd-none': field?.hidden }">
                             <fnx-nx-dynamic-form-control [mode]="mode.TableCell" [dynamicControl]="field"
-                                [parentFormGroupOrFormArray]="$any(ctrl)" [wrapStyleClass]="'mb-0'">
+                                [parentForm]="$any(ctrl)" [wrapStyleClass]="'mb-0'">
                             </fnx-nx-dynamic-form-control>
                         </td>
-                        <td [colSpan]="1" class="align-top" style="max-width: 40em">
-                            <button class="btn btn-md form-btn" (click)="removeConfig(i)" type="button">
-                                &#10060;
-                            </button>
-                        </td>
+                        <ng-container [ngTemplateOutlet]="arrayItemRemoveButton"
+                            [ngTemplateOutletContext]="{$implicit:i}"></ng-container>
                     </tr>
                     <tr *ngIf="!!ctrl && !ctrl.valid && config?.data?.groupValidations?.length">
                         <td class="px-0 pb-1 border-0 group-validation-wrapper">
@@ -58,21 +43,16 @@
                         </td>
                     </tr>
                 </ng-container>
-                <ng-container *ngIf="!!addConfig">
+                <ng-container *ngIf="!!addingFormGroupCtrl">
                     <tr class="add-row bg-light-blue">
                         <td [colSpan]="1" *ngFor="let field of config.data.formGroupConfig"
                             [ngClass]="{ 'd-none': field?.hidden   }" class="pt-2">
                             <fnx-nx-dynamic-form-control [mode]="mode.TableCell" [dynamicControl]="field"
-                                [parentFormGroupOrFormArray]="addingFormGroupCtrl" [wrapStyleClass]="'mb-0'">
+                                [parentForm]="addingFormGroupCtrl" [wrapStyleClass]="'mb-0'">
                             </fnx-nx-dynamic-form-control>
                         </td>
-                        <td [colSpan]="1" class="align-bottom">
-                            <button class="btn btn-default btn-md form-btn "
-                                (click)="!!addingFormGroupCtrl?.valid && saveToForm()" type="button"
-                                [disabled]="!addingFormGroupCtrl?.valid">
-                                {{ 'Add' }}
-                            </button>
-                        </td>
+                        <ng-container [ngTemplateOutlet]="newItemAddButton"
+                            [ngTemplateOutletContext]="{$implicit:addingFormGroupCtrl}"></ng-container>
                     </tr>
                     <tr
                         *ngIf="!!addingFormGroupCtrl && !addingFormGroupCtrl?.valid && config?.data?.groupValidations?.length">
@@ -87,58 +67,55 @@
                     <ng-container [ngTemplateOutlet]="defaultFormArrayValidationMessages"></ng-container>
                 </tr>
             </tbody>
-            <tbody *ngSwitchCase="data?.formControlConfig as field">
-                <ng-container *ngFor="let ctrl of control?.controls; let i = index; let odd = odd;">
-                    <tr >
-                        <td [colSpan]="1" [ngClass]="{ 'd-none': field?.hidden }">
-                            <fnx-nx-dynamic-form-control [mode]="mode.TableCell" [dynamicControl]="field"
-                                [parentFormGroupOrFormArray]="$any(ctrl)" [wrapStyleClass]="'mb-0'">
-                            </fnx-nx-dynamic-form-control>
-                        </td>
-                        <td [colSpan]="1" class="align-top" style="max-width: 40em">
-                            <button class="btn btn-md form-btn" (click)="removeConfig(i)" type="button">
-                                &#10060;
-                            </button>
-                        </td>
-                    </tr>
-                    <tr *ngIf="!!ctrl && !ctrl.valid && config?.data?.groupValidations?.length">
-                        <!-- [colSpan]="config.data.formGroupConfig?.length" -->
-                        <td class="px-0 pb-1 border-0 group-validation-wrapper">
-                            <fnx-nx-app-validation-messages [control]="ctrl" [filedLabel]="config?.label"
-                                [messages]="config?.errorMessages">
-                            </fnx-nx-app-validation-messages>
-                        </td>
-                        <td [colSpan]="1">
-                        </td>
+            <tbody *ngSwitchCase="data?.formControlConfig">
+                <ng-container *ngIf="$any(data?.formControlConfig) as formControlConfig">
+                    <ng-container *ngFor="let ctrl of control?.controls; let i = index; let odd = odd;">
+                        <tr>
+                            {{ ['parentForm,config?.field',parentForm,config?.field] | log }}
+                            <td [colSpan]="1" [ngClass]="{ 'd-none': formControlConfig?.hidden }">
+                                {{ ['formControlConfig,control',formControlConfig,control ] | log }}
+                                <fnx-nx-dynamic-form-control [mode]="mode.TableCell"
+                                    [dynamicControl]="formControlConfig" wrapStyleClass="mb-0" [control]="ctrl"
+                                    [parentForm]="control">
+                                </fnx-nx-dynamic-form-control>
+                            </td>
+                            <ng-container [ngTemplateOutlet]="arrayItemRemoveButton"
+                                [ngTemplateOutletContext]="{$implicit:i}"></ng-container>
+                        </tr>
+                        <tr *ngIf="!!ctrl && !ctrl.valid && config?.data?.groupValidations?.length">
+                            <td class="px-0 pb-1 border-0 group-validation-wrapper">
+                                <fnx-nx-app-validation-messages [control]="ctrl" [filedLabel]="config?.label"
+                                    [messages]="config?.errorMessages">
+                                </fnx-nx-app-validation-messages>
+                            </td>
+                            <td [colSpan]="1">
+                            </td>
+                        </tr>
+                    </ng-container>
+                    <ng-container *ngIf="!!addingFormCtrlGroupWarper">
+                        <tr [formGroup]="addingFormCtrlGroupWarper" class="add-row bg-light-blue">
+                            <td [colSpan]="1" [ngClass]="{ 'd-none': formControlConfig?.hidden }" class="pt-2">
+                                <fnx-nx-dynamic-form-control [mode]="mode.TableCell"
+                                    [dynamicControl]="formControlConfig" wrapStyleClass="mb-0"
+                                    [parentForm]="addingFormCtrlGroupWarper">
+                                </fnx-nx-dynamic-form-control>
+                            </td>
+                            <ng-container [ngTemplateOutlet]="newItemAddButton"
+                                [ngTemplateOutletContext]="{$implicit:addingFormCtrlGroupWarper}"></ng-container>
+                        </tr>
+                        <tr
+                            *ngIf="!!addingFormCtrlGroupWarper && !addingFormCtrlGroupWarper?.valid && config?.data?.groupValidations?.length">
+                            <td [colSpan]="1000" class="px-0 pb-1 border-0 group-validation-wrapper">
+                                <fnx-nx-app-validation-messages [filedLabel]="config?.label" [control]="addingFormCtrl"
+                                    [messages]="config?.errorMessages">
+                                </fnx-nx-app-validation-messages>
+                            </td>
+                        </tr>
+                    </ng-container>
+                    <tr>
+                        <ng-container [ngTemplateOutlet]="defaultFormArrayValidationMessages"></ng-container>
                     </tr>
                 </ng-container>
-                <ng-container *ngIf="!!addingFormCtrl">
-                    <tr class="add-row bg-light-blue">
-                        <td [colSpan]="1" *ngIf="$any(data.formControlConfig) as field"
-                            [ngClass]="{ 'd-none': field?.hidden }" class="pt-2">
-                            <fnx-nx-dynamic-form-control [mode]="mode.TableCell" [dynamicControl]="field"
-                                [parentFormGroupOrFormArray]="addingFormCtrl" [wrapStyleClass]="'mb-0'">
-                            </fnx-nx-dynamic-form-control>
-                        </td>
-                        <td [colSpan]="1" class="align-bottom">
-                            <button class="btn btn-default btn-md form-btn "
-                                (click)="!!addingFormCtrl?.valid && saveToForm()" type="button"
-                                [disabled]="!addingFormCtrl?.valid">
-                                {{ 'Add' }}
-                            </button>
-                        </td>
-                    </tr>
-                    <tr *ngIf="!!addingFormCtrl && !addingFormCtrl?.valid && config?.data?.groupValidations?.length">
-                        <td [colSpan]="1000" class="px-0 pb-1 border-0 group-validation-wrapper">
-                            <fnx-nx-app-validation-messages [filedLabel]="config?.label" *ngIf="!!addingFormCtrl"
-                                [control]="addingFormCtrl" [messages]="config?.errorMessages">
-                            </fnx-nx-app-validation-messages>
-                        </td>
-                    </tr>
-                </ng-container>
-                <tr>
-                    <ng-container [ngTemplateOutlet]="defaultFormArrayValidationMessages"></ng-container>
-                </tr>
             </tbody>
         </ng-container>
     </table>
@@ -151,6 +128,36 @@
         [messages]="config?.errorMessages">
     </fnx-nx-app-validation-messages>
 </ng-template>
+
+<ng-template #headerAddButton>
+    <th style="max-width: 40em" class="d-flex pr-0 justify-content-end align-item-center">
+        <div class="btn-group">
+            <button class="btn btn-secondary btn-sm" (click)="addConfig()" type="button"
+                [disabled]="!!config?.disabled || (config?.disabled$ | async)">
+                &#10133;
+            </button>
+        </div>
+    </th>
+</ng-template>
+
+<ng-template #arrayItemRemoveButton let-i>
+    <td [colSpan]="1" class="align-top" style="max-width: 40em">
+        <button class="btn btn-md form-btn" (click)="removeConfig(i)" type="button">
+            &#10060;
+        </button>
+    </td>
+</ng-template>
+
+<ng-template #newItemAddButton let-f>
+    <td [colSpan]="1" class="align-bottom">
+        <button class="btn btn-default btn-md form-btn " (click)="!!f?.valid && saveToForm()" type="button"
+            [disabled]="!f?.valid">
+            {{ 'Add' }}
+        </button>
+    </td>
+</ng-template>
+
+
 
 
 

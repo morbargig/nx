@@ -63,7 +63,7 @@ export type Field<
   // V extends T[keyof T] = T[keyof T]
 > = {
   config: FieldConfigObj<T, DModel, K>;
-  group: G;
+  parentForm: G;
   id: string;
 } & Partial<OnDestroy>;
 
@@ -128,10 +128,11 @@ export interface FieldConfigObj<
   registerControl?: (ctrl: C) => void;
 }
 
-export type CustomSubscribable<T = any> = (Observable<T> &
-  Partial<NextObserver<T>>) & {
-  new (): void;
-};
+export type CustomSubscribable<T = any> =
+  | (Observable<T> & Partial<NextObserver<T>>)
+  | ({
+      new ();
+    } & (Observable<T> & Partial<NextObserver<T>>));
 
 export type DynamicFormControl<
   T = any,

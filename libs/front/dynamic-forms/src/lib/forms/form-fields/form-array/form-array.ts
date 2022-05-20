@@ -1,11 +1,16 @@
-import { AsyncValidatorFn, FormArray, ValidatorFn } from '@angular/forms';
+import {
+  AsyncValidatorFn,
+  FormArray,
+  ValidatorFn,
+  AbstractControl,
+} from '@angular/forms';
+import { JsonPrimitive } from '@fnx-nx/api-interfaces';
 import {
   BaseFieldData,
   DynamicFormControl,
   DynamicFormControlArray,
   FieldConfigObj,
 } from '../../core/interfaces/field-config';
-import { JsonPrimitive } from '@angular/compiler-cli/ngcc/src/packages/entry_point';
 
 // export type ArrayElement<ArrayType extends readonly unknown[]> =
 //   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
@@ -27,6 +32,7 @@ import { JsonPrimitive } from '@angular/compiler-cli/ngcc/src/packages/entry_poi
 export class FormArrayData<T = any, K extends keyof T = keyof T>
   implements BaseFieldData<T, K>
 {
+  // , U, keyof Omit<typeof FormFieldType, 'FormArray'>
   public formGroupConfig?: K extends '_'
     ? never
     : T[K] extends (infer U)[]
@@ -77,7 +83,7 @@ export class FormArrayData<T = any, K extends keyof T = keyof T>
     );
   }
 
-  public onRemove?: (item: T) => void;
+  public onRemove?: ({ ctrl, val }: { ctrl: AbstractControl; val: T }) => void;
   // public setter?: (Observable<FormArraySetter> | Subject<FormArraySetter>)[];
   // public dynamicConfig?: (index: number, item: any) => FieldConfigObj[];
   // public formConfig: any;

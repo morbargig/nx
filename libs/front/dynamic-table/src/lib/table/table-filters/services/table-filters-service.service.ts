@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { JsonPrimitive } from '@fnx-nx/api-interfaces';
 import {
   LazyLoadEvent,
   FilterInsideObject,
@@ -112,6 +113,40 @@ export class TableFiltersServiceService {
                 return false;
                 break;
               }
+            }
+          }
+          break;
+        }
+        case MatchMode.Contained: {
+          const filterValue = filterObj.value as any as
+            | (string | number)
+            | (string | number | boolean | null | undefined)[];
+          // const typeofFilterValue = typeof filterValue;
+          const itemValue: JsonPrimitive = i?.[k] as any;
+          switch (typeof filterValue) {
+            case 'string':
+            case 'number': {
+              return (
+                ['number', 'string']?.includes(typeof itemValue) &&
+                filterValue?.toString()?.includes(itemValue?.toString())
+              );
+              break;
+            }
+            case 'object': {
+              if (Array.isArray(filterValue)) {
+                const itemValueAsJson = JSON.stringify(itemValue);
+                return filterValue?.some(
+                  (i) => JSON.stringify(i) === itemValueAsJson
+                );
+              }
+              // else if (filterValue !== null){
+              //   Object.keys(filterValue).some()
+              // }
+              return false;
+            }
+            default: {
+              return false;
+              break;
             }
           }
           break;

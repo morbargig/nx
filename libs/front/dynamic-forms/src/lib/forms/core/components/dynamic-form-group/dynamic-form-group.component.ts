@@ -1,7 +1,17 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild,} from '@angular/core';
-import {FormBuilder, FormGroup, ValidatorFn} from '@angular/forms';
-import {DynamicFormStepMode} from '../../interfaces/dynamic-stepped-form';
-import {DynamicFormControl} from '../../interfaces/field-config';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
+import { FormGroup, ValidatorFn } from '@angular/forms';
+import { DynamicFormStepMode } from '../../interfaces/dynamic-stepped-form';
+import { DynamicFormControl } from '../../interfaces/field-config';
+import { DynamicFormBuilderService } from '../../services/dynamic-form-builder.service';
 
 @Component({
   selector: 'fnx-nx-app-dynamic-form-group',
@@ -9,14 +19,14 @@ import {DynamicFormControl} from '../../interfaces/field-config';
   styleUrls: ['./dynamic-form-group.component.scss'],
 })
 export class DynamicFormGroupComponent<T = any> implements OnInit {
-  @ViewChild('submitBtn', {static: false})
+  @ViewChild('submitBtn', { static: false })
   public submitBtn: ElementRef<HTMLButtonElement>;
 
   @Input() public config: DynamicFormControl<any>[] = [];
   @Input() public mode: DynamicFormStepMode = DynamicFormStepMode.Default;
   @Input() public validation: ValidatorFn[];
   @Input() public errorMessages?: { [error: string]: string };
-  @Input() public showSubmitButton?: boolean = true;
+  @Input() public hideSubmitButton?: boolean;
   @Input() public showCancelButton?: boolean;
   @Input() template: TemplateRef<any>;
   @Input() public formRowCssClass = '';
@@ -32,8 +42,7 @@ export class DynamicFormGroupComponent<T = any> implements OnInit {
   @Output() public formChange: EventEmitter<FormGroup> =
     new EventEmitter<FormGroup>();
 
-  constructor(private fb: FormBuilder) {
-  }
+  constructor(private dfb: DynamicFormBuilderService) {}
 
   private _form: FormGroup;
 
@@ -57,28 +66,23 @@ export class DynamicFormGroupComponent<T = any> implements OnInit {
     this.formOnCancel.emit(true);
   }
 
-  public submit() {
-    this.submitBtn?.nativeElement.click();
-  }
+  // public submit() {
+  //   debugger;
+  //   this.submitBtn?.nativeElement.click();
+  // }
 
   public handleSubmit() {
     this.form.updateValueAndValidity();
-
-    if (this.form.valid && !!this.submit) {
+    if (this.form.valid) {
+      debugger;
       this.formOnSubmit.emit(this.form.getRawValue());
     }
   }
 
   private createGroup(): FormGroup {
-    const group = this.fb.group(
-      this.config.reduce((prev, curr) => {
-        prev[curr.field] = this.fb.control(curr?.value);
-        return prev;
-      }, {})
-    );
-    if (this.validation?.length) {
-      group?.setValidators(this.validation);
-    }
+    const group = this.dfb.buildGroup(this.config, {
+      validators: this.validation || [],
+    });
     return group;
   }
 }

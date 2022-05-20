@@ -12,21 +12,17 @@ import {
   Type,
   ViewContainerRef,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  FormArray,
-} from '@angular/forms';
+import { AbstractControl, FormGroup, FormArray } from '@angular/forms';
 import { filter, takeWhile } from 'rxjs/operators';
 import { BaseFieldComponent } from './base-field.directive';
 import { FieldEvent } from '../interfaces/events';
 import { ChangeDetectorRef } from '@angular/core';
+import { DynamicFormBuilderService } from '../services/dynamic-form-builder.service';
 
 @Directive({
   selector: '[fnxNxDynamicField]',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['id', 'group', 'config: fnxNxDynamicField'],
+  inputs: ['id', 'parentForm', 'config: fnxNxDynamicField'],
 })
 export class DynamicFieldDirective<
     T = any,
@@ -48,8 +44,8 @@ export class DynamicFieldDirective<
 
   constructor(
     private container: ViewContainerRef,
-    private fb: FormBuilder,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private dfb: DynamicFormBuilderService
   ) {
     super();
   }
@@ -58,20 +54,35 @@ export class DynamicFieldDirective<
   public override set control(ctrl) {
     this._control = ctrl;
     this.controlChange.emit(this._control);
-    this.cd;
+  }
+  public override get control() {
+    return this._control;
   }
 
   public override ngOnDestroy() {
+    // switch (this.parentForm.constructor) {
+    //   // case FormArray: {
+    //   //   this.control.setParent(null);
+    //   //   break;
+    //   // }
+    //   // case FormGroup: {
+    //   //   (this.parentForm as FormGroup).removeControl(this.config.field);
+    //   //   break;
+    //   // }
+    //   default: {
+    //     break;
+    //   }
+    // }
     this?.component?.instance?.ngOnDestroy?.();
     super.ngOnDestroy();
   }
 
   ngOnChanges() {
     if (this.component) {
-      this.component.instance.config = this.config;
-      this.component.instance.group = this.group;
       this.component.instance.control = this.control;
       this.component.instance.id = this.id;
+      this.component.instance.config = this.config;
+      this.component.instance.parentForm = this.parentForm;
       this.cd.markForCheck();
     }
   }
@@ -104,118 +115,80 @@ export class DynamicFieldDirective<
       });
   }
 
-  public async createAbstractControl() {
-    {
-      let control: AbstractControl;
-      switch (this.config.controlType) {
-        case 'array': {
-          switch (this.group instanceof FormArray) {
-            case true: {
-              const c = this.config;
-              control = this.fb.array([], {
-                validators: c?.validation || [],
-                asyncValidators: c?.asyncValidation || [],
-                updateOn: 'change',
-              });
-              (this.group as FormArray).push(control);
-              break;
-            }
-            default: {
-              const c = this.config;
-              control = this.fb.array(
-                [], // this.config.createItem ? [this.config.createItem()] : [],
-                {
-                  validators: c?.validation || [],
-                  asyncValidators: c?.asyncValidation || [],
-                  updateOn: 'change',
-                }
-              );
-              (this.group as FormGroup).addControl(this.config.field, control);
-              break;
-            }
-          }
-
-          break;
-        }
-        case 'group': {
-          switch (this.group instanceof FormArray) {
-            case true: {
-              const c = this.config;
-              control = this.fb.group(
-                {},
-                {
-                  validators: c?.validation || [],
-                  asyncValidators: c?.asyncValidation || [],
-                  updateOn: 'change',
-                }
-              );
-              (this.group as FormArray).push(control);
-              break;
-            }
-            default: {
-              const c = this.config;
-              control = this.fb.group(
-                {},
-                {
-                  validators: c?.validation || [],
-                  asyncValidators: c?.asyncValidation || [],
-                  updateOn: 'change',
-                }
-              );
-              (this.group as FormGroup).addControl(c.field, control);
-              break;
-            }
-          }
-
-          break;
-        }
-        case 'control':
-        default: {
-          switch (this.group instanceof FormArray) {
-            case true: {
-              const c = this.config;
-              control = this.fb.control(null, {
-                validators: c?.validation || [],
-                asyncValidators: c?.asyncValidation || [],
-                updateOn: 'change',
-              });
-              (this.group as FormArray).push(control);
-              break;
-            }
-            default: {
-              const c = this.config;
-              const ctrl = this.group.get(c.field);
-              if (ctrl) {
-                if (c.validation?.length) {
-                  ctrl.setValidators(c.validation);
-                }
-                if (c?.asyncValidation?.length) {
-                  ctrl.setAsyncValidators(c.asyncValidation);
-                }
-              } else {
-                const c = this.config;
-                control = this.fb.control(
-                  { value: c.value, disabled: c.disabled },
-                  {
-                    validators: c?.validation || [],
-                    asyncValidators: c?.asyncValidation || [],
-                    updateOn: 'change',
-                  }
-                );
-                (this.group as FormGroup).addControl(
-                  this.config.field,
-                  control
-                );
-              }
-              break;
-            }
-          }
-
-          break;
-        }
+  public createAbstractControl() {
+    // switch (this.parentForm instanceof FormArray) {
+    //   case true: {
+    //     const c = this.config;
+    //     control = this.fb.control(null, {
+    //       validators: c?.validation || [],
+    //       asyncValidators: c?.asyncValidation || [],
+    //       updateOn: 'change',
+    //     });
+    //     (this.parentForm as FormArray).push(control);
+    //     break;
+    //   }
+    //   default: {
+    //     const c = this.config;
+    //     const ctrl = this.parentForm?.get(c.field);
+    //     if (ctrl) {
+    //       if (c.validation?.length) {
+    //         ctrl.setValidators(c.validation);
+    //       }
+    //       if (c?.asyncValidation?.length) {
+    //         ctrl.setAsyncValidators(c.asyncValidation);
+    //       }
+    //       control = ctrl;
+    //     } else {
+    //       const c = this.config;
+    //       control = this.fb.control(
+    //         { value: c.value, disabled: c.disabled },
+    //         {
+    //           validators: c?.validation || [],
+    //           asyncValidators: c?.asyncValidation || [],
+    //           updateOn: 'change',
+    //         }
+    //       );
+    //       (this.parentForm as FormGroup).addControl(
+    //         this.config.field,
+    //         control
+    //       );
+    //     }
+    //     break;
+    //   }
+    // }
+    // if (this.parentForm instanceof FormArray) {
+    //   this.parentForm.push(this.control);
+    // } else
+    // switch (this.parentForm.constructor) {
+    //   case FormArray: {
+    //     break
+    //   }
+    switch (this.parentForm.constructor) {
+      case FormArray: {
+        // this.control = this.dfb.buildChild(this.config as any) as A;
+        // (this.parentForm as FormArray).push(this.control);
+        break;
       }
-      this.control = control;
+      case FormGroup: {
+        const buildCtrl = this.dfb.buildChild(this.config as any) as A;
+        if (
+          !this.control ||
+          !this.control.value ||
+          this.control?.constructor !== buildCtrl?.constructor
+        ) {
+          this.control = buildCtrl;
+          (this.parentForm as FormGroup).setControl(
+            this.config.field,
+            this.control
+          );
+        }
+        break;
+      }
+      default: {
+        break;
+      }
     }
+
     this.config?.registerControl!?.(this.control);
     // this.control.valueChanges
     //   .pipe(
@@ -233,13 +206,13 @@ export class DynamicFieldDirective<
     this.component = this.container.createComponent<
       BaseFieldComponent<T, D, K, A, P>
     >(this.type);
-
-    this.component.instance.config = this.config;
-    this.component.instance.group = this.group;
-    this.component.instance.id = this.id;
     if (this.config.controlType !== 'none') {
       this.createAbstractControl();
     }
+    this.component.instance.control = this.control;
+    this.component.instance.id = this.id;
+    this.component.instance.config = this.config;
+    this.component.instance.parentForm = this.parentForm;
   }
 
   private setFieldVisibility(visibility: boolean) {
@@ -252,15 +225,15 @@ export class DynamicFieldDirective<
   }
 
   private setDisabled(enabled: boolean) {
-    switch (this.group instanceof FormArray) {
-      case true: {
-        this.control;
-        break;
-      }
+    // switch (this.parentForm instanceof FormArray) {
+    //   case true: {
+    //     this.control;
+    //     break;
+    //   }
 
-      default:
-        break;
-    }
+    //   default:
+    //     break;
+    // }
     if (!enabled) {
       this.control.disable();
     } else {
