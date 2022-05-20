@@ -52,5 +52,5 @@
       "style": "scss"
     }
   },
-  "defaultProject": "fnx-nx"
+  "defaultProject": "main-app"
 }

@@ -27,20 +27,9 @@ export interface FormArrayData<T = any, K extends keyof T = keyof T>
     ? U extends object
       ? never
       : U extends JsonPrimitive
-      ? // FixedLengthArray<[
-        DynamicFormControl<
-          { _: U },
-          keyof { _: U }
-          // , U, keyof Omit<typeof FormFieldType, 'FormArray'>
-        >
-      : // ]>
-        // FixedSizeArray<1,
-        //   (DynamicFormControl<{ '_': U }, keyof { '_': U }, U, keyof Omit<typeof FormFieldType, 'FormArray'>>)>
-        // FieldConfigObj<{ '_': U }>
-        never
+      ? DynamicFormControl<{ _: U }, keyof { _: U }>
+      : never
     : never;
-  // FieldComponentTypeObject<{ '_': U }, keyof { '_': U }, U, keyof Omit<typeof FormFieldType, 'FormArray'>>
-  // DynamicFormControl<{ '_': U }, keyof { '_': U }, U, keyof Omit<typeof FormFieldType, 'FormArray'>>
   formArrayConfig?: K extends '_'
     ? never
     : T[K] extends (infer U)[]

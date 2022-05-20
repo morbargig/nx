@@ -5,9 +5,10 @@
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
-    "start": "nx serve",
+    "start": "nx serve api",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "herokuPush": "git add . && git commit -m \"`echo \"Auto commit by $(git config user.name) at $(date +%Y-%m-%dT%H:%M%z)\"`\" &&git push heroku main:master"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +24,7 @@
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/serve-static": "^2.2.2",
     "@nrwl/angular": "14.1.5",
     "@types/lodash": "^4.14.182",
     "lodash": "^4.17.21",
