@@ -53,8 +53,7 @@ export class DynamicFormControlComponent<T = any>
 
   constructor(private cd: ChangeDetectorRef) {}
 
-  @Input()
-  public set dynamicControl(dynamicControl: DynamicFormControl<T>) {
+  @Input() public set dynamicControl(dynamicControl: DynamicFormControl<T>) {
     this.type =
       FormFieldsDic?.[dynamicControl?.type] ||
       dynamicControl?.customFieldComponent ||

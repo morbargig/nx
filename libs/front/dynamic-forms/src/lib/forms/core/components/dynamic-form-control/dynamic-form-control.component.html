@@ -21,8 +21,7 @@
         [parentForm]="parentForm" [id]="id" [type]="type">
       </ng-container>
       <fnx-nx-app-validation-messages *ngIf="config?.validation?.length || config?.asyncValidation?.length"
-        [control]="control" [filedLabel]="config?.label" [messages]="config?.errorMessages"
-        [takeOne]="config.controlType !== 'group'">
+        [control]="control" [filedLabel]="config?.label" [messages]="config?.errorMessages">
       </fnx-nx-app-validation-messages>
     </div>
   </div>

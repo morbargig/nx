@@ -1,4 +1,4 @@
-import { Directive, OnDestroy } from '@angular/core';
+import { Directive, Input, OnDestroy } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import {
   BaseFieldData,
@@ -17,16 +17,16 @@ export abstract class BaseFieldComponent<
   G extends FiledParentControl<T, P, A> = FiledParentControl<T, P, A>
 > implements Field<T, D, K, A, P, G>, OnDestroy
 {
-  public config: FieldConfigObj<T, D, K>;
-  public parentForm: G;
-  public id: string;
+  @Input() public config: FieldConfigObj<T, D, K>;
+  @Input() public parentForm: G;
+  @Input() public id: string;
   protected isActive = true;
 
   protected _control: A;
   public get control(): A {
     return this._control;
   }
-  public set control(v: A) {
+  @Input() public set control(v: A) {
     this._control = v;
   }
 

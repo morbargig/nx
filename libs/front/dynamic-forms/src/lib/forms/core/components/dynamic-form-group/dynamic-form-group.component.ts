@@ -46,12 +46,11 @@ export class DynamicFormGroupComponent<T = any> implements OnInit {
 
   private _form: FormGroup;
 
-  @Input()
   public get form(): FormGroup {
     return this._form;
   }
 
-  public set form(v: FormGroup) {
+  @Input() public set form(v: FormGroup) {
     this._form = v;
     this.formChange.emit(this._form);
   }

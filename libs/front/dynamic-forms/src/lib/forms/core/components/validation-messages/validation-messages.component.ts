@@ -52,7 +52,7 @@ type supportedDefaultValuationsErrors =
   | 'email'
   | 'pattern';
 
-  @Component({
+@Component({
   selector: 'fnx-nx-app-validation-messages',
   templateUrl: './validation-messages.component.html',
   styleUrls: ['./validation-messages.component.scss'],
@@ -61,7 +61,6 @@ type supportedDefaultValuationsErrors =
 export class ValidationMessagesComponent implements OnInit, OnDestroy {
   public errorMessages: TranslateSelectItem[];
   public ended: EventEmitter<void> = new EventEmitter<void>();
-  @Input() public takeOne = true;
   @Input() public filedLabel: string;
   @Input() public control: AbstractControl;
 

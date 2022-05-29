@@ -1,13 +1,13 @@
 <ng-container>
   <input (input)="onChange($event.target)" (keyup)="control?.valid && keyUp($event)"
-    *ngIf="!config.data?.rows else textareaTemp" [attr.disabled]="disabled" [formControl]="control" [id]="id"
+    *ngIf="!data?.rows else textareaTemp" [attr.disabled]="disabled" [formControl]="control" [id]="id"
     [ngClass]="{ 'is-invalid': control?.touched && !control?.valid }" [placeholder]="config?.placeholder || ''"
-    [step]="config.data?.step || 1" [type]="config?.data?.inputType"
+    [step]="data?.step || 1" [type]="data?.inputType"
     class="form-control {{ config?.bodyStyle?.input.styleClass }}" />
   <!-- [prxKeyfilter]="config.data?.keyFilter" -->
   <ng-template #textareaTemp>
-    <textarea (input)="onChange($event.target)" [cols]="config.data?.cols" [formControl]="control" [id]="id"
+    <textarea (input)="onChange($event.target)" [cols]="data?.cols" [formControl]="control" [id]="id"
       [ngClass]="{ 'is-invalid': control?.touched && !control?.valid }" [placeholder]="config?.placeholder || ''"
-      [rows]="config.data.rows" class="form-control {{ config?.bodyStyle?.input.styleClass }}"></textarea>
+      [rows]="data.rows" class="form-control {{ config?.bodyStyle?.input.styleClass }}"></textarea>
   </ng-template>
 </ng-container>
