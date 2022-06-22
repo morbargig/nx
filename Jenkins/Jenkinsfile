@@ -3,7 +3,7 @@ pipeline {
     
     environment{
         SOURCE_CREDENTIALS = '299c107b-2af6-4a96-9a3e-c22b065831b3'
-        SOURCE_URL = 'https://dev.azure.com/fnxp1/AwesomePortal/_git/awesome-mandark-api'
+        SOURCE_URL = 'https://dev.azure.com/Fnxp1/Agents/_git/client'
         SOURCE_URL_SCRIPT = 'https://dev.azure.com/fnxp1/DevOps/_git/scripts'
         MODULE_NAME= "client"
         TGTDIR= "agents-gitops/Dev/integ"
@@ -48,6 +48,7 @@ pipeline {
                         }
                     }
                 }*/
+
                 stage('build and push image'){
                     steps{
                         script{
@@ -63,7 +64,7 @@ pipeline {
                             println("="*40)
                             
 
-                            sha_and_version = sh(script:"docker images --digests | grep awesome/mandark-api | head -1 |awk '{print \$2 \",\" \$3 }'", returnStdout: true).trim()
+                            sha_and_version = sh(script:"docker images --digests | grep "+env.project+"/"+env.MODULE_NAME+" | head -1 |awk '{print \$2 \",\" \$3 }'", returnStdout: true).trim()
                             
                             def (app_version, app_sha) = sha_and_version.split(',')
                             
@@ -84,7 +85,7 @@ pipeline {
                             println('#'*17+' '+pure_version+' '+'#'*17)
                             println('#'*100)
                             withCredentials([string(credentialsId: 'tfsbuilder_token', variable: 'tfsbuilder')]) {
-                                sh("git remote add ${MODULE_NAME}-pushable https://tfsbuilder:'${tfsbuilder}'@dev.azure.com/fnxp1/AwesomePortal/_git/awesome-mandark-api")
+                                sh("git remote add ${MODULE_NAME}-pushable https://tfsbuilder:'${tfsbuilder}'@dev.azure.com/fnxp1/Agents/_git/client")
                                 if (env.BRANCH_NAME == 'develop') {
                                     sh("git tag -a ${pure_version} -m \"jenkins build\" && git push ${MODULE_NAME}-pushable --tags ${pure_version}")
                                 }
@@ -100,7 +101,7 @@ pipeline {
                         script{
                             if (env.BRANCH_NAME == 'develop') {
                                 withCredentials([string(credentialsId: 'tfsbuilder_token', variable: 'tfsbuilder')]) {
-                                    sh("git clone https://tfsbuilder:${tfsbuilder}@dev.azure.com/fnxp1/AwesomePortal/_git/awesome-gitops")
+                                    sh("git clone https://tfsbuilder:${tfsbuilder}@dev.azure.com/fnxp1/Agents/_git/agents-gitops")
                                     
                                     println(pure_version)
                                     sh("grep -RiIl 'sha256:' '${TGTDIR}/${MODULE_NAME}' | xargs sed -i 's#sha256:.*#sha256:${pure_version}#g'")
