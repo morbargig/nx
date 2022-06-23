@@ -96,7 +96,7 @@ pipeline {
                 }
 
 
-                */stage ('Updating gitops repo for Dev') {
+                /*stage ('Updating gitops repo for Dev') {
                     steps{
                         script{
                             if (env.BRANCH_NAME == 'develop') {
@@ -118,7 +118,7 @@ pipeline {
                             }
                         }
                     }
-                }/*
+                }*/
             }
         }
     }       
