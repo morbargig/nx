@@ -1,5 +1,5 @@
 # From base image node
-FROM artifactory.hq.corp.phoenix.co.il:5000/node:16
+FROM artifactory.hq.corp.phoenix.co.il:5000/node:16-alpine
 # Create app directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
