@@ -6,8 +6,7 @@ pipeline {
         SOURCE_URL = 'https://dev.azure.com/Fnxp1/Agents/_git/client'
         SOURCE_URL_SCRIPT = 'https://dev.azure.com/fnxp1/DevOps/_git/scripts'
         MODULE_NAME= "client"
-        TGTDIR= "agents-gitops/Dev/integ"
-        TGTNAMESPACE="ns-agents-be-integ"
+        TGTDIR= "gitops/Dev/integ/client"
         project="agents"
         VERSION="1.0.0"
     }
@@ -96,7 +95,7 @@ pipeline {
                 }
 
 
-                /*stage ('Updating gitops repo for Dev') {
+                stage ('Updating gitops repo for Dev') {
                     steps{
                         script{
                             if (env.BRANCH_NAME == 'develop') {
@@ -106,8 +105,8 @@ pipeline {
                                     println(pure_version)
                                     sh("grep -RiIl 'sha256:' '${TGTDIR}/${MODULE_NAME}' | xargs sed -i 's#sha256:.*#sha256:${pure_version}#g'")
                                     image_version = 'sha256:'+pure_version
-                                    sh("cd awesome-gitops && git add Dev/fnx-pinfo-integ/${MODULE_NAME} && git commit -m 'updating gitops ${MODULE_NAME} from ci pipeline version: ${image_version}' && git push")
-                                    //artifact_name = sh(script: 'kp build logs ${MODULE_NAME} -n tbs5 | grep artifactory.hq.corp.phoenix.co.il:5000/awesome/${MODULE_NAME}:b | cut -d ":" -f3', returnStdout: true).trim()
+                                    sh("cd gitops && git add Dev/integ/${MODULE_NAME} && git commit -m 'updating gitops ${MODULE_NAME} from ci pipeline version: ${image_version}' && git push")
+                                    //artifact_name = sh(script: 'kp build logs ${MODULE_NAME} -n tbs5 | grep artifactory.hq.corp.phoenix.co.il:5000/agents/${MODULE_NAME}:b | cut -d ":" -f3', returnStdout: true).trim()
                                     
                                     println("artifact name: " + artifact_name)
                                     //sha = sh(script: ''' kp build logs ${MODULE_NAME} -n tbs5 | grep sha256: | sed 's/..$//' | sed '2!d' | sed 's/.*://' ''', returnStdout: true).trim()
@@ -118,7 +117,7 @@ pipeline {
                             }
                         }
                     }
-                }*/
+                }
             }
         }
     }       
