@@ -120,5 +120,30 @@ pipeline {
                 }
             }
         }
-    }       
+    }   
+
+     post { 
+        always {
+            node('eaasboxt02'){
+                script{
+                    git_commiter_email = sh(
+                        script: "git --no-pager show -s --format=\'%ae\'",
+                        returnStdout: true
+                    ).trim()
+                    println("Git committer email: ${git_commiter_email}")
+                    if (git_commiter_email == "315999508@phoenix.co.il") {
+                        COMMITER_EMAIL = "morb4@fnx.co.il"
+                    } else {
+                            COMMITER_EMAIL = git_commiter_email
+                    }
+                }
+            }   
+        }
+        failure {
+            emailext body: '''${SCRIPT, template="groovy_html.template"}''', mimeType: 'text/html', subject: '${JOB_NAME}',to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
+        }
+        success {
+            emailext body: '''${SCRIPT, template="groovy_html.template"}''', mimeType: 'text/html', subject: '${JOB_NAME}',to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
+        }
+    }        
 }
