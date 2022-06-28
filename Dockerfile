@@ -13,7 +13,7 @@ RUN npm run build:main-app
 
 ### STAGE 2: Serve ###
 FROM artifactory:5000/nginx:1.17.1-alpine
-FROM nginx:1.17.1-alpine
+# FROM nginx:1.17.1-alpine
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /usr/src/app/dist/apps/main-app /usr/share/nginx/html
 EXPOSE 8080
