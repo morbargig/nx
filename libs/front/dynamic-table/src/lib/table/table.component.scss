@@ -1,0 +1,148 @@
+$Desktop: '(min-width:48rem)';
+$Mobile: '(max-width:47.9994rem)';
+
+::-webkit-scrollbar {
+  width: 0.4375rem;
+  height: 0.3125rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0.3125rem #e1e8f2;
+  border-radius: 0.625rem;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 0.625rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #2c354f;
+}
+
+.table-wrapper {
+  z-index: 1;
+
+  // @apply w-full table-wrapper border-1 border-med-gray-40 rounded-md;
+  // max-height: calc(100vh - 20.625rem);
+  // &.full-height {
+  //   height: calc(58.5vh);
+  // }
+  table {
+    // position: relative;
+    border-collapse: collapse;
+    text-align: start;
+
+    thead {
+      position: sticky !important;
+      top: 0rem;
+      z-index: 1;
+
+      tr {
+        line-height: 1;
+
+        th {
+          &.hidden-cell {
+            padding: 0 !important;
+
+            span {
+              display: none;
+            }
+          }
+
+
+          text-align: start;
+        }
+      }
+    }
+
+    tbody {
+      overflow-y: auto;
+
+      tr {
+        &:not(:first-child) {
+          .tr-border-bottom {
+            $border-percent: 764 / 800 * 100%;
+            // according to Zeplin border bottom  47.75rem of 50rem
+            background: #e4e4e4;
+            top: 0;
+            left: (100 - $border-percent) / 2;
+            height: 0.0625rem;
+            width: $border-percent;
+
+            @media #{$Mobile} {
+              $border-percent: 315 / 343 * 100%;
+              left: (100 - $border-percent) / 2;
+              width: $border-percent;
+            }
+          }
+
+        }
+
+        td {
+          &.hidden-cell {
+            padding: 0 !important;
+
+            span {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// .extends {
+//   animation-name: example;
+//   animation-duration: 15s;
+// }
+
+// @keyframes example {
+//   from {
+//     height: 0%;
+//   }
+
+//   to {
+//     height: 100%;
+//   }
+// }
+
+.extends-tr {
+  max-height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  .extends-td .extends-div {
+    max-height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .inActive {
+    max-height: 0;
+    padding: 0 !important;
+    transition: max-height 0.3s;
+    transition: padding 0.3s;
+
+    .extends-div {
+      max-height: 0;
+      padding: 0 !important;
+      transition: max-height 0.3s;
+      transition: padding 0.3s;
+    }
+  }
+
+  &.active {
+    max-height: 100vh;
+    transition: max-height 2s;
+
+    .extends-td .extends-div {
+      max-height: 100vh;
+      transition: max-height 2s;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "api": "apps/api",
+    "api-interfaces": "libs/api-interfaces",
+    "front-dynamic-forms": "libs/front/dynamic-forms",
+    "front-dynamic-forms-e2e": "apps/front-dynamic-forms-e2e",
+    "front-dynamic-table": "libs/front/dynamic-table",
+    "front-main-app-testing": "libs/front/main-app-testing",
+    "main-app": "apps/main-app",
+    "main-app-e2e": "apps/main-app-e2e"
+  }
+}

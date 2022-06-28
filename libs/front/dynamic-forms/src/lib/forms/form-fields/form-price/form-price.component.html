@@ -1,0 +1,19 @@
+<!-- <div class="col-12 row ml-0 px-0 form-group" *ngIf=" !!config?.name">
+  <div [formGroup]="group" class="d-none">
+    <input [formControlName]="config?.name" />
+  </div>
+  <div *ngIf="!!form" [formGroup]="form" class="col px-0 mr-2">
+    <input id="{{ id + '-price' }}" currencyFormatter [formControlName]="priceControlName"
+      class="row form-control ml-0 {{ config?.inputStyleClass }}"
+      [ngClass]="{ 'is-invalid': !!priceControl.touched && !control.valid }" (focus)="$event.target.select()"
+      [placeholder]="config?.placeholder || '' | translate" (input)="onInput($event?.target?.value,false)" />
+    <label for="{{ id + '-price' }}" translate> Portal.Forms.Filed.Price.Title </label>
+  </div>
+  <div *ngIf="!!form" [formGroup]="form" class="col px-0" [ngClass]="{'d-none' :  !!data?.hideVat}">
+    <input id="{{ id + '-vatPrice' }}" currencyFormatter class="row form-control ml-0 {{ config?.inputStyleClass }} "
+      [ngClass]="{ 'is-invalid': !!priceControl.touched && !control.valid }" [formControlName]="vatControlName"
+      [placeholder]="config?.placeholder || '' | translate" (focus)="$event.target.select()"
+      (input)="onInput($event?.target?.value,true)" />
+    <label for="{{ id + '-vatPrice' }}" translate> Portal.Forms.Filed.VatPrice.Title </label>
+  </div>
+</div> -->
