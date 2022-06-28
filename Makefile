@@ -10,4 +10,4 @@ web-serve-cypress-vidoes:
 	npx serve ./dist/cypress/
 
 aotu-commit:
-	`git add . && git commit -m "$(string replace u-s- '#' "$(string replace task- '#' "$(string replace bug- '#' "$(git branch --show-current)")")")" && git push origin $(git branch --show-current)`
+	git add . && git commit -m (string replace u-s- '#' (string replace task- '#' (string replace bug- '#' (git branch --show-current)))) && git push origin (git branch --show-current)
