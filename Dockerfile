@@ -1,21 +1,19 @@
-# From base image node
-FROM artifactory.hq.corp.phoenix.co.il:5000/node:16-alpine
-# Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-# set proxy
+### STAGE 1: Build ###
+FROM artifactory:5000/node:16-alpine AS build
+# FROM node:16-alpine AS build
 ENV http_proxy="http://mswg.hq.corp.phoenix.co.il:8080"
 ENV https_proxy="http://mswg.hq.corp.phoenix.co.il:8080"
-# Copying all the files from your file system to container file system
-COPY package.json .
-# Install all dependencies
-RUN npm install
-# Copy other files too
-COPY ./ .
-# unset proxy
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
+RUN npm ci
 ENV http_proxy=""
 ENV https_proxy=""
-# Expose the port
+COPY . .
+RUN npm run build:main-app
+
+### STAGE 2: Serve ###
+FROM artifactory:5000/nginx:1.17.1-alpine
+FROM nginx:1.17.1-alpine
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /usr/src/app/dist/apps/main-app /usr/share/nginx/html
 EXPOSE 8080
-# Command to run app when intantiate an image
-CMD ["npm","start"]

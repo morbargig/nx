@@ -13,8 +13,7 @@ pipeline {
     options {
         ansiColor('xterm')
         timeout(time: 1, unit: 'HOURS')
-        lock resource: currentBuild.rawBuild.project.parent.displayName
-        
+        lock resource: currentBuild.rawBuild.project.parent.displayName  
     }
     stages {
         stage('run on eaasboxt02'){
@@ -119,8 +118,7 @@ pipeline {
                 }
             }
         }
-    }   
-
+    }
      post { 
         always {
             node('eaasboxt02'){
@@ -144,5 +142,5 @@ pipeline {
         success {
             emailext body: '''${SCRIPT, template="groovy_html.template"}''', mimeType: 'text/html', subject: '${JOB_NAME}',to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
         }
-    }        
+    }
 }
