@@ -1,6 +1,6 @@
 pipeline {
     agent none
-    
+
     environment{
         SOURCE_CREDENTIALS = '299c107b-2af6-4a96-9a3e-c22b065831b3'
         SOURCE_URL = 'https://dev.azure.com/Fnxp1/Agents/_git/client'
@@ -13,7 +13,7 @@ pipeline {
     options {
         ansiColor('xterm')
         timeout(time: 1, unit: 'HOURS')
-        lock resource: currentBuild.rawBuild.project.parent.displayName  
+        lock resource: currentBuild.rawBuild.project.parent.displayName
     }
     stages {
         stage('run on eaasboxt02'){
@@ -51,33 +51,31 @@ pipeline {
                     steps{
                         script{
                             string featureBranch = env.BRANCH_NAME
-                            featureBranch = featureBranch.replaceAll("/","-")
+                            string featureBranch = featureBranch.replaceAll("/","-")
+                            string temp_version = "b${featureBranch}.${VERSION}.${BUILD_NUMBER}"
+                            string temp_artifactory_path = "artifactory:5000/${env.project}/${env.MODULE_NAME}:${temp_version}"
 
+                            sh("docker build -f Dockerfile --no-cache --tag ${temp_artifactory_path} .")
+                            sh("docker push ${temp_artifactory_path}")
 
-                            sh('docker build -f Dockerfile --no-cache --tag artifactory:5000/'+env.project+'/'+env.MODULE_NAME+':b'+featureBranch+'.${VERSION}.${BUILD_NUMBER} .')
-                            sh('docker push artifactory:5000/'+env.project+'/'+env.MODULE_NAME+':b'+featureBranch+'.${VERSION}.${BUILD_NUMBER}')
-                            
-
-                            println("Show image of "+env.MODULE_NAME+" digest:")
+                            println("Show image of ${env.MODULE_NAME} digest:")
                             println("="*40)
-                            
 
-                            sha_and_version = sh(script:"docker images --digests | grep "+env.project+"/"+env.MODULE_NAME+" | head -1 |awk '{print \$2 \",\" \$3 }'", returnStdout: true).trim()
-                            
+                            sha_and_version = sh(script:"docker images --digests | grep ${env.project}/${env.MODULE_NAME} | head -1 |awk '{print \$2 \",\" \$3 }'", returnStdout: true).trim()
+
                             def (app_version, app_sha) = sha_and_version.split(',')
-                            
+
                             println("app_sha: " + app_sha)
                             println("app_version: " + app_version)
                             pure_version = app_sha - 'sha256:'
                             artifact_name = app_version
-                            temp_version = 'b'+featureBranch+'.'+VERSION+'.'+BUILD_NUMBER
                             println("temp_version: " + temp_version)
                             if(temp_version.equals(app_version)){
                                 println('This is sha256 version of the appliction: '+pure_version)
-                            } 
+                            }
 
-                            sh('docker rmi artifactory:5000/'+env.project+'/'+env.MODULE_NAME+':b'+featureBranch+'.${VERSION}.${BUILD_NUMBER}')
-                            sh('echo ${VERSION}.${BUILD_NUMBER}')
+                            sh("docker rmi ${temp_artifactory_path}")
+                            sh("echo ${VERSION}.${BUILD_NUMBER}")
                             //print the image version:
                             println('#'*42+' Image Version: '+'#'*42)
                             println('#'*17+' '+pure_version+' '+'#'*17)
@@ -87,7 +85,7 @@ pipeline {
                                 if (env.BRANCH_NAME == 'develop') {
                                     sh("git tag -a ${pure_version} -m \"jenkins build\" && git push ${MODULE_NAME}-pushable --tags ${pure_version}")
                                 }
-                                sh('git tag -a vb'+featureBranch+'${VERSION}.${BUILD_NUMBER} -m "jenkins version" && git push ${MODULE_NAME}-pushable --tags vb'+featureBranch+'${VERSION}.${BUILD_NUMBER}')
+                                sh("""git tag -a v${temp_version} -m "jenkins version" && git push ${MODULE_NAME}-pushable --tags v${temp_version}""")
                             }
                         }
                     }
@@ -99,18 +97,20 @@ pipeline {
                             if (env.BRANCH_NAME == 'develop') {
                                 withCredentials([string(credentialsId: 'tfsbuilder_token', variable: 'tfsbuilder')]) {
                                     sh("git clone https://tfsbuilder:${tfsbuilder}@dev.azure.com/fnxp1/Agents/_git/agents-gitops")
-                                    
+
                                     println(pure_version)
                                     sh("grep -RiIl 'sha256:' '${TGTDIR}/${MODULE_NAME}' | xargs sed -i 's#sha256:.*#sha256:${pure_version}#g'")
-                                    image_version = 'sha256:'+pure_version
+                                    image_version = "sha256:${pure_version}"
                                     sh("cd gitops && git add Dev/integ/${MODULE_NAME} && git commit -m 'updating gitops ${MODULE_NAME} from ci pipeline version: ${image_version}' && git push")
                                     //artifact_name = sh(script: 'kp build logs ${MODULE_NAME} -n tbs5 | grep artifactory.hq.corp.phoenix.co.il:5000/agents/${MODULE_NAME}:b | cut -d ":" -f3', returnStdout: true).trim()
-                                    
+
                                     println("artifact name: " + artifact_name)
                                     //sha = sh(script: ''' kp build logs ${MODULE_NAME} -n tbs5 | grep sha256: | sed 's/..$//' | sed '2!d' | sed 's/.*://' ''', returnStdout: true).trim()
                                     println("sha256:" + pure_version)
+
                                     //tag artifact with sha256 num
-                                    sh('${curl} -X PUT "https://artifactory.hq.corp.phoenix.co.il:8443/artifactory/api/storage/docker-local/'+env.project+'/${MODULE_NAME}/' + artifact_name + '"?properties=devops_tags=sha256:'+ pure_version +' --fail')
+                                    // TODO: check this command it's more clear
+                                    sh("""curl -X PUT "https://artifactory.hq.corp.phoenix.co.il:8443/artifactory/api/storage/docker-local/${env.project}/${MODULE_NAME}/${artifact_name}"?properties=devops_tags=sha256:${pure_version} --fail""")
                                 }
                             }
                         }
@@ -119,7 +119,7 @@ pipeline {
             }
         }
     }
-     post { 
+     post {
         always {
             node('eaasboxt02'){
                 script{
@@ -134,13 +134,13 @@ pipeline {
                             COMMITER_EMAIL = git_commiter_email
                     }
                 }
-            }   
+            }
         }
         failure {
-            emailext body: '''${SCRIPT, template="groovy_html.template"}''', mimeType: 'text/html', subject: '${JOB_NAME}',to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
+            emailext body: """${SCRIPT, template="groovy_html.template"}""", mimeType: 'text/html', subject: "${JOB_NAME}",to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
         }
         success {
-            emailext body: '''${SCRIPT, template="groovy_html.template"}''', mimeType: 'text/html', subject: '${JOB_NAME}',to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
+            emailext body: """${SCRIPT, template="groovy_html.template"}""", mimeType: 'text/html', subject: "${JOB_NAME}",to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
         }
-    }
+     }
 }
