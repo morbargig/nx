@@ -93,7 +93,6 @@ pipeline {
                     }
                 }
 
-
                 stage ('Updating gitops repo for Dev') {
                     steps{
                         script{
