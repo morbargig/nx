@@ -14,7 +14,6 @@ pipeline {
         ansiColor('xterm')
         timeout(time: 1, unit: 'HOURS')
         lock resource: currentBuild.rawBuild.project.parent.displayName
-        
     }
     stages {
         stage('run on eaasboxt02'){
