@@ -8,6 +8,7 @@
     "start": "nx serve",
     "build": "nx build",
     "build:main-app": "nx build main-app",
+    "build:storybook:front-dynamic-forms": "npx nx run front-dynamic-forms:storybook",
     "test": "nx test",
     "herokuPush": "git add . && git commit -m \"`echo \"Auto commit by $(git config user.name) at $(date +%Y-%m-%dT%H:%M%z)\"`\" &&git push heroku main:master"
   },
