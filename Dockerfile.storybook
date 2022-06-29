@@ -1,0 +1,23 @@
+### STAGE 1: Build ###
+# FROM artifactory:5000/node:16-alpine AS build
+FROM node:16-alpine AS build
+# ENV http_proxy="http://mswg.hq.corp.phoenix.co.il:8080"
+# ENV https_proxy="http://mswg.hq.corp.phoenix.co.il:8080"
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
+RUN npm ci
+ENV http_proxy=""
+ENV https_proxy=""
+COPY . .
+RUN npm run build:storybook:front-dynamic-forms
+
+### STAGE 2: Serve ###
+# FROM artifactory:5000/nginx:1.17.1-alpine
+FROM nginx:1.17.1-alpine
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /usr/src/app/dist/storybook/front-dynamic-forms /usr/share/nginx/html
+EXPOSE 8080
+
+# COPY if [ "$BASE_IMAGE" = "external" ] ; then COPY --from=BUILD $TMP_LOCATION/*.properties $DEPLOYMENT_LOCATION \
+# 			   ; COPY --from=BUILD $TMP_LOCATION/*.xml $DEPLOYMENT_LOCATION \
+# 			   ; COPY standalone.conf /opt/wildfly/bin ; fi

@@ -110,7 +110,7 @@ pipeline {
 
                                     //tag artifact with sha256 num
                                     // TODO: check this command it's more clear
-                                    sh("""curl -X PUT "https://artifactory.hq.corp.phoenix.co.il:8443/artifactory/api/storage/docker-local/${env.project}/${MODULE_NAME}/${artifact_name}"?properties=devops_tags=sha256:${pure_version} --fail""")
+                                    sh("""${curl} -X PUT "https://artifactory.hq.corp.phoenix.co.il:8443/artifactory/api/storage/docker-local/${env.project}/${MODULE_NAME}/${artifact_name}"?properties=devops_tags=sha256:${pure_version} --fail""")
                                 }
                             }
                         }
