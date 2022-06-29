@@ -120,8 +120,8 @@ pipeline {
             }
         }
     }
-    post {
-        /*always {
+    /*post {
+        always {
             node('eaasboxt02'){
                 script{
                     git_commiter_email = sh(script: "git --no-pager show -s --format=\'%ae\'",returnStdout: true).trim()
@@ -134,12 +134,12 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
         failure {
             emailext body: """${SCRIPT, template="groovy_html.template"}""", mimeType: 'text/html', subject: "${JOB_NAME}",to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
         }
         success {
             emailext body: """${SCRIPT, template="groovy_html.template"}""", mimeType: 'text/html', subject: "${JOB_NAME}",to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
         }
-     }
+    }*/
 }
