@@ -120,19 +120,17 @@ pipeline {
             }
         }
     }
-     post {
+    post {
         always {
             node('eaasboxt02'){
                 script{
-                    git_commiter_email = sh(
-                        script: "git --no-pager show -s --format=\'%ae\'",
-                        returnStdout: true
-                    ).trim()
+                    git_commiter_email = sh(script: "git --no-pager show -s --format=\'%ae\'",returnStdout: true).trim()
                     println("Git committer email: ${git_commiter_email}")
                     if (git_commiter_email == "315999508@phoenix.co.il") {
                         COMMITER_EMAIL = "morb4@fnx.co.il"
-                    } else {
-                            COMMITER_EMAIL = git_commiter_email
+                    } 
+                    else {
+                        COMMITER_EMAIL = git_commiter_email
                     }
                 }
             }
