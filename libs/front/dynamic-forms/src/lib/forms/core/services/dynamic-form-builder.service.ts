@@ -155,6 +155,7 @@ export class DynamicFormBuilderService {
                 number: 'number',
                 bigint: 'number',
                 boolean: 'checkbox',
+                undefined: 'hidden'
               }?.[typeof json?.[0]],
             },
           },
@@ -224,6 +225,7 @@ export class DynamicFormBuilderService {
             number: 'number',
             bigint: 'number',
             boolean: 'checkbox',
+            undefined: 'hidden'
           }?.[typeof json?.[i]],
         },
       } as DynamicFormControl);

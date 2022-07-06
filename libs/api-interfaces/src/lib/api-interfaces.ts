@@ -9,6 +9,7 @@ export interface JsonArray extends Array<JsonValue> {}
 export interface JsonObject {
   [key: string]: JsonValue;
 }
+export type JsonType = JsonValue;
 
 export interface User {
   job: {
