@@ -3,13 +3,10 @@ pipeline {
 
     environment{
         SOURCE_CREDENTIALS = '299c107b-2af6-4a96-9a3e-c22b065831b3'
-        SOURCE_URL = 'https://dev.azure.com/Fnxp1/Agents/_git/client'
-        SOURCE_URL_SCRIPT = 'https://dev.azure.com/fnxp1/DevOps/_git/scripts'
-        MODULE_NAME= "client"
-        TGTDIR= "gitops/Dev/integ/client"
+        SOURCE_URL = 'https://dev.azure.com/Fnxp1/Agents/_git/mono-repo'
+        MODULE_NAME= "package"
         project="agents"
         VERSION="1.0.0"
-        // APPS_TO_BUILD=['main-app','api']
     }
     options {
         ansiColor('xterm')
@@ -35,84 +32,33 @@ pipeline {
                     }
                 }
 
-                /*stage('Checkmarx'){
+                stage('check if agent-package exists'){
                     steps{
                         script{
-                            dir('devops_folder'){
-                                checkout([$class: 'GitSCM', branches: [[name: 'master']], browser: [$class: 'TFS2013GitRepositoryBrowser', repoUrl: SOURCE_URL_SCRIPT], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Git', submoduleCfg: [], userRemoteConfigs: [[credentialsId: '299c107b-2af6-4a96-9a3e-c22b065831b3', url: SOURCE_URL_SCRIPT]]])
-                            }
-                        sh('python devops_folder/CheckmarxChangeTeam.py team="PersonalInfo" sourcePath="${WORKSPACE}/devops_folder/groovy_scripts/checkmarxStep.groovy"')
-                        def checkmarxStepFunc = load "\\devops_folder\\groovy_scripts\\checkmarxStep.groovy"
-                        checkmarxStepFunc.checkmarxMulti(project, MODULE_NAME, env.BRANCH_NAME)
-                        }
-                    }
-                }*/
-
-                stage('build and push image'){
-                    steps{
-                        script{
-                            string featureBranch = env.BRANCH_NAME
-                            string featureBranch = featureBranch.replaceAll("/","-")
-                            string temp_version = "b${featureBranch}.${VERSION}.${BUILD_NUMBER}"
-                            string temp_artifactory_path = "artifactory:5000/${env.project}/${env.MODULE_NAME}:${temp_version}"
-
-                            sh("docker build -f Dockerfile --no-cache --tag ${temp_artifactory_path} .")
-                            sh("docker push ${temp_artifactory_path}")
-
-                            println("Show image of ${env.MODULE_NAME} digest:")
-                            println("="*40)
-
-                            sha_and_version = sh(script:"docker images --digests | grep ${env.project}/${env.MODULE_NAME} | head -1 |awk '{print \$2 \",\" \$3 }'", returnStdout: true).trim()
-
-                            def (app_version, app_sha) = sha_and_version.split(',')
-
-                            println("app_sha: " + app_sha)
-                            println("app_version: " + app_version)
-                            pure_version = app_sha - 'sha256:'
-                            artifact_name = app_version
-                            println("temp_version: " + temp_version)
-                            if(temp_version.equals(app_version)){
-                                println('This is sha256 version of the appliction: '+pure_version)
-                            }
-
-                            sh("docker rmi ${temp_artifactory_path}")
-                            sh("echo ${VERSION}.${BUILD_NUMBER}")
-                            //print the image version:
-                            println('#'*42+' Image Version: '+'#'*42)
-                            println('#'*17+' '+pure_version+' '+'#'*17)
-                            println('#'*100)
-                            withCredentials([string(credentialsId: 'tfsbuilder_token', variable: 'tfsbuilder')]) {
-                                sh("git remote add ${MODULE_NAME}-pushable https://tfsbuilder:'${tfsbuilder}'@dev.azure.com/fnxp1/Agents/_git/client")
-                                if (env.BRANCH_NAME == 'develop') {
-                                    sh("git tag -a ${pure_version} -m \"jenkins build\" && git push ${MODULE_NAME}-pushable --tags ${pure_version}")
-                                }
-                                sh("""git tag -a v${temp_version} -m "jenkins version" && git push ${MODULE_NAME}-pushable --tags v${temp_version}""")
-                            }
+                            print("TODO: check if agent-package exists in artifactory")
                         }
                     }
                 }
 
-                stage ('Updating gitops repo for Dev') {
+                stage('build and push image'){
                     steps{
                         script{
-                            if (env.BRANCH_NAME == 'develop') {
-                                withCredentials([string(credentialsId: 'tfsbuilder_token', variable: 'tfsbuilder')]) {
-                                    sh("git clone https://tfsbuilder:${tfsbuilder}@dev.azure.com/fnxp1/Agents/_git/agents-gitops")
+                            string artifactory_path = "artifactory:5000/${env.project}/${env.project}-${env.MODULE_NAME}"
 
-                                    println(pure_version)
-                                    sh("grep -RiIl 'sha256:' '${TGTDIR}/${MODULE_NAME}' | xargs sed -i 's#sha256:.*#sha256:${pure_version}#g'")
-                                    image_version = "sha256:${pure_version}"
-                                    sh("cd gitops && git add Dev/integ/${MODULE_NAME} && git commit -m 'updating gitops ${MODULE_NAME} from ci pipeline version: ${image_version}' && git push")
-                                    //artifact_name = sh(script: 'kp build logs ${MODULE_NAME} -n tbs5 | grep artifactory.hq.corp.phoenix.co.il:5000/agents/${MODULE_NAME}:b | cut -d ":" -f3', returnStdout: true).trim()
+                            sh("docker build -f Dockerfile --no-cache --tag ${artifactory_path} .")
+                            sh("docker push ${artifactory_path}")
+                            sh("docker rmi ${artifactory_path}")
+                        }
+                    }
+                }
 
-                                    println("artifact name: " + artifact_name)
-                                    //sha = sh(script: ''' kp build logs ${MODULE_NAME} -n tbs5 | grep sha256: | sed 's/..$//' | sed '2!d' | sed 's/.*://' ''', returnStdout: true).trim()
-                                    println("sha256:" + pure_version)
-
-                                    //tag artifact with sha256 num
-                                    // TODO: check this command it's more clear
-                                    sh("""${curl} -X PUT "https://artifactory.hq.corp.phoenix.co.il:8443/artifactory/api/storage/docker-local/${env.project}/${MODULE_NAME}/${artifact_name}"?properties=devops_tags=sha256:${pure_version} --fail""")
-                                }
+                stage ('trigger build job') {
+                    steps{                    
+                        script{
+                            APPLICATION_AFFECTED=['main-app','api']                                
+                            for(application in APPLICATION_AFFECTED){
+                                println("TODO: trigger app affected build job")
+                                //build job: "${env.project}_${application}", wait: false
                             }
                         }
                     }
@@ -120,5 +66,4 @@ pipeline {
             }
         }
     }
-
 }

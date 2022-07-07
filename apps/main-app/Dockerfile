@@ -1,5 +1,5 @@
 ### STAGE 1: Build ###
-FROM artifactory:5000/node:16 AS build
+FROM artifactory:5000/agents/agents-package:16 AS build
 #ENV http_proxy="http://mswg.hq.corp.phoenix.co.il:8080"
 #ENV https_proxy="http://mswg.hq.corp.phoenix.co.il:8080"
 #RUN npm config set registry https://artifactory.hq.corp.phoenix.co.il:8443/artifactory/api/npm/npm/
@@ -8,9 +8,6 @@ FROM artifactory:5000/node:16 AS build
 #RUN apt-get update \
 #    && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
 WORKDIR /usr/src/app
-COPY ../../package.json ../../.npmrc ./
-RUN cat package.json
-RUN npm install
 COPY . .
 RUN npm run build:main-app
 

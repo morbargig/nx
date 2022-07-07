@@ -3,10 +3,10 @@ pipeline {
 
     environment{
         SOURCE_CREDENTIALS = '299c107b-2af6-4a96-9a3e-c22b065831b3'
-        SOURCE_URL = 'https://dev.azure.com/Fnxp1/Agents/_git/client'
+        SOURCE_URL = 'https://dev.azure.com/Fnxp1/Agents/_git/mono-repo'
         SOURCE_URL_SCRIPT = 'https://dev.azure.com/fnxp1/DevOps/_git/scripts'
-        MODULE_NAME= "client"
-        TGTDIR= "gitops/Dev/integ/client"
+        MODULE_NAME= "main-app"
+        TGTDIR= "gitops/Dev/integ/main-app"
         project="agents"
         VERSION="1.0.0"
         APPS_TO_BUILD=['main-app','api']
@@ -28,7 +28,7 @@ pipeline {
                 }
                 stage('get sources'){
                     steps{
-                    checkout([$class: 'GitSCM', branches: [[name: env.BRANCH_NAME ]], browser: [$class: 'TFS2013GitRepositoryBrowser', repoUrl: SOURCE_URL], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Git', submoduleCfg: [], userRemoteConfigs: [[credentialsId: '299c107b-2af6-4a96-9a3e-c22b065831b3', url: SOURCE_URL]]])
+                    checkout([$class: 'GitSCM', branches: [[name: env.BRANCH_NAME ]], browser: [$class: 'TFS2013GitRepositoryBrowser', repoUrl: SOURCE_URL], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Git', submoduleCfg: [], userRemoteConfigs: [[credentialsId: SOURCE_CREDENTIALS, url: SOURCE_URL]]])
                     script{
                             println("pulling branch: "+env.BRANCH_NAME)
                         }
@@ -71,6 +71,7 @@ pipeline {
                             pure_version = app_sha - 'sha256:'
                             artifact_name = app_version
                             println("temp_version: " + temp_version)
+
                             if(temp_version.equals(app_version)){
                                 println('This is sha256 version of the appliction: '+pure_version)
                             }
@@ -82,7 +83,7 @@ pipeline {
                             println('#'*17+' '+pure_version+' '+'#'*17)
                             println('#'*100)
                             withCredentials([string(credentialsId: 'tfsbuilder_token', variable: 'tfsbuilder')]) {
-                                sh("git remote add ${MODULE_NAME}-pushable https://tfsbuilder:'${tfsbuilder}'@dev.azure.com/fnxp1/Agents/_git/client")
+                                sh("git remote add ${MODULE_NAME}-pushable https://tfsbuilder:'${tfsbuilder}'@dev.azure.com/fnxp1/${project}/_git/${MODULE_NAME}")
                                 if (env.BRANCH_NAME == 'develop') {
                                     sh("git tag -a ${pure_version} -m \"jenkins build\" && git push ${MODULE_NAME}-pushable --tags ${pure_version}")
                                 }
@@ -97,7 +98,7 @@ pipeline {
                         script{
                             if (env.BRANCH_NAME == 'develop') {
                                 withCredentials([string(credentialsId: 'tfsbuilder_token', variable: 'tfsbuilder')]) {
-                                    sh("git clone https://tfsbuilder:${tfsbuilder}@dev.azure.com/fnxp1/Agents/_git/agents-gitops")
+                                    sh("git clone https://tfsbuilder:${tfsbuilder}@dev.azure.com/fnxp1/${project}/_git/gitops")
 
                                     println(pure_version)
                                     sh("grep -RiIl 'sha256:' '${TGTDIR}/${MODULE_NAME}' | xargs sed -i 's#sha256:.*#sha256:${pure_version}#g'")
