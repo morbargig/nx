@@ -71,6 +71,7 @@ pipeline {
                             pure_version = app_sha - 'sha256:'
                             artifact_name = app_version
                             println("temp_version: " + temp_version)
+
                             if(temp_version.equals(app_version)){
                                 println('This is sha256 version of the appliction: '+pure_version)
                             }
