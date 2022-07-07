@@ -59,4 +59,8 @@ checkout-remote-branch:
 vsc-extansions-export:
 	`code --list-extensions | % { "code --install-extension $_" }`
 
+# ignore some file chnages locally only / in the repo those file will act differently.
+skip-worktree:
+	git update-index --skip-worktree <filename>
+
 # git add . && git commit -m (string replace u-s- '#' (string replace task- '#' (string replace bug- '#' (git branch --show-current)))) && git push origin (git branch --show-current)
