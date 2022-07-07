@@ -85,9 +85,9 @@ pipeline {
 
 
                                     println(image_version)
-                                    sh("sed -i 's#${MODULE_NAME}:.*#${MODULE_NAME}:${image_version}#g' '${TGTDIR}'/app/image-version.yaml")
+                                    sh("sed -i 's#${MODULE_NAME}:.*#${MODULE_NAME}:${image_version}#g' '${TGTDIR}'/image-version.yaml")
 
-                                    sh("cd gitops && git add Dev/integ/${MODULE_NAME}/app/image-version.yaml && git commit -m 'updating gitops ${MODULE_NAME} from ci pipeline version: ${image_version}' && git push")
+                                    sh("cd gitops && git add Dev/integ/${MODULE_NAME}/image-version.yaml && git commit -m 'updating gitops ${MODULE_NAME} from ci pipeline version: ${image_version}' && git push")
 
                                     // TODO: check this command it's more clear
                                     sh("""${curl} -X PUT "https://artifactory.hq.corp.phoenix.co.il:8443/artifactory/api/storage/docker-local/${env.project}/${MODULE_NAME}/${artifact_name}"?properties=devops_tags=${image_version} --fail""")
