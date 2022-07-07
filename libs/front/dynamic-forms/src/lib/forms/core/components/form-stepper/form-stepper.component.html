@@ -1,0 +1,22 @@
+<section class="container-fluid">
+  <!-- The navbar for the wizard -->
+  <header class="header">
+    <ol>
+      <ng-container *ngFor="let step of steps; let i = index">
+        <li class="{{ selectedIndex === i ? activeClass : inactiveClass }}">
+          <a (click)="selectedIndex = i" [ngClass]="{ btn :true ,disabled :  !step?.editable  }">
+            <ng-container *ngIf="step.stepLabel; else showLabelText" [ngTemplateOutlet]="step.stepLabel.template">
+            </ng-container>
+            <ng-template #showLabelText>
+              {{ step.label }}
+            </ng-template>
+          </a>
+        </li>
+      </ng-container>
+    </ol>
+  </header>
+
+  <div [ngClass]="bodyClass" class="body">
+    <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+  </div>
+</section>

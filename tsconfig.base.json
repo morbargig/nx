@@ -1,0 +1,27 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@fnx-nx/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@fnx-nx/front/dynamic-forms": ["libs/front/dynamic-forms/src/index.ts"],
+      "@fnx-nx/front/dynamic-table": ["libs/front/dynamic-table/src/index.ts"],
+      "@fnx-nx/front/main-app-testing": [
+        "libs/front/main-app-testing/src/index.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

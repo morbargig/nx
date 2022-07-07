@@ -1,0 +1,16 @@
+<div [matMenuTriggerFor]="dropDownMenu" (onMenuOpen)="toggleOpen()" (onMenuClose)="toggleOpen()"
+  class="inline-flex items-center md:rounded-full cursor-pointer">
+  <div #namePlaceholder>
+    <span *ngIf="selectedOption as o" [ngClass]="isMobile? 'caption-2-demibold': 'caption-2-medium'"
+      class="text-prime-blue pl-1 md:pl-1.5">{{o?.label }}</span>
+  </div>
+  <app-icon [iconName]="isMenuOpen? iconClass.chevronUp24: iconClass.chevronDown24"
+    [customClass]="'prime-blue flex items-center'" [size]="isMobile ? '16': ''"></app-icon>
+</div>
+<mat-menu class="drop-down-no-box shadow-full bg-white" #dropDownMenu="matMenu" yPosition="below">
+  <div class="z-50 list-none text-right">
+    <ng-container *ngFor="let option of options">
+      <span (click)="handleChange(option)" class="cursor-pointer caption-2 block w-full">{{ option.label }}</span>
+    </ng-container>
+  </div>
+</mat-menu>

@@ -1,0 +1,64 @@
+//.step-navigation-bar {
+//  display: flex;
+//  justify-content: space-between;
+//  align-items: center;
+//}
+//
+//$bullet-height: 6px;
+//$bullet-line-width: 10px;
+//
+//:host {
+//  display: flex;
+//  justify-content: flex-end;
+//}
+//
+//.wizard-navigation {
+//  display: inline-flex;
+//  align-items: center;
+//}
+//
+//.navigation-bullets {
+//  flex: 1;
+//  display: inline-flex;
+//  align-items: center;
+//  padding: 0.25rem 1rem;
+//  //margin-right: 0.5rem;
+//}
+//
+//.nav-steps {
+//  align-items: center;
+//  justify-content: center;
+//}
+//
+//.bullet {
+//  position: relative;
+//
+//  &:not(:first-of-type) {
+//    padding-left: $bullet-line-width;
+//
+//    &:before {
+//      content: "";
+//      left: 0;
+//      position: absolute;
+//      height: 1px;
+//      width: $bullet-line-width;
+//    }
+//  }
+//
+//  &.active,
+//  &.done {
+//    .bullet-dot {
+//      opacity: 1;
+//    }
+//  }
+//}
+//
+//.bullet-dot {
+//  position: relative;
+//  width: $bullet-height;
+//  height: $bullet-height;
+//  border-radius: 50%;
+//  opacity: 0.5;
+//  padding: 0;
+//  display: block;
+//}
