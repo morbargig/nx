@@ -2,8 +2,10 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+import { EnvironmentType } from './env.type';
+export const environment: EnvironmentType = {
   production: false,
+  env: 'dev',
 };
 
 /*
