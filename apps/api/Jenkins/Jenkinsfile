@@ -83,7 +83,7 @@ pipeline {
                                 withCredentials([string(credentialsId: 'tfsbuilder_token', variable: 'tfsbuilder')]) {
                                     sh("git clone https://tfsbuilder:${tfsbuilder}@dev.azure.com/fnxp1/${project}/_git/gitops")
 
-                                    sh("sed -i 's#${MODULE_NAME}:.*#${MODULE_NAME}:${image_version}#g' '${TGTDIR}/${MODULE_NAME}'/app/image-version.yaml")
+                                    sh("sed -i 's#${MODULE_NAME}:.*#${MODULE_NAME}:${image_version}#g' '${TGTDIR}/${MODULE_NAME}'/image-version.yaml")
 
                                     sh("cd gitops && git add Dev/integ/${MODULE_NAME}/app/image-version.yaml && git commit -m 'updating gitops ${MODULE_NAME} from ci pipeline version: ${image_version}' && git push")
 
