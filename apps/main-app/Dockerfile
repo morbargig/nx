@@ -9,6 +9,7 @@ FROM artifactory:5000/agents/agents-package AS build
 #    && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
 WORKDIR /usr/src/app
 COPY . .
+RUN ls
 RUN npm run build:main-app
 
 ### STAGE 2: Serve ###
