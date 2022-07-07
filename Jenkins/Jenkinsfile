@@ -53,9 +53,9 @@ pipeline {
                 }
 
                 stage ('trigger build job') {
-                    steps{
-                        APPLICATION_AFFECTED=['main-app','api']                        
+                    steps{                    
                         script{
+                            APPLICATION_AFFECTED=['main-app','api']                                
                             for(application in APPLICATION_AFFECTED){
                                 build job: "${env.project}_${application}", wait: false
                             }
