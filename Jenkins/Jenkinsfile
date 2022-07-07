@@ -43,7 +43,7 @@ pipeline {
                 stage('build and push image'){
                     steps{
                         script{
-                            string artifactory_path = "artifactory:5000/${env.project}/${env.MODULE_NAME}"
+                            string artifactory_path = "artifactory:5000/${env.project}/${env.project}-${env.MODULE_NAME}"
 
                             sh("docker build -f Dockerfile --no-cache --tag ${artifactory_path} .")
                             sh("docker push ${artifactory_path}")
