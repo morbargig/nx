@@ -55,7 +55,7 @@ pipeline {
                             string temp_version = "b${featureBranch}.${VERSION}.${BUILD_NUMBER}"
                             string temp_artifactory_path = "artifactory:5000/${env.project}/${env.MODULE_NAME}:${temp_version}"
 
-                            sh("docker build -f Dockerfile --no-cache --tag ${temp_artifactory_path} .")
+                            sh("docker build -f apps/${MODULE_NAME}/Dockerfile --no-cache --tag ${temp_artifactory_path} .")
                             sh("docker push ${temp_artifactory_path}")
 
                             println("Show image of ${env.MODULE_NAME} digest:")
