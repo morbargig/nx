@@ -49,7 +49,6 @@ pipeline {
                             sh("docker build -f Dockerfile --no-cache --tag ${artifactory_path} .")
                             sh("docker push ${artifactory_path}")
                             sh("docker rmi ${artifactory_path}")
-                            }
                         }
                     }
                 }
@@ -66,5 +65,4 @@ pipeline {
             }
         }
     }
-
 }
