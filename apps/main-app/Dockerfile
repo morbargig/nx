@@ -1,5 +1,5 @@
 ### STAGE 1: Build ###
-FROM artifactory:5000/agents/agents-package:16 AS build
+FROM artifactory:5000/agents/agents-package AS build
 #ENV http_proxy="http://mswg.hq.corp.phoenix.co.il:8080"
 #ENV https_proxy="http://mswg.hq.corp.phoenix.co.il:8080"
 #RUN npm config set registry https://artifactory.hq.corp.phoenix.co.il:8443/artifactory/api/npm/npm/
