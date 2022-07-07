@@ -7,7 +7,6 @@ pipeline {
         MODULE_NAME= "package"
         project="agents"
         VERSION="1.0.0"
-        APPLICATION_AFFECTED=['main-app','api']
     }
     options {
         ansiColor('xterm')
@@ -55,6 +54,7 @@ pipeline {
 
                 stage ('trigger build job') {
                     steps{
+                        APPLICATION_AFFECTED=['main-app','api']                        
                         script{
                             for(application in APPLICATION_AFFECTED){
                                 build job: "${env.project}_${application}", wait: false
