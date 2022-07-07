@@ -1,0 +1,97 @@
+pipeline {
+    agent none
+
+    environment{
+        SOURCE_CREDENTIALS = '299c107b-2af6-4a96-9a3e-c22b065831b3'
+        SOURCE_URL = 'https://dev.azure.com/Fnxp1/Agents/_git/mono-repo'
+        MODULE_NAME= "package"
+        project="agents"
+        VERSION="1.0.0"
+    }
+    options {
+        ansiColor('xterm')
+        timeout(time: 1, unit: 'HOURS')
+        //lock resource: currentBuild.rawBuild.project.parent.displayName
+    }
+    stages {
+        stage('run on eaasboxt02'){
+            agent { node { label 'eaasboxt02'} }
+            stages {
+                stage('clean'){
+                    steps{
+                        deleteDir()
+                        echo ("deleteDir")
+                    }
+                }
+                stage('get sources'){
+                    steps{
+                    checkout([$class: 'GitSCM', branches: [[name: env.BRANCH_NAME ]], browser: [$class: 'TFS2013GitRepositoryBrowser', repoUrl: SOURCE_URL], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Git', submoduleCfg: [], userRemoteConfigs: [[credentialsId: '299c107b-2af6-4a96-9a3e-c22b065831b3', url: SOURCE_URL]]])
+                    script{
+                            println("pulling branch: "+env.BRANCH_NAME)
+                        }
+                    }
+                }
+
+                stage('check if agent-package exists'){
+                    steps{
+                        script{
+                            is_image_exists = sh(script: "${curl} --location --request GET 'https://artifactory:8443/artifactory/api/storage/docker-local/${env.project}/${env.project}-${env.MODULE_NAME}/latest'", returnStdout: true).trim()
+                            if (is_image_exists.contains("Unable to find item")){
+                                sh("sed -i 's#agents/agents-package#node:16-alpine#g' Dockerfile")
+                            }
+                        }
+                    }
+                }
+
+                stage('build and push image'){
+                    steps{
+                        script{
+                            string artifactory_path = "artifactory:5000/${env.project}/${env.project}-${env.MODULE_NAME}"
+
+                            sh("docker build -f Dockerfile --no-cache --tag ${artifactory_path} .")
+                            sh("docker push ${artifactory_path}")
+                            sh("docker rmi ${artifactory_path}")
+                        }
+                    }
+                }
+
+                stage ('trigger build job') {
+                    steps{                    
+                        script{
+                            APPLICATION_AFFECTED=['main-app','api']                                
+                            for(application in APPLICATION_AFFECTED){
+                                println("TODO: trigger app affected build job")
+                                //build job: "${env.project}_${application}", wait: false
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            node('eaasboxt02'){
+                script{
+                    COMMITER_EMAIL = sh(
+                        script: "git --no-pager show -s --format=\'%ae\'",
+                        returnStdout: true
+                    ).trim()
+                    println("Git committer email: ${COMMITER_EMAIL}")
+                }
+            }
+        }
+        failure {
+            emailext body: '''${SCRIPT, template="groovy_html.template"}''',
+                     mimeType: 'text/html',
+                     subject: "${JOB_NAME}",
+                     to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
+        }
+        success {
+            emailext body: '''${SCRIPT, template="groovy_html.template"}''',
+                     mimeType: 'text/html',
+                     subject: "${JOB_NAME}",
+                     to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
+        }
+    }
+}
