@@ -6,7 +6,7 @@ pipeline {
         SOURCE_URL = 'https://dev.azure.com/Fnxp1/Agents/_git/mono-repo'
         SOURCE_URL_SCRIPT = 'https://dev.azure.com/fnxp1/DevOps/_git/scripts'
         MODULE_NAME= "api"
-        TGTDIR= "gitops/Dev/integ/api"
+        TGTDIR= "gitops/Dev/integ"
         project="agents"
         VERSION="1.0.0"
     }
