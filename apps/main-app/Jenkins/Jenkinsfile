@@ -139,10 +139,10 @@ pipeline {
             }
         }
         failure {
-            emailext body: """${SCRIPT, template="groovy_html.template"}""", mimeType: 'text/html', subject: "${JOB_NAME}",to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
+            emailext body: "${SCRIPT, template=\"groovy_html.template\"}", mimeType: 'text/html', subject: "${JOB_NAME}",to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
         }
         success {
-            emailext body: """${SCRIPT, template="groovy_html.template"}""", mimeType: 'text/html', subject: "${JOB_NAME}",to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
+            emailext body: "${SCRIPT, template=\"groovy_html.template\"}", mimeType: 'text/html', subject: "${JOB_NAME}",to: "morb4@fnx.co.il, ${COMMITER_EMAIL}"
         }
      }
 }
