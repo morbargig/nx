@@ -68,7 +68,7 @@ pipeline {
                             println('#'*100)
 
                             withCredentials([string(credentialsId: 'tfsbuilder_token', variable: 'tfsbuilder')]) {
-                                sh("git remote add ${MODULE_NAME}-pushable https://tfsbuilder:'${tfsbuilder}'@dev.azure.com/fnxp1/${project}/_git/${MODULE_NAME}")
+                                sh("git remote add ${MODULE_NAME}-pushable https://tfsbuilder:'${tfsbuilder}'@dev.azure.com/fnxp1/${project}/_git/mono-repo")
                                 if (env.BRANCH_NAME == 'develop') {
                                     sh("git tag -a ${pure_version} -m \"jenkins build\" && git push ${MODULE_NAME}-pushable --tags ${image_version}-${date_timestemp}")
                                 }
