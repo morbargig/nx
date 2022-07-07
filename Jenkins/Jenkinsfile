@@ -35,7 +35,10 @@ pipeline {
                 stage('check if agent-package exists'){
                     steps{
                         script{
-                            print("TODO: check if agent-package exists in artifactory")
+                            is_image_exists = sh(script: "${curl} --location --request GET 'https://artifactory:8443/artifactory/api/storage/docker-local/${env.project}/${env.project}-${env.MODULE_NAME}/latest'", returnStdout: true).trim()
+                            if (is_image_exists.contains("Unable to find item")){
+                                sh("sed -i 's#agents/agents-package#node:16-alpine#g' Dockerfile")
+                            }
                         }
                     }
                 }

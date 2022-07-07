@@ -83,6 +83,7 @@ pipeline {
                                 withCredentials([string(credentialsId: 'tfsbuilder_token', variable: 'tfsbuilder')]) {
                                     sh("git clone https://tfsbuilder:${tfsbuilder}@dev.azure.com/fnxp1/${project}/_git/gitops")
 
+
                                     println(pure_version)
                                     sh("sed -i 's#${MODULE_NAME}:.*#${MODULE_NAME}:${image_version}#g' '${TGTDIR}'/app/image-version.yaml")
 
