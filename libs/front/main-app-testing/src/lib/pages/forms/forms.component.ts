@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { Validators, FormGroup } from '@angular/forms';
 import {
   DynamicFormBuilderService,
   DynamicFormControl,
 } from '@fnx-nx/front/dynamic-forms';
-import { User } from '@fnx-nx/api-interfaces';
-import { firstValueFrom, timer } from 'rxjs';
+import { User, formConfig } from '@fnx-nx/api-interfaces';
+import { Observable, firstValueFrom, of, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -162,7 +162,8 @@ export class FormsComponent implements OnInit {
         rows: 5,
       },
     };
-  hello$ = this.http.get<DynamicFormControl<User>[]>('/api/helloForm');
+  hello$: Observable<DynamicFormControl<User>[]> = of(formConfig);
+  // hello$ = this.http.get<DynamicFormControl<User>[]>('/api/helloForm');
   formOnSubmit(event: any) {
     alert(JSON.stringify(event));
   }

@@ -5,7 +5,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/main-app",
         "index": "apps/main-app/src/index.html",
@@ -13,8 +15,13 @@
         "polyfills": "apps/main-app/src/polyfills.ts",
         "tsConfig": "apps/main-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/main-app/src/favicon.ico", "apps/main-app/src/assets"],
-        "styles": ["apps/main-app/src/styles.scss"],
+        "assets": [
+          "apps/main-app/src/favicon.ico",
+          "apps/main-app/src/assets"
+        ],
+        "styles": [
+          "apps/main-app/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -74,12 +81,17 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/main-app/**/*.ts", "apps/main-app/**/*.html"]
+        "lintFilePatterns": [
+          "apps/main-app/**/*.ts",
+          "apps/main-app/**/*.html"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/main-app"],
+      "outputs": [
+        "coverage/apps/main-app"
+      ],
       "options": {
         "jestConfig": "apps/main-app/jest.config.ts",
         "passWithNoTests": true
@@ -101,7 +113,9 @@
     },
     "build-storybook": {
       "executor": "@storybook/angular:build-storybook",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputDir": "dist/storybook/main-app",
         "configDir": "apps/main-app/.storybook",
@@ -113,6 +127,10 @@
           "quiet": true
         }
       }
+    },
+    "deploy": {
+      "builder": "angular-cli-ghpages:deploy",
+      "options": {}
     }
   },
   "tags": []
