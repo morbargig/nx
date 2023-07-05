@@ -6,7 +6,7 @@ import { BaseFieldComponentDirective } from '../../core/directives/base-field.di
 import { KeyValuePair } from '../../core/interfaces/key-value-pair';
 import { FormAutocompleteData } from './form-autocomplete-data';
 import { debounceTime, filter, startWith, switchMap } from 'rxjs/operators';
-import { LazyLoadEvent } from '@fnx-nx/api-interfaces';
+import { LazyLoadEvent } from '../../core/interfaces/lazy-load-event';
 
 @Component({
   selector: 'fnx-nx-form-autocomplete',

@@ -8,21 +8,25 @@ import {
 } from '@fnx-nx/front/dynamic-forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
-export const frontMainAppTestingRoutes: Route[] = [
+export const frontTestingRoutes: Route[] = [
   { path: 'forms', component: FormsComponent },
   // { path: 'table' },
-  { path: '*', redirectTo: 'forms' },
+  { path: '**', redirectTo: 'forms' },
 ];
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(frontMainAppTestingRoutes),
+    RouterModule.forChild(frontTestingRoutes),
     HttpClientModule,
     FrontDynamicFormsModule,
     FormsModule,
     ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [DynamicFormBuilderService, FormBuilder],
   declarations: [FormsComponent],

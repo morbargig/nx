@@ -5,7 +5,7 @@ import {
   OnDestroy,
   Output,
 } from '@angular/core';
-import { MatLegacyAutocomplete as MatAutocomplete } from '@angular/material/legacy-autocomplete';
+import { MatAutocomplete } from '@angular/material/autocomplete';
 import { Subject, fromEvent } from 'rxjs';
 import { delay, takeUntil, debounceTime, switchMap } from 'rxjs/operators';
 

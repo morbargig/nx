@@ -6,6 +6,7 @@ import {
 } from '@fnx-nx/front/dynamic-forms';
 import { firstValueFrom, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { JsonObject } from '@fnx-nx/api-interfaces';
 
 export interface User {
   job: {
@@ -91,14 +92,17 @@ export class FormsComponent implements OnInit {
       type: 'Default',
       field: 'DynamicFormConfigurationObject',
       label: 'From Config',
-      placeholder: `[{
-        type: 'Default',
-        field: 'description',
-        label: 'Description',
-        placeholder: 'Description',
-        data: { rows:5 },
-      }
-    ]`,
+      placeholder: (
+        [
+          {
+            type: 'Default',
+            field: 'description',
+            label: 'Description',
+            placeholder: 'Description',
+            data: { rows: 5 },
+          },
+        ] as DynamicFormControl<any>[]
+      ).toString(),
       validation: [Validators.required, Validators.minLength(10)],
       errorMessages: {
         required: 'Required',
@@ -114,77 +118,65 @@ export class FormsComponent implements OnInit {
       type: 'Default',
       field: 'DynamicFormObjectValue',
       label: 'Any Valid JSON',
-      placeholder: `{
-        "job": {
-            "title": "Developer",
-            "salary": "22",
-            "coworkers": [
-                {
-                    "name": "omri",
-                    "phoneNumber": "1"
-                },
-                {
-                    "name": "oren",
-                    "phoneNumber": "2"
-                }
-            ]
-        },
-        "matrix": [
-            [
-                "1",
-                "2",
-                "3",
-                null
-            ],
-            [
-                "2",
-                "4"
-            ]
-        ],
-        "roles": [
-            "10",
-            "20",
-            "30"
-        ],
-        "friends": [
+      placeholder: JSON.stringify({
+        job: {
+          title: 'Developer',
+          salary: '22',
+          coworkers: [
             {
-                "name": "nik",
-                "phoneNumber": "1",
-                "friends": [
-                    {
-                        "name": "zalina",
-                        "phoneNumber": "2",
-                        "friends": [
-                            {
-                                "name": "alon",
-                                "phoneNumber": "3"
-                            },
-                            {
-                                "name": "anabel",
-                                "phoneNumber": "4"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "ortal",
-                        "phoneNumber": "5",
-                        "friends": [
-                            {
-                                "name": "ziv",
-                                "phoneNumber": "6"
-                            },
-                            {
-                                "name": "adi",
-                                "phoneNumber": "7"
-                            }
-                        ]
-                    }
-                ]
-            }
+              name: 'omri',
+              phoneNumber: '1',
+            },
+            {
+              name: 'oren',
+              phoneNumber: '2',
+            },
+          ],
+        },
+        matrix: [
+          ['1', '2', '3', null],
+          ['2', '4'],
         ],
-        "age": "24",
-        "name": "Mor Bargig"
-    }`,
+        roles: ['10', '20', '30'],
+        friends: [
+          {
+            name: 'nik',
+            phoneNumber: '1',
+            friends: [
+              {
+                name: 'zalina',
+                phoneNumber: '2',
+                friends: [
+                  {
+                    name: 'alon',
+                    phoneNumber: '3',
+                  },
+                  {
+                    name: 'anabel',
+                    phoneNumber: '4',
+                  },
+                ],
+              },
+              {
+                name: 'ortal',
+                phoneNumber: '5',
+                friends: [
+                  {
+                    name: 'ziv',
+                    phoneNumber: '6',
+                  },
+                  {
+                    name: 'adi',
+                    phoneNumber: '7',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        age: '24',
+        name: 'Mor Bargig',
+      } as JsonObject),
       validation: [Validators.required, Validators.minLength(10)],
       errorMessages: {
         required: 'Required',
@@ -219,9 +211,10 @@ export class FormsComponent implements OnInit {
         type: 'FormGroup',
         data: {
           formConfig: [
-            { field: 'title', label: 'Title' },
+            { field: 'title', label: 'Title', type: 'Default' },
             {
               field: 'salary',
+              type: 'Default',
               label: 'Salary',
             },
             {
@@ -380,7 +373,7 @@ export class FormsComponent implements OnInit {
           // title$: of(),
         },
       },
-    ] as any;
+    ];
     // console.log(this.config);
     // console.log([
     //   {
@@ -421,16 +414,17 @@ export class FormsComponent implements OnInit {
     //Add 'implements OnInit' to the class.
   }
   click() {
+    debugger;
     this.config = null;
     firstValueFrom(timer(0)).then(() => {
       this.config = JSON.parse(
         JSON.stringify(
           new Function(
-            'return (' +
-              this.group.getRawValue().DynamicFormConfigurationObject +
-              ')'
+            `return ${
+              this.group.getRawValue().DynamicFormConfigurationObject || '{}'
+            }`
           )()
-        )
+        ) || ''
       );
     });
   }
@@ -441,11 +435,13 @@ export class FormsComponent implements OnInit {
         JSON.parse(
           JSON.stringify(
             new Function(
-              'return (' + this.group.getRawValue().DynamicFormObjectValue + ')'
+              `return ${
+                this.group.getRawValue().DynamicFormObjectValue || '{}'
+              }`
             )()
           )
-        )
-      ) as any;
+        ) || ''
+      );
       console.log('config:', this.config);
     });
   }

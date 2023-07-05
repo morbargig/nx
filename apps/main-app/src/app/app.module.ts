@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FrontDynamicFormsModule } from '@fnx-nx/front/dynamic-forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ROUTES } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent],
@@ -12,6 +13,7 @@ import { ROUTES } from './app-routing.module';
     BrowserModule,
     RouterModule.forRoot(ROUTES, { initialNavigation: 'enabledBlocking' }),
     HttpClientModule,
+    BrowserAnimationsModule,
     FrontDynamicFormsModule,
   ],
   providers: [],

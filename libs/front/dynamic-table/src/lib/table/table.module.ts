@@ -17,9 +17,7 @@ import { PillCellComponent } from './cell-components/pill-cell/pill-cell.compone
 import { DateCellComponent } from './cell-components/date-cell/date-cell.component';
 import { AppIconComponent } from './core/components/app-icon/app-icon.component';
 import { LoadingCellComponent } from './cell-components/loading-cell/loading-cell.component';
-import { TranslateModule } from '@ngx-translate/core';
-
-// import { MatMenuModule } from '@angular/material/menu';
+// import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -28,7 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     AppIconComponent,
-    TranslateModule,
+    // TranslateModule,
     // CarouselModule,
     // MatMenuModule,
   ],

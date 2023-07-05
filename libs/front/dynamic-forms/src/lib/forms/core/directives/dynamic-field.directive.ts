@@ -133,6 +133,9 @@ export class DynamicFieldDirective<
   }
 
   private createComponent() {
+    if (!this.type) {
+      debugger;
+    }
     this.component = this.container.createComponent<
       BaseFieldComponentDirective<T, D, K, A, P>
     >(this.type);

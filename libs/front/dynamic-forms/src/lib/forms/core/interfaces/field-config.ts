@@ -157,7 +157,7 @@ type MyErrorType<
 export class FieldConfigObj<
   T = any,
   DModel extends BaseFieldData<T, K> = BaseFieldData<T>,
-  K extends keyof { [key in keyof T]: any } = keyof { [key in keyof T]: any },
+  K extends keyof T = keyof T,
   E extends keyof typeof FormFieldType = keyof typeof FormFieldType,
   C extends AbstractControl = AbstractControl
 > {

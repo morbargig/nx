@@ -2,7 +2,7 @@ import { INestApplication, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
   DocumentBuilder,
-  ExpressSwaggerCustomOptions,
+  SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
@@ -22,7 +22,7 @@ async function bootstrap() {
   const globalPrefix = '/api';
   const swaggerPath = `${globalPrefix}/swagger`;
   app.setGlobalPrefix(globalPrefix);
-  setupOpenApi(app,swaggerPath);
+  setupOpenApi(app, swaggerPath);
 
   app.enableCors();
   app.use((req, res, next) => {
@@ -51,10 +51,12 @@ async function bootstrap() {
 
 bootstrap();
 
-function setupOpenApi(app: INestApplication, swaggerPath:string) {
+function setupOpenApi(app: INestApplication, swaggerPath: string) {
   const docBuilderConfig = new DocumentBuilder()
     .setTitle('Agents BFF (Backend for Frontend)')
-    .setDescription('Represents the middleware api services for the agents project')
+    .setDescription(
+      'Represents the middleware api services for the agents project'
+    )
     .setVersion('1.0')
     // // .addTag('Java Api', 'Java is a Rest Api for personal info project', {
     // //   'description': "Java Swagger",
@@ -74,7 +76,7 @@ function setupOpenApi(app: INestApplication, swaggerPath:string) {
     // )
     .build();
   const document = SwaggerModule.createDocument(app, docBuilderConfig);
-  const swaggerCustomOptions: ExpressSwaggerCustomOptions = {
+  const swaggerCustomOptions: SwaggerCustomOptions = {
     customSiteTitle: 'Agents BFF Api',
     explorer: true,
     swaggerOptions: {

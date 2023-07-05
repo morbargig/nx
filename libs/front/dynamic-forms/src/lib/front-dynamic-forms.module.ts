@@ -1,4 +1,4 @@
-import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
+import { MatRadioModule } from '@angular/material/radio';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkStepperModule } from '@angular/cdk/stepper';
@@ -19,13 +19,14 @@ import { DynamicComponentDirective } from './forms/core/directives/dynamic-compo
 import { DynamicComponentComponent } from './forms/core/components/dynamic-component/dynamic-component.component';
 import { OptionsScrollDirective } from './forms/core/directives/options-scroll.directive';
 import { FormAutocompleteComponent } from './forms/form-fields/form-autocomplete/form-autocomplete.component';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
-import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { HighlighterPipe } from './forms/core/pipes/highlighter.pipe';
 import { FormCheckboxComponent } from './forms/form-fields/form-checkbox/form-checkbox.component';
 import { FormSelectComponent } from './forms/form-fields/form-select/form-select.component';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 export * from './forms';
 
@@ -70,6 +71,7 @@ const STANDALONEMODULE: NgModule['imports'] & NgModule['exports'] = [
     CommonModule,
     FormsModule,
     CdkStepperModule,
+    MatFormFieldModule,
     MatInputModule,
     ...EXPORTEDMODULE,
     ...STANDALONEMODULE,

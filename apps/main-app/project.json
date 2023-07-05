@@ -7,20 +7,43 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
+        "allowedCommonJsDependencies": [],
         "outputPath": "dist/apps/main-app",
-        "index": "apps/main-app/src/index.html",
+        "index": {
+          "input": "apps/main-app/src/index.html",
+          "output": "404.html"
+        },
         "main": "apps/main-app/src/main.ts",
         "polyfills": "apps/main-app/src/polyfills.ts",
         "tsConfig": "apps/main-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/main-app/src/favicon.ico", "apps/main-app/src/assets"],
-        "styles": ["apps/main-app/src/styles.scss"],
+        "baseHref": "/nx/",
+        "assets": [
+          "apps/main-app/src/favicon.ico",
+          "apps/main-app/src/assets",
+          {
+            "input": "libs/front/dynamic-forms/src/assets/front/dynamic-forms",
+            "glob": "**/*",
+            "output": "assets/front/dynamic-forms"
+          },
+          {
+            "input": "libs/front/dynamic-table/src/assets/front/dynamic-table",
+            "glob": "**/*",
+            "output": "assets/front/dynamic-table"
+          }
+        ],
+        "styles": [
+          "apps/main-app/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
         "production": {
+          "sourceMap": false,
           "budgets": [
             {
               "type": "initial",
@@ -76,49 +99,56 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/main-app/**/*.ts", "apps/main-app/**/*.html"]
+        "lintFilePatterns": [
+          "apps/main-app/**/*.ts",
+          "apps/main-app/**/*.html"
+        ]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/main-app"],
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/main-app"
+      ],
       "options": {
         "jestConfig": "apps/main-app/jest.config.ts",
         "passWithNoTests": true
-      }
-    },
-    "storybook": {
-      "executor": "@storybook/angular:start-storybook",
-      "options": {
-        "port": 4400,
-        "configDir": "apps/main-app/.storybook",
-        "browserTarget": "main-app:build",
-        "compodoc": false
       },
-      "configurations": {
-        "ci": {
-          "quiet": true
+      "storybook": {
+        "executor": "@storybook/angular:start-storybook",
+        "options": {
+          "port": 4400,
+          "configDir": "apps/main-app/.storybook",
+          "browserTarget": "main-app:build",
+          "compodoc": false
+        },
+        "configurations": {
+          "ci": {
+            "quiet": true
+          }
         }
-      }
-    },
-    "build-storybook": {
-      "executor": "@storybook/angular:build-storybook",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputDir": "dist/storybook/main-app",
-        "configDir": "apps/main-app/.storybook",
-        "browserTarget": "main-app:build",
-        "compodoc": false
       },
-      "configurations": {
-        "ci": {
-          "quiet": true
+      "build-storybook": {
+        "executor": "@storybook/angular:build-storybook",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "outputDir": "dist/storybook/main-app",
+          "configDir": "apps/main-app/.storybook",
+          "browserTarget": "main-app:build",
+          "compodoc": false
+        },
+        "configurations": {
+          "ci": {
+            "quiet": true
+          }
         }
+      },
+      "deploy": {
+        "builder": "angular-cli-ghpages:deploy",
+        "options": {}
       }
-    },
-    "deploy": {
-      "builder": "angular-cli-ghpages:deploy",
-      "options": {}
     }
   },
   "tags": []

@@ -145,7 +145,10 @@ export class DynamicFormBuilderService {
   };
 
   fromJsonArrayToConfigRecursion(json: JsonValue[], label?: string) {
-    const returnDefault = (json: any, i?: any) =>
+    const returnDefault = (
+      json: any[],
+      v?: string | number | bigint | boolean
+    ) =>
       ({
         field: l ? l : '_',
         ...(l
@@ -156,6 +159,7 @@ export class DynamicFormBuilderService {
           formControlConfig: {
             field: '_',
             type: 'Default',
+            value: v,
             data: {
               inputType: {
                 string: 'text',
@@ -174,7 +178,7 @@ export class DynamicFormBuilderService {
       case 'number':
       case 'bigint':
       case 'boolean': {
-        return returnDefault(json);
+        return returnDefault(json, json?.[0]);
         break;
       }
       case 'object': {

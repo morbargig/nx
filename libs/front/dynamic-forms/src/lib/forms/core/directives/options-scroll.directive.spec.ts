@@ -1,16 +1,16 @@
 import { OptionsScrollDirective } from './options-scroll.directive';
 import { TestBed } from '@angular/core/testing';
-import { MatLegacyAutocomplete } from '@angular/material/legacy-autocomplete';
+import { MatAutocomplete } from '@angular/material/autocomplete';
 
 describe('OptionsScrollDirective', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MatLegacyAutocomplete],
+      declarations: [MatAutocomplete],
     }).compileComponents();
   });
 
   it('should create an instance', () => {
-    const fixture = TestBed.createComponent(MatLegacyAutocomplete);
+    const fixture = TestBed.createComponent(MatAutocomplete);
     const component = fixture.componentInstance;
     const directive = new OptionsScrollDirective(component);
     expect(directive).toBeTruthy();

@@ -8,10 +8,11 @@ export const formConfig: DynamicFormControl<User>[] = [
     type: 'FormGroup',
     data: {
       formConfig: [
-        { field: 'title', label: 'Title' },
+        { field: 'title', label: 'Title', type: 'Default' },
         {
           field: 'salary',
           label: 'Salary',
+          type: 'Default',
         },
         {
           type: 'FormArray',

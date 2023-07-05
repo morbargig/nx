@@ -1,7 +1,10 @@
 import { BaseFieldData } from '../../core/interfaces/field-config';
 import { KeyValuePair } from '../../core/interfaces/key-value-pair';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { LazyLoadEvent, PageDataResponse } from '@fnx-nx/api-interfaces';
+import {
+  LazyLoadEvent,
+  PageDataResponse,
+} from '../../core/interfaces/lazy-load-event';
 export interface FormAutocompleteData<T = any, K extends keyof T = keyof T>
   extends BaseFieldData<T, K> {
   // keyValuePairs: KeyValuePair<T[K]>[];

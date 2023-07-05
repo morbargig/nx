@@ -1,39 +1,36 @@
-<mat-form-field
+<!-- <mat-form-field
   appearance="outline"
   *ngIf="config?.placeholder || config?.label || ' ' as placeholder"
->
-  <!-- <mat-label
+> -->
+<!-- <mat-label
     [ngClass]="{
       'text-xl text-primary-blue':
         selectedElement || control?.value,
       '!text-med-gray': !(selectedElement || control?.value)
     }"
   > -->
-  <mat-label>
-    {{ placeholder }}
-  </mat-label>
-  <input
-    #matInput
-    matInput
-    (focus)="onFocus($event)"
-    (blur)="onFocus()"
-    *ngIf="!data?.rows; else textareaTemp"
-    (keyup)="control?.valid && keyUp($event)"
-    [attr.disabled]="disabled"
-    [formControl]="control"
-    [id]="id"
-    [ngClass]="{ 'is-invalid': control?.touched && !control?.valid }"
-    [placeholder]="config?.placeholder || ''"
-    [step]="data?.step || 1"
-    [type]="data?.inputType"
-    class="form-control {{ config?.bodyStyle?.input?.styleClass }}"
-    [name]="config?.inputName || config?.field"
-  />
-  <mat-hint *ngIf="data?.hint!?.(control) as hint">{{ hint }}</mat-hint>
-</mat-form-field>
+<!-- matInput -->
+<input
+  #matInput
+  (focus)="onFocus($event)"
+  (blur)="onFocus()"
+  *ngIf="!data?.rows; else textareaTemp"
+  (keyup)="control?.valid && keyUp($event)"
+  [attr.disabled]="disabled"
+  [formControl]="control"
+  [id]="id"
+  [ngClass]="{ 'is-invalid': control?.touched && !control?.valid }"
+  [placeholder]="config?.placeholder || ''"
+  [step]="data?.step || 1"
+  [type]="data?.inputType"
+  class="form-control {{ config?.bodyStyle?.input?.styleClass }}"
+  [name]="config?.inputName || config?.field"
+/>
+<mat-hint *ngIf="data?.hint!?.(control) as hint">{{ hint }}</mat-hint>
+<!-- </mat-form-field> -->
 <ng-template #textareaTemp>
+  <!-- matInput -->
   <textarea
-    matInput
     cdkTextareaAutosize
     #autosize="cdkTextareaAutosize"
     [cdkAutosizeMinRows]="data.rows"
