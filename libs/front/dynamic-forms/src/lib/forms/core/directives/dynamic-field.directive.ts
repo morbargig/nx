@@ -14,10 +14,11 @@ import {
 } from '@angular/core';
 import { AbstractControl, FormGroup, FormArray } from '@angular/forms';
 import { filter, takeWhile } from 'rxjs/operators';
-import { BaseFieldComponent } from './base-field.directive';
+import { BaseFieldComponentDirective } from './base-field.directive';
 import { FieldEvent } from '../interfaces/events';
 import { ChangeDetectorRef } from '@angular/core';
 import { DynamicFormBuilderService } from '../services/dynamic-form-builder.service';
+import { firstValueFrom, timer } from 'rxjs';
 
 @Directive({
   selector: '[fnxNxDynamicField]',
@@ -31,11 +32,11 @@ export class DynamicFieldDirective<
     A extends AbstractControl = AbstractControl,
     P extends FormGroup | FormArray = FormGroup | FormArray
   >
-  extends BaseFieldComponent<T, D, K, A, P>
+  extends BaseFieldComponentDirective<T, D, K, A, P>
   implements OnInit, OnChanges, OnDestroy
 {
-  public component: ComponentRef<BaseFieldComponent<T, D, K, A, P>>;
-  @Input() public type: Type<BaseFieldComponent<T, D, K, A, P>>;
+  public component: ComponentRef<BaseFieldComponentDirective<T, D, K, A, P>>;
+  @Input() public type: Type<BaseFieldComponentDirective<T, D, K, A, P>>;
   @Output() public setVisibility: EventEmitter<boolean> =
     new EventEmitter<boolean>();
   @Output() public controlChange: EventEmitter<AbstractControl> =
@@ -59,8 +60,8 @@ export class DynamicFieldDirective<
   }
 
   public override ngOnDestroy() {
-    this?.component?.instance?.ngOnDestroy?.();
-    super.ngOnDestroy();
+    this?.component?.instance?.ngOnDestroy!?.();
+    super.ngOnDestroy!?.();
   }
 
   ngOnChanges() {
@@ -73,7 +74,7 @@ export class DynamicFieldDirective<
     }
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     this.createComponent();
     this.config.setter
       ?.pipe(
@@ -125,12 +126,15 @@ export class DynamicFieldDirective<
         break;
       }
     }
-    this.config?.registerControl!?.(this.control);
+    this.config?.registerControl!?.({
+      control: this.control,
+      field: this.config?.field,
+    });
   }
 
   private createComponent() {
     this.component = this.container.createComponent<
-      BaseFieldComponent<T, D, K, A, P>
+      BaseFieldComponentDirective<T, D, K, A, P>
     >(this.type);
     if (this.config.controlType !== 'none') {
       this.createAbstractControl();
@@ -143,7 +147,7 @@ export class DynamicFieldDirective<
 
   private setFieldVisibility(visibility: boolean) {
     if (visibility !== !this.isHidden) {
-      setTimeout(() => {
+      firstValueFrom(timer(0)).then(() => {
         this.isHidden = !visibility;
         this.setVisibility.emit(!this.isHidden);
       });

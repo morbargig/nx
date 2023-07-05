@@ -1,22 +1,97 @@
-<section class="container-fluid">
+<section class="flex h-full">
   <!-- The navbar for the wizard -->
-  <header class="header">
-    <ol>
-      <ng-container *ngFor="let step of steps; let i = index">
-        <li class="{{ selectedIndex === i ? activeClass : inactiveClass }}">
-          <a (click)="selectedIndex = i" [ngClass]="{ btn :true ,disabled :  !step?.editable  }">
-            <ng-container *ngIf="step.stepLabel; else showLabelText" [ngTemplateOutlet]="step.stepLabel.template">
-            </ng-container>
-            <ng-template #showLabelText>
-              {{ step.label }}
-            </ng-template>
-          </a>
-        </li>
+  <header
+    *ngIf="hasTitles"
+    [ngClass]="headerClass"
+    class="header w-1/5 border-med-gray-90 border-l p-8.5"
+  >
+    <ul class="pb-3 w-full desktop:w-460px">
+      <ng-container *ngFor="let step of steps; let i = index; let last = last">
+        <ng-container *ngIf="stepControl(step?.stepControl) as stepControl">
+          <li>
+            <table>
+              <tr
+              *ngIf="stepControl?.size || 1 as fontSize"
+              class="tr"
+              [ngStyle]="{ 'font-size': fontSize + 'em' }"
+              >
+                <td
+                  class="{{ selectedIndex === i ? activeClass : inactiveClass }}"
+                  style="vertical-align: top; height: 1px; width: 0"
+                  [ngStyle]="{
+                    'font-size': fontSize + 'em',
+                    disabled: !step?.editable
+                  }"
+                >
+                  <div
+                    [class.circleActive]="selectedIndex >= i"
+                    (click)="goToSelectedStepOnClick(i)"
+                    class="circleNotActive"
+                    *ngIf="
+                      !step?.completed || selectedIndex <= i;
+                      else finishStepTemp
+                    "
+                  >
+                    <button [attr.aria-label]="selectedIndex < i ? 'צעד מעומם' : null">
+                      <span [class.numberInClass]="i === 0">
+                        {{ stepControl?.stepNumber || i + 1 }}</span
+                      >
+                    </button>
+                  </div>
+
+                  <ng-template #finishStepTemp>
+                    <button
+                      class="circleNotActive"
+                      (click)="goToSelectedStepOnClick(i)"
+                      [class.circleActive]="selectedIndex >= i"
+                    >
+                      <img
+                        style="width: 1.1875rem; height: 0.875rem"
+                        class="number"
+                        src="./assets/front/dynamic-forms/finish.svg"
+                      />
+                    </button>
+                  </ng-template>
+                  <div
+                    class="h-[2rem] line-wrapper flex justify-center mt-[0.1875rem] w-full"
+                    *ngIf="!last"
+                  >
+                    <div
+                      class="h-full"
+                      [ngClass]="{
+                        line: true,
+                        active: step?.completed && selectedIndex > i
+                      }"
+                    ></div>
+                  </div>
+                </td>
+                <td class="text-td pr-3" [ngClass]="{ 'pb-2.8125rem': !last }">
+                  <div
+                    class="flex flex-col justify-center"
+                    [ngClass]="{ 'mb-10': !last }"
+                  >
+                    <span [ngClass]="!isMobile ? '' : ''" class="step-title" [attr.aria-label]="' שלב ' + stepControl.stepTitle" >{{
+                      stepControl.stepTitle
+                    }}</span>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </li>
+        </ng-container>
       </ng-container>
-    </ol>
+    </ul>
   </header>
 
-  <div [ngClass]="bodyClass" class="body">
-    <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+  <div class="body w-full p-8.5 flex flex-col">
+    <h1
+      class="text-2xl.66 text-primary-blue wizard-step-h2"
+      *ngIf="stepControl(selected?.stepControl) as stepControl"
+    >
+      {{ stepControl?.stepInnerPageTitle || stepControl?.stepTitle }}
+    </h1>
+    <div class="justify-between flex flex-col h-full min-h-0">
+      <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+    </div>
   </div>
 </section>

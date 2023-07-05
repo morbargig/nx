@@ -1,14 +1,13 @@
-// export class FormSelectData {
-//   constructor(obj: FormSelectData = null) {
-//     if (!!obj) {
-//       const keys: string[] = Object.keys(obj);
-//       for (let i = 0; i < keys.length; i++) {
-//         const key = keys[i];
-//         this[key] = obj[key];
-//       }
-//     }
-//   }
-//   public appendTo: 'body' | null = null
-//   public dataKey?: string = null;
-//   public showClear?: boolean = true;
-// }
+import { BaseFieldData } from '../../core/interfaces/field-config';
+import { KeyValuePair } from '../../core/interfaces/key-value-pair';
+import { Observable } from 'rxjs';
+
+// export type FormSelectData<
+//   T = any,
+//   K extends keyof T = keyof T
+// > = BaseFieldData<T, K>
+
+export interface FormSelectData<T = any, K extends keyof T = keyof T>
+  extends BaseFieldData<T, K> {
+  options: Observable<Omit<KeyValuePair, 'img' | 'disabled'>[]>;
+}

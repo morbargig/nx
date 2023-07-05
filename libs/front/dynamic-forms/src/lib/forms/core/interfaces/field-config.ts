@@ -5,16 +5,37 @@ import {
   FormGroup,
   ValidatorFn,
 } from '@angular/forms';
-import { NextObserver, Observable } from 'rxjs';
 import { OnDestroy, Type } from '@angular/core';
-import { ChangedCallBack } from './callbacks';
+import type { ChangedCallBack, RegisterControlCallBack } from './callbacks';
 import { FormTextComponent } from '../../form-fields/form-text/form-text.component';
-import { BaseFieldComponent } from '../directives/base-field.directive';
-import { FieldEvent } from './events';
+import { FieldEvent, SetterActionType } from './events';
 import { FormArrayComponent } from '../../form-fields/form-array/form-array.component';
-import { asConst } from '../functions/as-const.func';
-import { Validators } from '@angular/forms';
 import { FormGroupComponent } from '../../form-fields/form-group/form-group.component';
+import { CustomSubscribable } from './base';
+import { FormRadioComponent } from '../../form-fields/form-radio/form-radio.component';
+import { FormAutocompleteComponent } from '../../form-fields/form-autocomplete/form-autocomplete.component';
+import { FormCheckboxComponent } from '../../form-fields/form-checkbox/form-checkbox.component';
+import { BaseFieldComponentDirective } from '../directives/base-field.directive';
+import { FormSelectComponent } from '../../form-fields/form-select/form-select.component';
+
+type componentWithData<
+  T = any,
+  K extends keyof T = keyof T,
+  C extends Type<any> = Type<any>,
+  D extends BaseFieldData<T, K> = InstanceType<C>['data']
+> = {
+  component?: C;
+  data?: D;
+};
+
+export function lazyFieldLoadConfigure<
+  T = any,
+  K extends keyof T = keyof T,
+  C extends Type<any> = Type<any>
+  // C extends Type<BaseCellComponent<any, any, any>> = Type<any>
+>(data: componentWithData<T, K, C>): componentWithData<T, K, C> {
+  return data;
+}
 
 export type elStyleObj = {
   styleClass?: string;
@@ -24,21 +45,35 @@ export type elStyleObj = {
 
 export enum FormFieldType {
   /** basic component made to answer primitive values and input known type attribute types types */
-  Default = 'Default',
+  Default,
   /** this component made to answer arrays types */
-  FormArray = 'FormArray',
+  FormArray,
   /** this component made to answer object types */
-  FormGroup = 'FormGroup',
+  FormGroup,
+  FormRadio,
+  FormAutocomplete,
+  FormCheckbox,
+  FormSelect,
+  DynamicLazy,
 }
 
 class FormsFieldClassType<T = any, K extends keyof T = keyof T> {
-  FieldDicType = asConst<{
-    [key in keyof typeof FormFieldType]-?: Type<BaseFieldComponent>;
-  }>()({
+  FieldDicType = {
     Default: FormTextComponent as Type<FormTextComponent<T, K>>,
     FormArray: FormArrayComponent as Type<FormArrayComponent<T, K>>,
     FormGroup: FormGroupComponent as Type<FormGroupComponent<T, K>>,
-  } as const);
+    FormRadio: FormRadioComponent as Type<FormRadioComponent<T, K>>,
+    FormAutocomplete: FormAutocompleteComponent as Type<
+      FormAutocompleteComponent<T, K>
+    >,
+    FormCheckbox: FormCheckboxComponent as Type<FormCheckboxComponent<T, K>>,
+    FormSelect: FormSelectComponent as Type<FormSelectComponent<T, K>>,
+    DynamicLazy: null as any,
+  } as const satisfies {
+    [key in keyof typeof FormFieldType]-?: Type<
+      BaseFieldComponentDirective<any, any, any>
+    >;
+  };
 }
 
 type FieldComponentType<
@@ -46,16 +81,22 @@ type FieldComponentType<
   K extends keyof T = keyof T
 > = FormsFieldClassType<T, K>['FieldDicType'];
 
-export const FormFieldsDic = asConst<FieldComponentType>()({
+export const FormFieldsDic = {
   Default: FormTextComponent,
   FormArray: FormArrayComponent,
   FormGroup: FormGroupComponent,
-} as const);
+  FormRadio: FormRadioComponent,
+  FormAutocomplete: FormAutocompleteComponent,
+  FormCheckbox: FormCheckboxComponent,
+  FormSelect: FormSelectComponent,
+  DynamicLazy: undefined as any,
+} as const satisfies FieldComponentType;
 
 // tslint:disable-next-line:no-empty-interface
 export type BaseFieldData<
   T = any,
   K extends keyof T = keyof T /** will have used on extends components */
+  // C extends AbstractControl = AbstractControl
 > = object;
 
 export type Field<
@@ -72,6 +113,21 @@ export type Field<
   id: string;
 } & Partial<OnDestroy>;
 
+export type GetFieldCComponentData<
+  T = any,
+  K extends keyof T = keyof T,
+  CT extends keyof FieldComponentType = keyof FieldComponentType
+> = {
+  [E in CT]?: FieldComponentType<T, K>[E] extends Type<infer C> // when you chose type this will be the data type of this component
+    ? C extends BaseFieldComponentDirective<any, infer D, any, any, any, any>
+      ? // ? C extends BaseFieldComponent<[T,infer D,K,...(any)]>
+        C extends BaseFieldComponentDirective<T, infer D, K, any, any, any>
+        ? D
+        : D
+      : any
+    : any;
+}[CT];
+
 export type FieldComponentTypeObject<
   T = any,
   K extends keyof T = keyof T,
@@ -81,41 +137,69 @@ export type FieldComponentTypeObject<
   [E in CT]?: FieldConfigObj<
     T,
     FieldComponentType<T, K>[E] extends Type<infer C> // when you chose type this will be the data type of this component
-      ? C extends BaseFieldComponent<T, infer D>
-        ? D
+      ? C extends BaseFieldComponentDirective<any, infer D, any, any, any, any>
+        ? // ? C extends BaseFieldComponent<[T,infer D,K,...(any)]>
+          C extends BaseFieldComponentDirective<T, infer D, K, any, any, any>
+          ? D
+          : D
         : any
       : any,
     K,
     E
   >;
 }[CT];
+// | FieldConfigObj<T, any, K, never, AbstractControl>;
 
-export interface FieldConfigObj<
+type MyErrorType<
+  T extends keyof Pick<FieldConfigObj, 'loadCustomFieldComponent'>,
+  E extends string | number | never
+> = `${T} can't be set where the type has a specific component type. To use it, remove "type: ${E}"`;
+export class FieldConfigObj<
   T = any,
   DModel extends BaseFieldData<T, K> = BaseFieldData<T>,
   K extends keyof { [key in keyof T]: any } = keyof { [key in keyof T]: any },
   E extends keyof typeof FormFieldType = keyof typeof FormFieldType,
   C extends AbstractControl = AbstractControl
 > {
+  /** if the form represents data like a user so 'birthday' is one of the user filed that can display on the form */
   field?: K & string;
   label?: string;
-  type?: E;
-  // parsedData?: (val: T[K]) => any;                            // parse the cell data // (date) => moment(date).format('DD.MM.YY')
-  // parsedFullData?: (item: T) => any;                   // get the cell data from the row item // (item)=> item.vatPrice + item.basePrice
-  data?: DModel;
-  // colspan?: number;
+  labelHtml?: (ctrl: C) => string;
+  /** if the form represents data like a user so for 'birthday' which is user filed can be a filed with type date */
+  type: E;
+  data?: E extends 'DynamicLazy' ? null : DModel;
+  loadCustomFieldComponent?: E extends 'DynamicLazy'
+    ? (data: {
+        /** it just for type proposes */
+        t?: T;
+        /** it just for type proposes */
+        k?: K;
+        calBack: typeof lazyFieldLoadConfigure;
+      }) => Promise<
+        ReturnType<
+          typeof lazyFieldLoadConfigure<
+            T,
+            K,
+            Type<BaseFieldComponentDirective<T, any, K>>
+          >
+        >
+      >
+    : MyErrorType<'loadCustomFieldComponent', E>;
   hidden?: boolean;
-  validationFuncString?: (keyof Validators)[];
+  // TODO: need to be implement
+  // validationFuncString?: (keyof Validators)[];
   // hiddenFunc?: (data: { item?: T }) => boolean;
   styleFunc?:
     | ((this: FieldConfigObj<T, DModel, K, E, C>) => elStyleObj)
     | (() => elStyleObj);
-  customFieldComponent?: Type<BaseFieldComponent<T, DModel, K>>;
+  /** the lazy load stand alone custom filed component which will render */
+
   controlType?: 'control' | 'group' | 'array' | 'none';
   disabled?: boolean;
   disabled$?: CustomSubscribable<boolean>;
   placeholder?: string;
   bodyStyle?: {
+    dynamicFormControlComponent?: elStyleObj;
     field?: elStyleObj;
     label?: elStyleObj;
     input?: elStyleObj;
@@ -126,29 +210,35 @@ export interface FieldConfigObj<
   errorMessages?: { [error: string]: string };
   value?: T[K];
   // description?: string;
-  setter?: CustomSubscribable<FieldEvent<T>>;
+  setter?: CustomSubscribable<FieldEvent<T, SetterActionType, K>>;
   onChange?: ChangedCallBack<C, T[K]>;
+  onInput?: (ctrl: C) => void;
+  // TODO implement function
   onBlur?: (ctrl: C) => void;
-  onClick?: (val: T[K], item?: T) => void;
-  registerControl?: (ctrl: C) => void;
+  onClick?: (ctrl?: C) => void;
+  registerControl?: RegisterControlCallBack<C, /** K */ string>;
+  /**
+   * can be use to get user username or password
+   * username, password
+   * or use advanced name to get email for example from the address and more of the user
+   * request[anonymous_requester_email]
+   */
+  inputName?: string;
 }
-
-export type CustomSubscribable<T = any> =
-  | (Observable<T> & Partial<NextObserver<T>>)
-  | ({
-      new ();
-    } & (Observable<T> & Partial<NextObserver<T>>));
 
 export type DynamicFormControl<
   T = any,
   K extends keyof T = keyof T,
   V extends T[K] = T[K],
   CT extends keyof FieldComponentType = keyof FieldComponentType
-> = {
-  [KK in K]-?: FieldComponentTypeObject<T, KK, T[KK], CT>;
-}[K];
+> = keyof any extends K
+  ? FieldComponentTypeObject<any, string, any, CT>
+  : {
+      [KK in K]-?: FieldComponentTypeObject<T, KK, T[KK], CT>;
+    }[K];
 
 /** @author Mor Bargig <morbargig@gmail.com>*/
+
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DynamicFormControlArray<
   T = any,
@@ -164,7 +254,7 @@ export interface DynamicFormControlArray<
   > {}
 
 // tslint:disable-next-line:no-shadowed-variable
-export type getFieldType<T> = T extends DynamicFormControl<infer T>[]
+export type GetFieldType<T> = T extends DynamicFormControl<infer T>[]
   ? T
   : never;
 
@@ -183,16 +273,6 @@ export class NewFormArray<
   override controls: ChildControl[];
 }
 
-// class NewFormGroup<T, ChildControl extends AbstractControl = AbstractControl> extends OmitClass<FormGroup, 'controls'>(FormGroup as any, ['controls']) {
-//   controls: {
-//     [key in keyof T]: ChildControl;
-//   };
-// }
-
-// class NewFormArray<ChildControl extends AbstractControl = AbstractControl> extends OmitClass<FormGroup, 'controls'>(FormGroup as any, ['controls']) {
-//   controls: ChildControl[]
-// }
-
 export type FiledParentControl<
   T = any,
   ParentControl extends FormArray | FormGroup = FormArray | FormGroup,
@@ -205,10 +285,26 @@ export type FiledParentControl<
 //   name: string;
 //   age: number;
 //   test: string[];
-//   payment: [{ obj: [{ obj2: [{ obj3: string[][] }] }] }];
+//   payment: { obj: { obj2: [{ obj3: string[][] }] }[] }[];
+//   friends: string[][];
 // }
 
-// const simpleTest: DynamicFormControl<User>[] = [
+// const simpleForm: DynamicFormControl<User>[] = [
+//   {
+//     field: 'friends',
+//     type: 'FormArray',
+//     data: {
+//       formArrayConfig: {
+//         type: 'FormArray',
+//         field: '_',
+//         data: {
+//           formControlConfig: {
+//             type: 'Default',
+//           },
+//         },
+//       },
+//     },
+//   },
 //   {
 //     field: 'test',
 //     type: 'FormArray',
@@ -216,7 +312,7 @@ export type FiledParentControl<
 //     data: {
 //       formControlConfig: {
 //         type: 'Default',
-//         field: '',
+//         field: '_',
 //       },
 //     },
 //   },
@@ -279,20 +375,24 @@ export type FiledParentControl<
 //   {
 //     field: 'age',
 //     type: 'Default',
-//     data: {
-//       inputType: 'text',
-//       // title$: of(),
+//     onChange: ({ currentValue, control }) => {
+//       return;
 //     },
+//     value: 3,
+//     // data: {
+//     //   inputType: 'text',
+//     //   // title$: of(),
+//     // },
 //   },
 // ];
 
-// TODO add json convertor
-//   var obj = {
-//     hello: "World",
-//     sayHello: (function() {
-//         console.log("I say Hello!");
-//     }).toString()
+// // TODO add json convertor
+// const obj = {
+//   hello: 'World',
+//   sayHello: function () {
+//     console.log('I say Hello!');
+//   }.toString(),
 // };
-// var myobj = JSON.parse(JSON.stringify(obj));
-// myobj.sayHello = new Function("return ("+myobj.sayHello+")")();
+// const myobj = JSON.parse(JSON.stringify(obj));
+// myobj.sayHello = new Function('return (' + myobj.sayHello + ')')();
 // myobj.sayHello();

@@ -5,10 +5,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   ContentChild,
+  EventEmitter,
   Input,
+  Output,
   TemplateRef,
 } from '@angular/core';
 import { ITableColumn } from './cell-components/cell-components';
+import { ChangeDetectorRef } from '@angular/core';
+import { LazyLoadEvent } from '@fnx-nx/api-interfaces';
 
 export type tableElStyleObj = {
   styleClass?: string;
@@ -28,7 +32,11 @@ export type tableBodyStylesObj = tableElementsStyleObj<tableElements>;
   styleUrls: ['./table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableComponent<T = any, E = T> {
+export class TableComponent<
+  /** table item type */ T = any,
+  /** extends type */ E = T
+> {
+  constructor(public cd: ChangeDetectorRef) {}
   // header section
   @Input() hideHeader?: boolean;
 
@@ -38,11 +46,11 @@ export class TableComponent<T = any, E = T> {
 
   // style and class section
   defaultTableBodyStyle: tableBodyStylesObj = {
-    table: { styleClass: 'col-span-12' },
-    td: { styleClass: 'col-auto' },
-    thead: { styleClass: 'flex' },
+    table: { styleClass: ((ngClass = 'col-span-12') => ngClass)() },
+    td: { styleClass: ((ngClass = 'col-auto') => ngClass)() },
   };
   @Input() tableBodyStyle?: tableBodyStylesObj;
+  @Input() tableAriaLabel: string;
   public getElStyleObj = (el: tableElements): tableElStyleObj =>
     [
       this.defaultTableBodyStyle?.[el] || {},
@@ -62,9 +70,11 @@ export class TableComponent<T = any, E = T> {
     el: tableElements,
     inputStyleClassObj?: tableElStyleObj['styleClass']
   ): tableElStyleObj['styleClass'] =>
-    (inputStyleClassObj || '') +
-    ' ' +
-    (this.getElStyleObj(el)?.styleClass || '');
+    (
+      (inputStyleClassObj || '') +
+      ' ' +
+      (this.getElStyleObj(el)?.styleClass || '')
+    )?.toString();
   public getElStyleClassObj = (
     el: tableElements
   ): tableElStyleObj['styleClassObj'] => this.getElStyleObj(el)?.styleClassObj;
@@ -113,7 +123,7 @@ export class TableComponent<T = any, E = T> {
 
   @Input()
   public set items(val: T[] | undefined) {
-    if (this.extendsColumns?.length) {
+    if (!!this.extendsColumns?.length || !!this.getExtendsColumnsArr) {
       this.panelOpenState = val?.map(() => false) || [];
     }
     this.loading = false;
@@ -130,16 +140,19 @@ export class TableComponent<T = any, E = T> {
     +(lastTd ? this.columns?.length % 2 : 0);
   @Input() extendsColumns?: ITableColumn<E>[];
   @Input() getExtendsColumnsArr?: (item: T) => ITableColumn<E>[][];
-  @Input() getExtendsData?: (item: T) => E;
+  @Input() getExtendsData?: (item: T, index?: number) => E;
+  @Output() extend = new EventEmitter<{ index: number; isOpen: boolean }>();
   getExtendsDataItems = (
     items: T[] | undefined = this.items
-  ): E[] | undefined => items?.map((i) => this.getExtendsData!?.(i));
+  ): E[] | undefined =>
+    items?.map((item, index) => this.getExtendsData!?.(item, index));
   panelOpenState: boolean[] = [];
   togglePanel = (index: number, state?: boolean) => {
     if (!!this.extendsColumns?.length || !!this.getExtendsColumnsArr) {
       this.panelOpenState[index] =
         state !== undefined ? state : !this.panelOpenState[index];
     }
+    this.extend.emit({ index: index, isOpen: state });
   };
 
   // more items
@@ -157,7 +170,8 @@ export class TableComponent<T = any, E = T> {
   @Input() notFoundColumn?: ITableColumn<T>;
 
   public get notFoundColumns(): ITableColumn<T>[] {
-    return [this.notFoundColumn]?.map((i) => <typeof i>{ ...i, colspan: 10 });
+    this.notFoundColumn.colspan = () => 10;
+    return [this.notFoundColumn];
   }
 
   public get notFoundMode(): boolean {
@@ -171,4 +185,33 @@ export class TableComponent<T = any, E = T> {
     col: ITableColumn<T>;
     $implicit: T[keyof T];
   }>;
+
+  // sort
+  // sort: string;
+  // sortChange: EventEmitter<keyof T> = new EventEmitter<keyof T>();
+  @Output() sortEvent: EventEmitter<LazyLoadEvent> =
+    new EventEmitter<LazyLoadEvent>();
+  @Input() currentSort?: { [key in keyof T]: 'ASC' | 'DESC' };
+  onSort(k: keyof T) {
+    this.currentSort = {
+      [k]: this.currentSort?.[k] === 'ASC' ? 'DESC' : 'ASC',
+    } as this['currentSort'];
+
+    if (!this.useCustomSort) {
+      // this._items = this.tableSortingService.sort(this._items, {
+      //   sort: k,
+      //   sortDeration: this.currentSort?.[k],
+      // });
+    } else {
+      this.sortEvent.emit({
+        sort: k,
+        sortDirection: this.currentSort?.[k],
+      });
+    }
+    this.cd.detectChanges();
+    this.cd.markForCheck();
+  }
+  get useCustomSort(): boolean {
+    return !!this.sortEvent?.observers?.length;
+  }
 }

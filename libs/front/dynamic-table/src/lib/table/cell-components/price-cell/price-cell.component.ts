@@ -1,20 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { DefaultCellComponent } from '../default-cell/default-cell.component';
+import { Price } from '../../models/price.model';
+import { fixCustomCurrency } from '../../core/pipes/custom-currency.pipe';
 
 @Component({
-  selector: 'app-price-cell',
+  selector: 'fnx-nx-app-price-cell',
   //extends DefaultCellComponent html template
   templateUrl: '../default-cell/default-cell.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 //extends DefaultCellComponent
-export class PriceCellComponent extends DefaultCellComponent {
-  ngOnInit() {
-    // extends the default cell component but just overwrite with extra code one little function
-    // const oldParseData = this.col?.parsedData
-    // this.col.parsedData = (x) => {
-    //   const price: ISum = !!oldParseData ? oldParseData(x) : x
-    //   return fixCustomCurrency(price)
-    // }
+export class PriceCellComponent<T = any, K extends keyof T = keyof T>
+  extends DefaultCellComponent<T, K>
+  implements OnInit
+{
+  override generateDataValue() {
+    return fixCustomCurrency(super.generateDataValue() as Price)
   }
 }

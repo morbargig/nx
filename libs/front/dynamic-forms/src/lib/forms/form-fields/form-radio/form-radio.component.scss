@@ -1,0 +1,80 @@
+input[type='radio'] {
+  display: none;
+
+  &:not(:disabled) ~ label {
+    cursor: pointer;
+  }
+
+  &:disabled ~ label {
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+}
+
+:host {
+  ::ng-deep {
+    &.hide .mat-radio-container {
+      display: none;
+    }
+
+    .defaultTemplate {
+      .mat-radio-label {
+        margin-top: 10px;
+        margin-left: 40px;
+        margin-bottom: 35px;
+      }
+
+      .mat-radio-outer-circle {
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+      }
+
+      .mat-radio-inner-circle {
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+      }
+
+      .mat-radio-checked {
+        .mat-radio-label {
+          color: theme('colors.primary-orange');
+        }
+
+        .mat-radio-outer-circle {
+          border-color: theme('colors.primary-orange') !important;
+        }
+        .mat-radio-inner-circle {
+          background-color: theme('colors.primary-orange') !important;
+          color: theme('colors.primary-orange') !important;
+        }
+      }
+    }
+
+    .mat-radio-label-content {
+      padding-right: 0px !important;
+    }
+
+    .mat-radio-outer-circle {
+      border-color: theme('colors.primary-blue') !important;
+      height: 0.9375rem !important;
+      width: 0.9375rem !important;
+    }
+
+    .mat-radio-inner-circle {
+      background-color: theme('colors.primary-blue') !important;
+      color: theme('colors.primary-orange') !important;
+      transition: none !important;
+      height: 0.44rem !important;
+      width: 0.44rem !important;
+    }
+  }
+
+  .fnx-select-radio {
+    .mat-radio-outer-circle {
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+    }
+  }
+}

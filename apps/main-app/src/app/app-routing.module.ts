@@ -7,7 +7,7 @@ export const ROUTES: Routes = [
     path: 'testing',
     // canLoad:[],
     loadChildren: () =>
-      import('@fnx-nx/front/main-app-testing').then(
+      import('@fnx-nx/front/testing').then(
         (m) => m.FrontMainAppTestingModule
       ),
   },

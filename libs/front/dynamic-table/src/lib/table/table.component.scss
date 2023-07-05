@@ -1,5 +1,6 @@
-$Desktop: '(min-width:48rem)';
-$Mobile: '(max-width:47.9994rem)';
+// TODO: fix when add mobile
+$Desktop: '(min-width:0)';
+$Mobile: '(min-width:10000000000000000rem)';
 
 ::-webkit-scrollbar {
   width: 0.4375rem;
@@ -26,7 +27,7 @@ $Mobile: '(max-width:47.9994rem)';
 .table-wrapper {
   z-index: 1;
 
-  // @apply w-full table-wrapper border-1 border-med-gray-40 rounded-md;
+  // @apply w-full table-wrapper border-1 border-med-gray-90 rounded-md;
   // max-height: calc(100vh - 20.625rem);
   // &.full-height {
   //   height: calc(58.5vh);
@@ -53,7 +54,6 @@ $Mobile: '(max-width:47.9994rem)';
             }
           }
 
-
           text-align: start;
         }
       }
@@ -65,21 +65,24 @@ $Mobile: '(max-width:47.9994rem)';
       tr {
         &:not(:first-child) {
           .tr-border-bottom {
-            $border-percent: 764 / 800 * 100%;
-            // according to Zeplin border bottom  47.75rem of 50rem
+            // according to design border bottom  47.75rem of 50rem
             background: #e4e4e4;
             top: 0;
-            left: (100 - $border-percent) / 2;
             height: 0.0625rem;
-            width: $border-percent;
+            @media #{$Desktop} {
+              $border-percent: calc(764 / 800) * 100%;
+              $full-minus-border-percent: calc(100% - $border-percent);
+              left: calc($full-minus-border-percent / 2);
+              width: $border-percent;
+            }
 
             @media #{$Mobile} {
-              $border-percent: 315 / 343 * 100%;
-              left: (100 - $border-percent) / 2;
+              $border-percent: calc(315 / 343) * 100%;
+              $full-minus-border-percent: calc(100% - $border-percent);
+              left: calc($full-minus-border-percent / 2);
               width: $border-percent;
             }
           }
-
         }
 
         td {
@@ -146,3 +149,92 @@ $Mobile: '(max-width:47.9994rem)';
     }
   }
 }
+
+.loading {
+  min-height: 1em;
+  border-radius: 0.4375rem;
+  animation-duration: 0.8s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  background-color: #f6f7f8;
+  background: linear-gradient(to right, #eeeeee 8%, #bbbbbb 18%, #eeeeee 33%);
+  background-size: 350% 350%;
+  position: relative;
+  overflow: hidden;
+  color: transparent;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+  supported by Chrome, Edge, Opera and Firefox */
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: -100%;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      #e8e8e8 50%,
+      transparent 100%
+    );
+    animation: load 0.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  &-circle {
+    border-radius: 50%;
+  }
+}
+
+@keyframes load {
+  from {
+    left: -10%;
+  }
+  to {
+    left: 10%;
+  }
+}
+
+@media not print {
+  th,
+  td {
+    border: 0;
+  }
+}
+
+// @media print {
+//   .hidden-cell {
+//     all: unset !important;
+//     border-width: 0px !important;
+//     max-width: 0px !important;
+//     width: 0px !important;
+//     min-width: 0px !important;
+//     font-size: 0px !important;
+//     > * {
+//       display: none !important;
+//     }
+//   }
+
+//   tr {
+//     border-left-width: 2px !important;
+//     border-color: #a6a8ad !important;
+//     td:nth-last-child(-n + 1 of td:not(.hidden-cell)),
+//     th:nth-last-child(-n + 1 of th:not(.hidden-cell)) {
+//       // @apply border-l-0;
+//       border-left-width: 0px !important;
+//     }
+//   }
+// }

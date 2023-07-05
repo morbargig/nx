@@ -1,4 +1,3 @@
-import { FormGroup, FormControl } from '@angular/forms';
 import { moduleMetadata, Story, Meta } from '@storybook/angular';
 import { DynamicFormStepMode } from '../../interfaces/dynamic-stepped-form';
 import { DynamicFormGroupComponent } from './dynamic-form-group.component';
@@ -56,7 +55,7 @@ Primary.args = {
       placeholder: 'Placeholder',
     },
   ],
-  mode: DynamicFormStepMode.Default,
+  mode: DynamicFormStepMode.TableCell,
   hideSubmitButton: false,
   showCancelButton: true,
   formRowCssClass: '',

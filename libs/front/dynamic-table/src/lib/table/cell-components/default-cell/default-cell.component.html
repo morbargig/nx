@@ -1,23 +1,18 @@
-<span *ngIf="!col.parsedHtmlData; else html"
-      [ngClass]="{ pointer : !!(!!col?.href && !!!!col?.href(value , item)?.length) }"
-      [routerLink]="(!!col!?.href(value , item)?.length) ? col!?.href(value ,item) : []"
-      (click)="col?.onClick!?.(value, item)">
-  {{
-  !!col.parsedFullData
-    ? col.parsedFullData(item)
-    : !!col.parsedData
-      ? col.parsedData(value)
-      : value
-  }}
+<span
+  *ngIf="!col?.parsedHtmlData; else html"
+  tabindex="-1"
+  [ngClass]="{ 'cursor-pointer' : col!?.href!?.(value , item)?.length }"
+  [routerLink]="col?.href!?.(value , item) ?? null"
+>
+  {{ generateDataValue() }}
 </span>
 <ng-template #html>
-  <span [ngClass]="{ pointer : !!(!!col?.href && !!col?.href(value , item)?.length)}"
-        [routerLink]="(!!col!?.href(value , item)?.length) ? col!?.href(value ,item) : []"
-        (click)="col?.onClick!?.(value, item)" [innerHTML]="
- col.parsedFullData || col.parsedData
- ? col.parsedFullData
- ? col.parsedHtmlData(value,item,col.parsedFullData(item))
- : col.parsedHtmlData(value,item,col.parsedData(value))
- : col.parsedHtmlData(value,item)
- "></span>
+  <span
+    tabindex="-1"
+    [ngClass]="{ 'cursor-pointer' : col!?.href!?.(value , item)?.length}"
+    [routerLink]="col?.href!?.(value , item) ?? null"
+    [innerHTML]="
+      col.parsedHtmlData(value, item, generateDataValue()) | safe : 1
+    "
+  ></span>
 </ng-template>

@@ -1,28 +1,45 @@
-<div *ngIf="config && parentForm" [class]="wrapStyleClass" [hidden]="config?.hidden || notVisible" [ngClass]="{
-    'mb-3': !wrapStyleClass,
-    invalid: control?.touched && !control?.valid && !control?.disabled
-  }" class="form-group ">
+<ng-container *ngIf="config && parentForm">
   <ng-container *ngIf="!mode">
-    <label *ngIf="config.label" [class]="config?.bodyStyle?.label.styleClass" [for]="id">
-      <span *ngIf="!hideLabel">
-        {{ config.label }}
-      </span>
-      <i *ngIf="!!isRequired" class="fas fa-star-of-life text-danger mt-1 ml-1"
-        style="font-size: 5px; vertical-align: top"></i>
+    <label
+      *ngIf="config.label || config.labelHtml"
+      [class]="config?.bodyStyle?.label?.styleClass"
+      [for]="id"
+    >
+    <ng-container *ngIf="!hideLabel">
+      <ng-container *ngIf="(config.labelHtml && config.labelHtml(control)) as labelHtmlRes; else simpleLabel">
+        <span [innerHTML]="labelHtmlRes | safe: 1"></span>
+      </ng-container>
+      <ng-template #simpleLabel>
+        <span [innerHTML]="config.label"></span>
+      </ng-template>
+    </ng-container>
+      <!-- <i *ngIf="!!isRequired" class="fas fa-star-of-life text-danger mt-1 ml-1"
+        style="font-size: 5px; vertical-align: top"></i> -->
     </label>
   </ng-container>
   <ng-container [ngTemplateOutlet]="actual"></ng-container>
-</div>
+</ng-container>
 
 <ng-template #actual>
-  <div *ngIf="!!config && !!parentForm" class="row">
-    <div class="col position-relative">
-      <ng-container (setVisibility)="setVisibility($event)" [(control)]="control" [fnxNxDynamicField]="config"
-        [parentForm]="parentForm" [id]="id" [type]="type">
+  <ng-container *ngIf="!!config && !!parentForm">
+    <div>
+      <ng-container
+        (setVisibility)="setVisibility($event)"
+        [(control)]="control"
+        [fnxNxDynamicField]="config"
+        [parentForm]="parentForm"
+        [id]="id"
+        [type]="type"
+      >
       </ng-container>
-      <fnx-nx-app-validation-messages *ngIf="config?.validation?.length || config?.asyncValidation?.length"
-        [control]="control" [filedLabel]="config?.label" [messages]="config?.errorMessages">
+      <fnx-nx-app-validation-messages
+        *ngIf="config?.validation?.length || config?.asyncValidation?.length"
+        [control]="control"
+        [filedLabel]="config?.label"
+        [messages]="config?.errorMessages"
+        class="relative"
+      >
       </fnx-nx-app-validation-messages>
     </div>
-  </div>
+  </ng-container>
 </ng-template>

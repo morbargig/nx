@@ -1,14 +1,39 @@
-<!-- <div
-  class="custom-control custom-radio"
-  *ngFor="let option of !!config.optionsArr$ ? (config.optionsArr$ | async) : config.optionsArr; let i = index"
+<!-- !!config.optionsArr$ ? (config.optionsArr$ | async) : -->
+<mat-radio-group
+  aria-label="Select an option"
+  [formControl]="control"
+  [class.defaultTemplate]="!data?.classTemplate"
 >
-  <input
-    type="radio"
-    class="custom-control-input"
-    [value]="option.value"
-    [id]="id + i"
-    [formControl]="control"
-    (change)="!!config.onChange && config.onChange($event, control)"
-  />
-  <label class="custom-control-label" [for]="id + i">{{ option.label }}</label>
-</div> -->
+  <span
+    class="custom-control custom-radio text-lg"
+    *ngFor="let option of data?.keyValuePairs | async; let i = index"
+  >
+    <!--  <input-->
+    <!--    type="radio"-->
+    <!--    class="radio-control-input"-->
+    <!--    [disabled]="option?.disabled"-->
+    <!--    [value]="option.value"-->
+    <!--    [id]="id + i"-->
+    <!--    [formControl]="control"-->
+    <!--    />-->
+    <!-- (change)="onChange(option)" -->
+
+    <mat-radio-button
+      color="warn"
+      [class.hide]="data?.classTemplate"
+      [value]="option.value"
+      [id]="id + i"
+    >
+      <ng-container *ngIf="data?.classTemplate as Temp; else defaultLabelTemp">
+        <fnx-nx-dynamic-component
+          [dynamicComponent]="Temp"
+          [data]="{option, control}"
+        ></fnx-nx-dynamic-component>
+        <!-- , control,  isSelectedFunc: data?.isSelectedFunc -->
+      </ng-container>
+      <ng-template #defaultLabelTemp>
+        {{ option.label }}
+      </ng-template>
+    </mat-radio-button>
+  </span>
+</mat-radio-group>

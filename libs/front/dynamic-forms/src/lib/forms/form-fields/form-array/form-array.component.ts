@@ -3,7 +3,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArrayData } from './form-array';
 import { AbstractControlOptions, FormArray, FormGroup } from '@angular/forms';
-import { BaseFieldComponent } from '../../core/directives/base-field.directive';
+import { BaseFieldComponentDirective } from '../../core/directives/base-field.directive';
 import { DynamicFormControl } from '../../core/interfaces/field-config';
 import { DynamicFormStepMode } from '../../core/interfaces/dynamic-stepped-form';
 import { DynamicFormBuilderService } from '../../core/services/dynamic-form-builder.service';
@@ -16,7 +16,7 @@ import { timer, firstValueFrom } from 'rxjs';
   styleUrls: ['./form-array.component.scss'],
 })
 export class FormArrayComponent<T = any, K extends keyof T = keyof T>
-  extends BaseFieldComponent<T, FormArrayData<T, K>, K, FormArray>
+  extends BaseFieldComponentDirective<T, FormArrayData<T, K>, K, FormArray>
   implements OnInit
 {
   // array of array
@@ -41,7 +41,7 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
     asyncValidators: this.config?.data?.asyncGroupValidations || [],
   });
 
-  public get mode() {
+  public get mode(): typeof DynamicFormStepMode {
     return DynamicFormStepMode;
   }
 
@@ -52,7 +52,7 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
     super();
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     switch (
       this.data?.formGroupConfig ||
       this.data?.formControlConfig ||

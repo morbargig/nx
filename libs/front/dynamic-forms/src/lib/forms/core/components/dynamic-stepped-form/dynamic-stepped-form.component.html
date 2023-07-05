@@ -1,71 +1,108 @@
-<form (ngSubmit)="handleSubmit()" *ngIf="!!form" class="dynamic-form {{ formCssClass }} w-100" novalidate>
-  <div class="row {{ formRowCssClass }}">
-    <div class="col-12 d-flex justify-content-start align-items-center">
-      <app-form-stepper #cdkStepper
-        (selectionChange)="stepChanged($event.previouslySelectedIndex, $event.selectedIndex)" *ngIf="!!config?.length"
-        [bodyClass]="bodyClass" class="d-block w-100">
-        <cdk-step *ngFor="let step of config; let i = index; let isLastStep = last" [editable]="!step?.disable"
-          [optional]="false" [stepControl]="step">
-          <ng-template cdkStepLabel>
-            <span [ngClass]="{ error: (selected?.interacted || dyn?.form?.touched) && dyn?.form?.invalid }">
-              {{ step.title }}
-              <span *ngIf="selectedInd !== i && !!stepErrors[i]" class="badge badge-danger badge-pill">
-                {{ stepErrors[i] }}
-              </span>
+<form
+  (ngSubmit)="handleSubmit()"
+  *ngIf="!!form"
+  class="bg-white rounded-md h-full dynamic-stepped-form"
+  novalidate
+>
+  <fnx-nx-app-form-stepper
+    *ngIf="!!config?.length"
+    #cdkStepper
+    (selectionChange)="
+      stepChanged($event.previouslySelectedIndex, $event.selectedIndex)
+    "
+  >
+    <cdk-step
+      *ngFor="let step of config; let i = index; let isLastStep = last"
+      [editable]="!step?.disable"
+      [optional]="false"
+      [stepControl]="controlPlusData(step, i)"
+    >
+      <ng-template cdkStepLabel>
+        <span
+          [ngClass]="{
+            error:
+              (selected?.interacted || dyn?.form?.touched) && dyn?.form?.invalid
+          }"
+        >
+          <!-- {{ step?.stepInnerPageTitle || step?.stepTitle }} -->
+          {{ step?.stepTitle }}
+        </span>
+      </ng-template>
+      <fnx-nx-app-dynamic-form-group
+        #dyn
+        [(form)]="form.controls['forms'].controls[i + '']"
+        [config]="step.group"
+        [errorMessages]="errorMessages"
+        [hideSubmitButton]="true"
+        [validation]="validation"
+        class="flex-1 overflow-y-auto"
+        style="padding: 0rem 2rem; margin: 0 -2rem"
+      >
+      </fnx-nx-app-dynamic-form-group>
+      <footer
+        class="pt-[35px] flex justify-between border-med-gray-90 border-t"
+      >
+        <span class="w-full flex justify-between align-middle pl-9">
+          <button
+            *ngIf="!(!i || isPrevDisable)"
+            cdkStepperPrevious
+            class="btn flex text-lg items-center font-medium text-primary-blue pl-9"
+          >
+            <img
+              class="ml-1 !w-6 !max-w-[1.5rem]"
+              src="./assets/front/dynamic-forms/chevron-right.svg"
+            />
+            חזור
+          </button>
+          <fnx-nx-app-validation-messages
+            *ngIf="
+              (step?.validators?.length || step?.asyncValidators?.length) &&
+               form.controls['forms'].controls[i + '']?.errors ;
+              else summaryTemp
+            "
+            [filedLabel]="step?.stepTitle"
+            class="text-base font-normal text-accent-bright-red ml-auto pt-[0.625rem]"
+            [control]="form.controls['forms'].controls[i + '']"
+            [messages]="step?.errorMessages"
+          ></fnx-nx-app-validation-messages>
+          <ng-template #summaryTemp>
+            <ng-container
+              *ngIf="step?.summaryHtml$ | async as html; else disclaimerTemp"
+            >
+              <span class="w-full" [innerHTML]="html | safe : 1"></span>
+            </ng-container>
+          </ng-template>
+          <ng-template #disclaimerTemp>
+            <span
+              *ngIf="step?.disclamer"
+              class="text-base font-normal text-error-red ml-auto pt-[0.625rem]"
+            >
+              {{ step.disclamer }}
             </span>
           </ng-template>
-          <fnx-nx-app-dynamic-form-group #dyn [(form)]="form.controls['forms'].controls[i + '']" [config]="step.group"
-            [errorMessages]="errorMessages" [hideSubmitButton]="true" [validation]="validation">
-          </fnx-nx-app-dynamic-form-group>
+        </span>
 
-          <ng-content #sidebar></ng-content>
-
-          <ng-container [ngSwitch]="footerMode">
-            <footer *ngSwitchCase="0" class="step-navigation-bar">
-              <button [disabled]="!i || isPrevDisable" cdkStepperPrevious class="btn btn-light btn-circle nav-button">
-                <i class="fas fa-arrow-left"></i>
-              </button>
-
-              <button *ngIf="!isLastStep" [disabled]="dyn?.form?.invalid  || isNextDisable" cdkStepperNext
-                class="btn btn-light btn-circle nav-button">
-                <i class="fas fa-arrow-right"></i>
-              </button>
-              <button *ngIf="!!form" [disabled]="!validForm" class="btn btn-primary" type="submit">
-                Portal.Common.SubmitBtn
-              </button>
-            </footer>
-            <footer *ngSwitchCase="1" class="wizard-navigation d-flex justify-content-end align-items-center">
-              <div class="navigation-bullets rounded shadow-sm d-flex justify-content-end align-items-center">
-                <div class="nav-steps-number mr-2">Step {{ i + 1 }} of {{ config.length }}</div>
-
-                <button [disabled]="i === 0 || isPrevDisable" cdkStepperPrevious
-                  class="btn btn-light btn-sm btn-circle nav-button mr-2">
-                  <i class="fas fa-arrow-left"></i>
-                </button>
-
-                <div class="nav nav-steps mr-2">
-                  <span *ngFor="let step of config; let b = index" [ngClass]="{ active: i === b, done: i > b }"
-                    class="bullet">
-                    <i class="bullet-dot"></i>
-                  </span>
-                </div>
-
-                <button *ngIf="!isLastStep" [disabled]="isNextDisable" cdkStepperNext
-                  class="btn btn-light btn-sm btn-circle nav-button">
-                  <i class="fas fa-arrow-right"></i>
-                </button>
-              </div>
-
-              <button *ngIf="!!form" [disabled]="!validForm" class="btn btn-primary" translate type="submit">
-                Portal.Common.SubmitBtn
-              </button>
-              <!-- <button type="button" class="btn btn-primary" (click)="log(form)" translate>
-                Portal.Common.Test
-              </button> -->
-            </footer>
-          </ng-container>
-        </cdk-step>
-      </app-form-stepper>
-    </div>
-  </div>
+        <ng-container *ngIf="!step.hideButton">
+          <button
+            *ngIf="!isLastStep; else submitTemp"
+            [disabled]="dyn?.form?.invalid || isNextDisable"
+            cdkStepperNext
+            class="h-[2.75rem] mr-8 px-[1.9631rem] py-[0.625rem] rounded-[1.375rem] disabled:bg-disable-gray disabled:text-med-gray bg-secondary-blue text-white"
+          >
+            המשך
+          </button>
+          <ng-template #submitTemp>
+            <button
+              *ngIf="!!form"
+              [disabled]="!validForm"
+              class="h-11 px-[31.41px] py-[10px] rounded-[22px] disabled:bg-disable-gray disabled:text-med-gray bg-primary-blue text-white whitespace-nowrap"
+              type="submit"
+            >
+              אישור וסיום
+            </button>
+          </ng-template>
+        </ng-container>
+      </footer>
+    </cdk-step>
+  </fnx-nx-app-form-stepper>
 </form>

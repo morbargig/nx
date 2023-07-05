@@ -5,24 +5,22 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Inject,
   Input,
   OnDestroy,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidatorFn,} from '@angular/forms';
-import {DynamicSteppedForm, SteppedFormFooterMode,} from '../../interfaces/dynamic-stepped-form';
-import {CdkStepper} from '@angular/cdk/stepper';
-import {Directionality} from '@angular/cdk/bidi';
-import {BehaviorSubject} from 'rxjs';
-import {takeWhile} from 'rxjs/operators';
-import {StepperService} from '../../services/stepper.service';
-import {range} from 'lodash';
-import {StepFormGroup} from '../../interfaces/step-form-group';
-import {DOCUMENT} from "@angular/common";
-
+import { FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
+import { DynamicSteppedForm } from '../../interfaces/dynamic-stepped-form';
+import { CdkStepper } from '@angular/cdk/stepper';
+import { Directionality } from '@angular/cdk/bidi';
+import { BehaviorSubject, firstValueFrom, timer } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+import { StepperService } from '../../services/stepper.service';
+import { range } from 'lodash-es';
+import { StepFormGroup } from '../../interfaces/step-form-group';
+import { AbstractControl } from '@angular/forms';
 @Component({
   selector: 'fnx-nx-app-dynamic-stepped-form',
   templateUrl: './dynamic-stepped-form.component.html',
@@ -30,39 +28,39 @@ import {DOCUMENT} from "@angular/common";
 })
 export class DynamicSteppedFormComponent
   extends CdkStepper
-  implements OnInit, OnDestroy {
-  @ViewChild('cdkStepper', {static: false}) public cdkStepper: CdkStepper;
-  @ViewChild('submitBtn', {static: false})
+  implements OnInit, OnDestroy
+{
+  @ViewChild('cdkStepper', { static: false }) public cdkStepper: CdkStepper;
+  @ViewChild('submitBtn', { static: false })
   public submitBtn: ElementRef<HTMLButtonElement>;
-  @Input() public stepBody: object;
   @Input() public useStepperService?: boolean;
   @Input() public config: DynamicSteppedForm[] = [];
   @Input() public validation: ValidatorFn[] = null;
   @Input() public errorMessages?: { [error: string]: string };
-  @Input() public formRowCssClass = '';
-  @Input() public formCssClass = '';
-  @Input() public bodyClass = '';
-  @Input() public isLinear = true;
-  @Input() public isEditable = true;
-  @Input() public footerMode: SteppedFormFooterMode =
-    SteppedFormFooterMode.Default;
+  // @Input() public formRowCssClass = '';
+  // @Input() public formCssClass = '';
+  // @Input() public bodyClass = '';
+  // @Input() public isLinear = true;
+  // @Input() public isEditable = true;
+  // @Input() public footerMode: SteppedFormFooterMode =
+  //   SteppedFormFooterMode.Default;
   @Input() public formValue?: BehaviorSubject<any>;
   public stepErrors: { [step: number]: number } = {};
-  public selectedInd = 0;
   @Output() public stepperOnSubmit: EventEmitter<any> = new EventEmitter<any>();
   @Output() public formChange: EventEmitter<StepFormGroup> =
     new EventEmitter<StepFormGroup>();
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
+  @Output() public onStepChanged = new EventEmitter<number>();
   public isAlive = true;
 
   constructor(
-    private fb: FormBuilder,
-    private ref: ChangeDetectorRef,
     dir: Directionality,
     elementRef: ElementRef<HTMLElement>,
-    @Inject(DOCUMENT) private document: Document,
+    private cd: ChangeDetectorRef,
+    private fb: FormBuilder,
     private stepperService: StepperService
   ) {
-    super(dir, ref, elementRef, document);
+    super(dir, cd, elementRef);
   }
 
   private _form: StepFormGroup;
@@ -92,60 +90,61 @@ export class DynamicSteppedFormComponent
     return this.config?.[this.selectedIndex + 1]?.isDisable;
   }
 
-  // log(val: any) {
-  //   console?.log(val)
-  // }
-
   public get isPrevDisable(): boolean {
     return this.config?.[this.selectedIndex - 1]?.isDisable;
   }
 
   override ngOnDestroy() {
-    super.ngOnDestroy!?.()
+    super.ngOnDestroy!?.();
     this.isAlive = false;
+    if (this.useStepperService) {
+      this.stepperService.resetState();
+    }
   }
 
   ngOnInit(): void {
     this.formValue.pipe(takeWhile(() => this.isAlive)).subscribe((res) => {
-      if (this.form?.controls?.forms?.controls?.length) {
-        const forms = this.form?.controls?.forms?.controls;
-        for (let i = 0; i < forms.length; i++) {
-          const form: FormGroup = forms[i] as any;
-          form.patchValue(res, {onlySelf: false, emitEvent: true});
-          setTimeout(() => {
-            Object.keys(form?.controls || {}).forEach((i) => {
-              if (form?.get(i) instanceof FormGroup) {
-                form.get(i)?.patchValue(res);
-              }
-            });
+      this.form?.controls?.forms?.controls?.forEach((form) => {
+        form.patchValue(res, { onlySelf: false, emitEvent: true });
+        firstValueFrom(timer(0)).then(() => {
+          Object.keys(form?.controls || {}).forEach((i) => {
+            if (form?.get(i) instanceof FormGroup) {
+              form.get(i)?.patchValue(res);
+            }
           });
-        }
-      }
+        });
+      });
     });
-    setTimeout(() => {
-      this.stepErrors = this.config.reduce((prev, curr, i) => {
+    firstValueFrom(timer(0)).then(() => {
+      this.stepErrors = this.config?.reduce((prev, curr, i) => {
         prev[i] = 0;
         return prev;
       }, {});
       this.form = this.fb.group({
         forms: this.fb.array([
-          ...this.config.map((_, i) =>
+          ...(this.config || []).map((stepConf, i) =>
             this.fb.group(
-              this.config[i].group.reduce((prev, curr,) => {
+              stepConf.group.reduce((prev, curr) => {
                 prev[curr.field] = curr?.value;
                 return prev;
-              }, {})
+              }, {}),
+              {
+                validators: stepConf?.validators,
+                asyncValidators: stepConf?.asyncValidators,
+              }
             )
           ),
         ]),
       }) as FormGroup as any as StepFormGroup;
       this.stepperService.form = this.form;
+      this.stepperService.dynamicSteppedForm = this.config;
+      this.cd.detectChanges();
     });
-    if (!!this.validation && !!this.validation.length) {
+    if (this.validation?.length) {
       this.form.setValidators(this.validation);
     }
     if (this.useStepperService) {
-      this.stepperService.stepChanged.next(0);
+      this.stepperService.step = 0;
       this.stepperService.relativeStep
         .pipe(takeWhile(() => this.isAlive))
         .subscribe((res) => {
@@ -190,7 +189,7 @@ export class DynamicSteppedFormComponent
             this.config.forEach(
               (i, index) =>
                 (i.isDisable = !(
-                  steps?.includes(index) || steps?.includes(i?.title)
+                  steps?.includes(index) || steps?.includes(i?.stepTitle)
                 ))
             );
           } else if (typeof steps === 'object') {
@@ -198,77 +197,70 @@ export class DynamicSteppedFormComponent
               this.config[Number(i)].isDisable = steps?.[i];
             });
           }
-          this.ref.markForCheck();
+          this.cd.markForCheck();
         });
       this.stepperService.disableForm
         .pipe(takeWhile(() => this.isAlive))
         .subscribe((disable) => {
           if (disable) {
-            this.form.setErrors({...this.form.errors, incorrect: true});
+            this.form.setErrors({ ...this.form.errors, incorrect: true });
           } else {
-            const {errors} = this.form;
+            const { errors } = this.form;
             delete errors?.['incorrect'];
             this.form.setErrors(this.form.errors);
           }
         });
+      this.stepperService.CDRefEvent.pipe(
+        takeWhile(() => this.isAlive)
+      ).subscribe((event) => {
+        this.cd?.[event]!?.();
+      });
     }
   }
 
   public stepChanged(step: number, selectedIndex: number) {
-    this.selectedInd = selectedIndex;
-    this.useStepperService &&
-    this.stepperService.stepChanged.next(selectedIndex);
+    this.useStepperService && (this.stepperService.step = selectedIndex);
     if (this.config[step]) {
       const controls = (
         this.form.controls['forms'].controls[step + ''] as FormGroup
       )?.controls;
-      const controlsNames = Object.keys(controls);
-      let errors = 0;
-      for (let index = 0; index < controlsNames.length; index++) {
-        const controlsName = controlsNames[index];
-        if (!this.config[step].group.some((c) => c.field == controlsName)) {
-          const control = controls[controlsName];
-          if (control instanceof FormGroup) {
-            // let innerControls = control.controls;
-            errors += this.extractErrors(control.controls);
-          } else {
-            control.markAsDirty();
-            control.markAsTouched();
-            control.updateValueAndValidity();
-            control.invalid && errors++;
-          }
-        }
-      }
+      const errors = this.extractErrors(controls);
       this.stepErrors[step] = errors;
     }
+    this.onStepChanged.emit(selectedIndex);
   }
 
   public handleSubmit() {
     this.form.updateValueAndValidity();
-    if (this.form.valid && !!this.submit) {
+    if (this.form.valid) {
       this.stepperOnSubmit.emit(this.form.getRawValue());
     }
-  }
-
-  public submit() {
-    this.submitBtn?.nativeElement.click();
   }
 
   private extractErrors(controls: { [key: string]: AbstractControl }): number {
     const controlsNames = Object.keys(controls);
     let errors = 0;
-    for (let index = 0; index < controlsNames.length; index++) {
-      const controlsName = controlsNames[index];
+    controlsNames?.forEach((controlsName) => {
       const control = controls[controlsName];
       if (control instanceof FormGroup) {
-        // let innerControls = control.controls;
         errors += this.extractErrors(control.controls);
       }
       control.markAsDirty();
       control.markAsTouched();
       control.updateValueAndValidity();
       !control.valid && errors++;
-    }
+    });
+
     return errors;
   }
+
+  public controlPlusData(step: DynamicSteppedForm, i: number) {
+    const control = this.form.controls['forms']?.get(i?.toString());
+    control['data'] = step;
+    return control;
+  }
+
+  // debugForm() {
+  //   console.log('DEBUG FORM', this.form.getRawValue());
+  // }
 }

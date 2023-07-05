@@ -245,16 +245,15 @@ export class ValidationMessagesComponent implements OnInit, OnDestroy {
   public hasCustomErrorMessage = (key: string) =>
     key ? this.errorMessages?.find((i) => i.errorName === key) : null;
 
-  render = () => this.cd.detectChanges();
+  render = () => {
+    this.cd.detectChanges();
+    this.cd.markForCheck();
+  };
 
   ngOnInit() {
     merge(
-      this.control.statusChanges?.pipe(distinctUntilChanged(), skip(1)),
-      this.control?.valueChanges?.pipe(
-        skip(1),
-        distinctUntilChanged(),
-        debounceTime(200)
-      )
+      this.control.statusChanges?.pipe(skip(1), distinctUntilChanged()),
+      this.control?.valueChanges?.pipe(skip(1), distinctUntilChanged())
     )
       .pipe(
         takeUntil(this.ended),

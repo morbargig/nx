@@ -1,7 +1,13 @@
-import {AfterViewInit, Directive, HostListener, OnDestroy, Self,} from '@angular/core';
-import {NgControl} from '@angular/forms';
-import {Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {
+  AfterViewInit,
+  Directive,
+  HostListener,
+  OnDestroy,
+  Self,
+} from '@angular/core';
+import { NgControl } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Directive({
   selector: '[fnxNxCurrencyFormatter]',
@@ -14,8 +20,7 @@ export class CurrencyFormatterDirective implements OnDestroy, AfterViewInit {
   });
   private destroy$: Subject<any> = new Subject();
 
-  constructor(@Self() private ngControl: NgControl) {
-  }
+  constructor(@Self() private ngControl: NgControl) {}
 
   static formatPrice(v: string) {
     return CurrencyFormatterDirective.formatter.format(
@@ -59,8 +64,8 @@ export class CurrencyFormatterDirective implements OnDestroy, AfterViewInit {
     this.setValue(
       inputVal
         ? CurrencyFormatterDirective.validateDecimalValue(
-          inputVal?.toString()?.replace(/[^\d.]/g, '')
-        )
+            inputVal?.toString()?.replace(/[^\d.]/g, '')
+          )
         : ''
     );
   };
@@ -71,13 +76,13 @@ export class CurrencyFormatterDirective implements OnDestroy, AfterViewInit {
     );
   }
 
-  @HostListener('blur') onBlur() {
+  @HostListener('focusout') onBlur() {
     const value = this.ngControl.value || '';
     !!value && this.setValue(CurrencyFormatterDirective.formatPrice(value));
   }
 
   setValue(v: string) {
-    this.ngControl.control.setValue(v, {emitEvent: false});
+    this.ngControl.control.setValue(v, { emitEvent: false });
   }
 
   ngOnDestroy() {

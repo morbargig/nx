@@ -1,5 +1,5 @@
 import { FormGroup, FormArray } from '@angular/forms';
-import { BaseFieldComponent } from '../../core/directives/base-field.directive';
+import { BaseFieldComponentDirective } from '../../core/directives/base-field.directive';
 import { FormGroupData } from './form-group';
 import { Component } from '@angular/core';
 
@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
 export class FormGroupComponent<
   T = any,
   K extends keyof T = keyof T
-> extends BaseFieldComponent<T, FormGroupData<T, K>, K, FormGroup> {
+> extends BaseFieldComponentDirective<T, FormGroupData<T, K>, K, FormGroup> {
   setForm(form: FormGroup) {
     switch (this.parentForm.constructor) {
       case FormGroup: {

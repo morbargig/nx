@@ -23,7 +23,7 @@ export class DynamicFormGroupComponent<T = any> implements OnInit {
   public submitBtn: ElementRef<HTMLButtonElement>;
 
   @Input() public config: DynamicFormControl<any>[] = [];
-  @Input() public mode: DynamicFormStepMode = DynamicFormStepMode.Default;
+  @Input() public mode: DynamicFormStepMode = DynamicFormStepMode.TableCell;
   @Input() public validation: ValidatorFn[];
   @Input() public errorMessages?: { [error: string]: string };
   @Input() public hideSubmitButton?: boolean;

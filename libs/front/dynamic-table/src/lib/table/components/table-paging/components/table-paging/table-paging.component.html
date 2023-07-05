@@ -1,0 +1,93 @@
+<div
+  class="flex pt-[5.6563rem] pb-[4.625rem] text-lg font-medium leading-6 underline-offset-2"
+  *ngIf="pages"
+>
+  <div
+    class="w-8 h-8 md:mr-0 md:ml-3 border-2 bg-white rounded-full flex items-center justify-around"
+    (click)="selectPage(pageNum - 1); $event.preventDefault()"
+    [attr.tabindex]="previousDisabled() ? '-1' : '0'"
+    [attr.aria-disabled]="previousDisabled() ? 'true' : null"
+    [attr.aria-label]="previousDisabled() ? 'לא זמין' : 'לעמוד הקודם'"
+    [ngClass]="
+      previousDisabled()
+        ? 'opacity-30 border-med-gray text-med-gray cursor-default'
+        : 'border-primary-blue-70 text-primary-blue cursor-pointer'
+    "
+    role="button"
+  >
+    <!--    <app-icon-->
+    <!--      class="h-4 w-4"-->
+    <!--      [customClass]="!startPosition ? 'gray' : 'transform rotate-180'"-->
+    <!--      [iconName]="iconClass.chevronRight"-->
+    <!--    >-->
+    <!--    </app-icon>-->
+    <img
+      class="rotate-90"
+      src="./assets/front/dynamic-table/btn-table-extend-close.svg"
+    />
+  </div>
+  <div
+    class="flex center items-center text-center justify-center text-dark-gray"
+  >
+    <div
+      *ngFor="let pageNumber of pages; let i = index"
+      class="md:mx-1 caption-1"
+    >
+      <div *ngIf="isEllipsis(pageNumber)">…</div>
+      <div *ngIf="!isEllipsis(pageNumber)">
+        <div class="cursor-pointer" 
+            (click)="selectPage(pageNumber)"
+            [attr.aria-label]="pageNumber === pageNum ? 'עמוד נוכחי' + pageNumber : 'מעבר לעמוד ' + pageNumber"
+            tabindex="0"
+            role="button"
+            >
+          <span
+            class="w-8 mx-4"
+            [ngClass]="{
+              'underline text-primary-blue': pageNumber === pageNum
+            }"
+            >{{ pageNumber }}</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="w-8 h-8 md:mr-0 md:ml-3 border-2 bg-white rounded-full flex items-center justify-around"
+    [ngClass]="
+      nextDisabled()
+        ? 'opacity-30 border-med-gray text-med-gray cursor-default'
+        : 'border-primary-blue-70 text-primary-blue cursor-pointer'
+    "
+    (click)="selectPage(pageNum + 1); $event.preventDefault()"
+    [attr.tabindex]="nextDisabled() ? '-1' : '0'"
+    [attr.aria-disabled]="nextDisabled() ? 'true' : null"
+    [attr.aria-label]="nextDisabled() ? 'לא זמין' : 'לעמוד הבא'"
+    role="button"
+  >
+    <!--    <app-icon class="h-4 w-4" [iconName]="iconClass.chevronLeft"></app-icon>-->
+    <img
+      class="rotate-[270deg]"
+      src="./assets/front/dynamic-table/btn-table-extend-close.svg"
+    />
+  </div>
+  <div
+    class="pr-6 text-sm text-dark-gray font-normal flex center items-center text-center justify-center"
+  >
+    <span>{{ currentRecordsFrom() }}</span>
+    -
+    <span>{{ currentRecordsTo() }}</span>
+    &nbsp; תוצאות מתוך
+    {{ totalRecords }}
+  </div>
+  <!--  {{-->
+  <!--    console.log({-->
+  <!--      totalRecords: totalRecords,-->
+  <!--      pageSize: pageSize,-->
+  <!--      pagesLength: pagesLength,-->
+  <!--      pages: pages,-->
+  <!--      pageNum: pageNum,-->
+  <!--      startPosition: startPosition-->
+  <!--    })-->
+  <!--  }}-->
+</div>

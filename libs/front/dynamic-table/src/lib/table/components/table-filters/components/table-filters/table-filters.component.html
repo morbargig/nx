@@ -1,0 +1,14 @@
+<form
+  *ngIf="form"
+  [formGroup]="form"
+  class="pb-4 whitespace-nowrap overflow-auto"
+>
+  <form
+    *ngFor="let ctl of filters"
+    [formGroup]="filterControl(ctl?.key)"
+    class="inline-block ml-40px desktop:ml-34px"
+  >
+    <fnx-nx-app-table-select-filter formControlName="value" [filterCtl]="ctl">
+    </fnx-nx-app-table-select-filter>
+  </form>
+</form>

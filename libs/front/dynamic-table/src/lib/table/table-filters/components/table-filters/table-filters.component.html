@@ -1,6 +1,0 @@
-<form *ngIf="form" [formGroup]="form" class="pb-4 whitespace-nowrap overflow-auto">
-  <form *ngFor="let ctl of filters" [formGroup]="filterControl(ctl?.key)" class="inline-block ml-40px md:ml-34px">
-    <app-table-select-filter formControlName="value" [filterCtl]="ctl">
-    </app-table-select-filter>
-  </form>
-</form>

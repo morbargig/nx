@@ -1,0 +1,15 @@
+#btnShow {
+  // rounded-btn-small border-gray-border
+  @apply h-11 border-2 bg-white whitespace-nowrap print:hidden text-base font-medium;
+  border-color: rgba(35, 40, 115, 0.3);
+  border-radius: 1.375rem;
+
+  &.blue-btn {
+    // bg-bright-blue
+    @apply border-0 text-white bg-primary-blue;
+  }
+}
+
+.bg-background-gray {
+  border-color: rgba(35, 40, 115, 0.3);
+}

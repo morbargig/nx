@@ -1,0 +1,27 @@
+{
+  "name": "front-testing",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/front/testing/src",
+  "prefix": "fnx-nx",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/front/testing"],
+      "options": {
+        "jestConfig": "libs/front/testing/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/front/testing/**/*.ts",
+          "libs/front/testing/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

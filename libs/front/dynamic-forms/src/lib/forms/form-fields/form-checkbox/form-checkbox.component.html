@@ -1,3 +1,11 @@
-<!-- <app-checkbox (checkedChange)="!!config.onChange && config.onChange($event, control)"
-  [formControl]="group?.controls[config?.name]" [id]="id" [label]="config?.data?.checkboxLabel | translate">
-</app-checkbox> -->
+<span class="custom-control custom-radio">
+  <input type="checkbox" class="radio-control-input" [disabled]="config?.disabled" [id]="id" [formControl]="control" />
+  <label class="custom-control-label" [for]="id">
+    <ng-container *ngIf="data?.classTemplate as Temp; else defaultLabelTemp">
+      <fnx-nx-dynamic-component [dynamicComponent]="Temp"></fnx-nx-dynamic-component>
+    </ng-container>
+    <ng-template #defaultLabelTemp>
+      {{ data?.label }}
+    </ng-template>
+  </label>
+</span>

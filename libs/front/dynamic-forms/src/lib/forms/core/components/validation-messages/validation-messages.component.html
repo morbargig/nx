@@ -1,20 +1,27 @@
-<div *ngIf="(!!control?.dirty)" class="position-absolute validation-wrapper">
-  <ng-container *ngFor="let ctrlErr of (control?.errors | keyvalue);">
-    <ng-container *ngIf="hasCustomErrorMessage(ctrlErr?.key) as errMsg; else defaultError">
+<ng-container *ngIf="!!control?.touched || !!control?.dirty">
+  <ng-container *ngFor="let ctrlErr of control?.errors | keyvalue">
+    <ng-container
+      *ngIf="hasCustomErrorMessage(ctrlErr?.key) as errMsg; else defaultError"
+    >
       <ng-container *ngIf="control.hasError(errMsg.errorName)">
-        <ng-container *ngTemplateOutlet="customError; context:{errMsg:errMsg}"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="customError; context: { errMsg: errMsg }"
+        ></ng-container>
       </ng-container>
     </ng-container>
     <ng-template #defaultError>
       <ng-container *ngIf="getDefaultErrorMessage(ctrlErr) as errMsg">
-        <ng-container *ngTemplateOutlet="customError; context:{errMsg:errMsg}"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="customError; context: { errMsg: errMsg }"
+        ></ng-container>
       </ng-container>
     </ng-template>
   </ng-container>
-</div>
+</ng-container>
 
 <ng-template #customError let-errMsg="errMsg">
-  <div [innerHTML]="errMsg.label" class="invalid-feedback d-block mt-0">
-    <!-- [translateParams]="translateParamObject(errMsg) | translateParams" translate -->
-  </div>
+  <mat-error>{{ errMsg.label }}</mat-error>
+  <!-- <div [innerHTML]="errMsg.label" class="invalid-feedback d-block mt-0"> -->
+  <!-- [translateParams]="translateParamObject(errMsg) | translateParams" translate -->
+  <!-- </div> -->
 </ng-template>

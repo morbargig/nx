@@ -1,13 +1,13 @@
 import { moduleMetadata, Story, Meta } from '@storybook/angular';
-import { SteppedFormFooterMode } from '../../interfaces/dynamic-stepped-form';
 import { DynamicSteppedFormComponent } from './dynamic-stepped-form.component';
+import { FrontDynamicFormsModule } from '../../../../front-dynamic-forms.module';
 
 export default {
   title: 'DynamicSteppedFormComponent',
   component: DynamicSteppedFormComponent,
   decorators: [
     moduleMetadata({
-      imports: [],
+        imports: [FrontDynamicFormsModule],
     }),
   ],
 } as Meta<DynamicSteppedFormComponent>;
@@ -23,10 +23,4 @@ Primary.args = {
   useStepperService: false,
   config: [],
   validation: null,
-  formRowCssClass: '',
-  formCssClass: '',
-  bodyClass: '',
-  isLinear: true,
-  isEditable: true,
-  footerMode: SteppedFormFooterMode.Default,
 };

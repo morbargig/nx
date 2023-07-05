@@ -1,5 +1,30 @@
-<!-- <app-select [id]="id" [formControl]="control" (valueChanged)="!!config.onChange && config.onChange($event, control)"
-  [placeholder]="config.placeholder || config?.label" [disabled]="config?.disabled" [appendTo]="config.data?.appendTo"
-  [options]="!!config.optionsArr$ ? (config.optionsArr$ | async) : config.optionsArr" [dataKey]="config.data?.dataKey"
-  [showClear]="config.data?.showClear" [showSelectPrefix]="true">
-</app-select> -->
+<mat-form-field
+  appearance="outline"
+  *ngIf="config?.placeholder || config?.label || ' ' as placeholder"
+>
+  <mat-label
+    [ngClass]="{
+      'text-xl text-primary-blue': !!control?.value,
+      '!text-med-gray': !control?.value
+    }"
+    >{{ placeholder }}</mat-label
+  >
+  <mat-select
+    #mySelect
+    panelClass="!text-primary-blue"
+    [formControl]="control"
+    [placeholder]="placeholder"
+  >
+    <mat-option disabled="true">
+      <span class="flex justify-between font-ploni border-b-2 border-solid border-med-gray-60 ">
+        {{ placeholder }}
+        <img (click)="mySelect.close()" class="rotate-180 cursor-pointer" src="./assets/front/dynamic-forms/down.svg" alt="^" />
+      </span>
+    </mat-option>
+    <mat-option
+      *ngFor="let option of data?.options | async"
+      [value]="option?.value"
+      >{{ option?.label }}</mat-option
+    >
+  </mat-select>
+</mat-form-field>

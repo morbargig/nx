@@ -1,0 +1,42 @@
+<!-- <mat-form-field  [formGroup]="$any(parentForm)" class="example-full-width w-2/5 !text-start" appearance="fill"> -->
+
+<input
+  matInput
+  #input
+  style="border: inherit"
+  class="!border placeholder:text-med-gray text-dark-gray w-full h-12 !pr-4 rounded-3xl"
+  name="Search"
+  id="search"
+  type="search"
+  aria-label="שדה עריכה לחיפוש מבוטח"
+  role="search"
+  placeholder="חיפוש מבוטח"
+  [formControl]="control"
+  [matAutocomplete]="auto"
+/>
+<!-- (blur)="data?.onBlur!?.(control)" -->
+<!-- box-shadow: 0px 1px 2px rgba(108, 108, 108, 0.129494); -->
+<mat-autocomplete
+  [displayWith]="displayWith"
+  class="!rounded-3xl !mt-[0.688rem] !max-h-[270px] shadow-0px-2px-15px-0px-#00000019"
+  #auto
+  (optionsScroll)="nextPage()"
+  [thresholdPercent]="data?.noVirtualScroll ? 1.1 : data?.thresholdPercent"
+>
+  <mat-option
+    class="!h-20 mx-5 !px-0 !bg-transparent border-b last:border-none border-med-gray-90"
+    *ngFor="let option of filteredOptions$ | async"
+    [value]="option"
+  >
+    <div
+      [innerHtml]="option.label?.toString() | highlighter : control.value"
+      class="text-lg font-semibold text-dark-gray font-ploni mt-5"
+    ></div>
+    <div
+      [innerHtml]="option.value?.toString() | highlighter : control.value"
+      class="text-base font-normal text-med-gray font-ploni mb-[0.875rem]"
+    ></div>
+  </mat-option>
+</mat-autocomplete>
+
+<!-- </mat-form-field> -->

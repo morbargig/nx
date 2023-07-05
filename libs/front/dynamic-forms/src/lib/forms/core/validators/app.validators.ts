@@ -1,4 +1,4 @@
-import { Observable, timer } from 'rxjs';
+import { Observable, timer, firstValueFrom } from 'rxjs';
 import {
   AbstractControl,
   AsyncValidatorFn,
@@ -17,7 +17,7 @@ export class AppValidators {
           const other = parseFloat(otherControl?.value || '0');
           const inValid = current <= other;
           if (inValid) {
-            setTimeout(() => {
+            firstValueFrom(timer(0)).then(() => {
               otherControl.updateValueAndValidity({
                 onlySelf: false,
                 emitEvent: true,
@@ -46,7 +46,7 @@ export class AppValidators {
           const other = parseFloat(otherControl?.value || '0');
           const inValid = current >= other;
           if (inValid) {
-            setTimeout(() => {
+            firstValueFrom(timer(0)).then(() => {
               otherControl.updateValueAndValidity({
                 onlySelf: false,
                 emitEvent: true,
@@ -69,25 +69,18 @@ export class AppValidators {
 
   public static israelIdentity(): ValidatorFn {
     const validation = (id: string) => {
-      if (isNaN(Number(id))) {
-        return false;
-      }
-      let strId = id?.toString().trim();
-      if (strId.length > 9) {
-        return false;
-      }
-      if (strId.length < 9) {
-        while (strId.length < 9) strId = '0' + strId;
-      }
-      let counter = 0,
-        rawVal,
-        actualVal;
-      for (let i = 0; i < strId.length; i++) {
-        rawVal = Number(strId[i]) * ((i % 2) + 1);
-        actualVal = rawVal > 9 ? rawVal - 9 : rawVal;
-        counter += actualVal;
-      }
-      return counter % 10 === 0;
+      id = String(id).trim();
+      if (id.length > 9 || id.length < 5 || isNaN(Number(id))) return false;
+      // Pad string with zeros up to 9 digits
+      id = id.length < 9 ? ('00000000' + id).slice(-9) : id;
+      return (
+        Array.from(id, Number).reduce((counter, digit, i) => {
+          const step = digit * ((i % 2) + 1);
+          return counter + (step > 9 ? step - 9 : step);
+        }) %
+          10 ===
+        0
+      );
     };
     return (control: AbstractControl): { [key: string]: any } => {
       const tz = control?.value;
@@ -95,7 +88,7 @@ export class AppValidators {
         const valid = validation(tz);
         if (!valid) {
           return {
-            israelIdentity: true,
+            [this.israelIdentity.name]: true,
           };
         }
       }
@@ -127,7 +120,7 @@ export class AppValidators {
         const valid = validation(tz);
         if (!valid) {
           return {
-            creditcard: 'Portal.Forms.Validation.Errors.CreditCard',
+            [this.creditCard.name]: 'Portal.Forms.Validation.Errors.CreditCard',
           };
         }
       }
@@ -148,7 +141,7 @@ export class AppValidators {
         const valid = validation(tz);
         if (!valid) {
           return {
-            olderThan: true,
+            [this.olderThan.name]: true,
           };
         }
       }
@@ -242,7 +235,7 @@ export class AppValidators {
     service: any,
     action: string,
     key: string,
-    formFields?: (c:AbstractControl)=>any[]
+    formFields?: (c: AbstractControl) => any[]
   ): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       return timer(350).pipe(

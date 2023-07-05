@@ -57,13 +57,15 @@ export class DynamicFormBuilderService {
     abstractControlOptions: AbstractControlOptions = {}
   ): FormGroup {
     return this.fb.group(
-      configs?.reduce(
-        (p, c) => ({
-          ...p,
-          [c.field]: this.fb.control(null),
-        }),
-        {} as FormGroup['controls']
-      ),
+      configs
+        .filter((i) => !!i)
+        ?.reduce(
+          (p, c) => ({
+            ...p,
+            [c.field]: this.fb.control(null),
+          }),
+          {} as FormGroup['controls']
+        ),
       abstractControlOptions
     );
   }
@@ -131,9 +133,14 @@ export class DynamicFormBuilderService {
         return this.recursionBuildGroup(config);
         break;
       }
-      default:
-        return this.fb.control(state);
+      default: {
+        const { disabled, value } = state;
+        return this.fb.nonNullable.control({
+          value,
+          disabled,
+        });
         break;
+      }
     }
   };
 
@@ -155,7 +162,7 @@ export class DynamicFormBuilderService {
                 number: 'number',
                 bigint: 'number',
                 boolean: 'checkbox',
-                undefined: 'hidden'
+                undefined: 'hidden',
               }?.[typeof json?.[0]],
             },
           },
@@ -225,7 +232,7 @@ export class DynamicFormBuilderService {
             number: 'number',
             bigint: 'number',
             boolean: 'checkbox',
-            undefined: 'hidden'
+            undefined: 'hidden',
           }?.[typeof json?.[i]],
         },
       } as DynamicFormControl);

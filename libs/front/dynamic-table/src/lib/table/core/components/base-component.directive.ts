@@ -1,14 +1,15 @@
-import {OnDestroy, Directive} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil, takeWhile} from 'rxjs/operators';
+import { OnDestroy, Directive } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil, takeWhile } from 'rxjs/operators';
 
 @Directive()
 export abstract class BaseComponent implements OnDestroy {
   public readonly ngUnsubscribe: Subject<void> = new Subject<void>();
-  // public readonly isMobileChange: BehaviorSubject<boolean> = WindowsSizeHandleService.isMobileChange
 
-  protected readonly takeUntilDestroy = <T>() => takeUntil<T>(this.ngUnsubscribe);
-  protected readonly takeWhileAlive = <T>() => takeWhile<T>(() => !this.ngUnsubscribe.closed);
+  protected readonly takeUntilDestroy = <T>() =>
+    takeUntil<T>(this.ngUnsubscribe);
+  protected readonly takeWhileAlive = <T>() =>
+    takeWhile<T>(() => !this.ngUnsubscribe.closed);
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();

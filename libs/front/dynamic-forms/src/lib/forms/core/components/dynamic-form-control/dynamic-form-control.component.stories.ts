@@ -1,6 +1,5 @@
 import { moduleMetadata, Story, Meta } from '@storybook/angular';
 import { DynamicFormControlComponent } from './dynamic-form-control.component';
-import { FrontDynamicFormsModule } from '../../../../front-dynamic-forms.module';
 import { FormControl, FormGroup } from '@angular/forms';
 
 export default {
@@ -8,7 +7,7 @@ export default {
   component: DynamicFormControlComponent,
   decorators: [
     moduleMetadata({
-      imports: [FrontDynamicFormsModule],
+      imports: [],
     }),
   ],
 } as Meta<DynamicFormControlComponent>;
@@ -23,7 +22,6 @@ export const Primary = Template.bind({});
 Primary.args = {
   isRequired: false,
   hideLabel: false,
-  wrapStyleClass: '',
   dynamicControl: {
     type: 'Default',
     field: 'story-book',

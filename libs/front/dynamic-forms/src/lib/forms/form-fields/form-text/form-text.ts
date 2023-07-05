@@ -3,6 +3,7 @@ import { BaseFieldData } from '../../core/interfaces/field-config';
 
 export interface FormTextData<T = any, K extends keyof T = keyof T>
   extends BaseFieldData<T, K> {
+  hint?: (ctr: AbstractControl) => string;
   rows?: number;
   cols?: number;
   step?: number;
