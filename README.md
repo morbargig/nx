@@ -163,7 +163,7 @@ workspace.json
 // TODO: update url
 <br>
 <a href="https://app.diagrams.net/#Hmorbargig%2Fnx%2Fmain%2FJenkins%2FJenkins.drawio.svg" target="_blank" >Edit</a>
-![Diagram](https://github.com/morbargig/nx/blob/main/Jenkins/jenkins.drawio.svg)
+![Diagram](https://github.com/morbargig/nx/blob/main/Jenkins/Jenkins.drawio.svg)
 
 # FnxNx
 
