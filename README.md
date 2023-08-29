@@ -160,7 +160,7 @@ workspace.json
 ```
 
 # CI-CD
-<br>
+
 ![Diagram](https://github.com/morbargig/nx/blob/main/Jenkins/Jenkins.drawio.svg)
 <br>
 <a href="https://app.diagrams.net/#Hmorbargig%2Fnx%2Fmain%2FJenkins%2FJenkins.drawio.svg" target="_blank" >Edit</a>
