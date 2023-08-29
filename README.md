@@ -161,7 +161,9 @@ workspace.json
 
 # CI-CD
 // TODO: update url
-[Diagram](https://dev.azure.com/Fnxp1/Agents/_git/mono-repo?path=/Jenkins/ci-cd.drawio&_a=preview)
+<br>
+<a href="https://app.diagrams.net/#Hmorbargig%2Fnx%2Fmain%2FJenkins/jenkins.drawio.svg" target="_blank" >Edit</a>
+![Diagram](https://github.com/morbargig/nx/blob/main/Jenkins/jenkins.drawio.svg)
 
 # FnxNx
 
