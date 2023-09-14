@@ -15,7 +15,6 @@ import { TableSelectFilterComponent } from './components/table-filters/component
 import { SafePipe } from './core/pipes/safe.pipe';
 import { PillCellComponent } from './cell-components/pill-cell/pill-cell.component';
 import { DateCellComponent } from './cell-components/date-cell/date-cell.component';
-import { AppIconComponent } from './core/components/app-icon/app-icon.component';
 import { LoadingCellComponent } from './cell-components/loading-cell/loading-cell.component';
 // import { TranslateModule } from '@ngx-translate/core';
 
@@ -25,7 +24,6 @@ import { LoadingCellComponent } from './cell-components/loading-cell/loading-cel
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    AppIconComponent,
     // TranslateModule,
     // CarouselModule,
     // MatMenuModule,

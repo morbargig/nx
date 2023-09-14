@@ -5,8 +5,8 @@ import {
   DynamicFormControl,
 } from '@fnx-nx/front/dynamic-forms';
 import { firstValueFrom, timer } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { JsonObject } from '@fnx-nx/api-interfaces';
+import { FormsApiService } from './services/forms-api.service';
 
 export interface User {
   job: {
@@ -40,7 +40,7 @@ export interface User {
 })
 export class FormsComponent implements OnInit {
   constructor(
-    private http: HttpClient,
+    private formsApiService: FormsApiService,
     private dfb: DynamicFormBuilderService
   ) {}
   @ViewChild('formComponent', { static: false })
@@ -186,7 +186,7 @@ export class FormsComponent implements OnInit {
         rows: 5,
       },
     };
-  hello$ = this.http.get<DynamicFormControl<User>[]>('/api/helloForm');
+  hello$ = this.formsApiService.helloForm();
   formOnSubmit(event: any) {
     alert(JSON.stringify(event));
   }

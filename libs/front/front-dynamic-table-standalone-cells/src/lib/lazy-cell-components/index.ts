@@ -1,1 +1,1 @@
-export * from './lazy-share-cell'
+export default {};
