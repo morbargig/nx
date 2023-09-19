@@ -7,7 +7,7 @@ export const BFF_APP_CONTROL_ROUTES = {
     method: 'get',
     response: null as boolean,
   },
-  helloForm: {
+  'hello-form': {
     method: 'get',
     response: null as DynamicFormControl<User>[],
   },

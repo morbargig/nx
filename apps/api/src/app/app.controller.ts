@@ -4,12 +4,13 @@ import { DynamicFormControl } from '@fnx-nx/front/dynamic-forms';
 import { ApiCustomResponse } from '../shared/decorators/api-paginated-response.decorator';
 import { ApiResponse } from '@nestjs/swagger';
 import { ResponseDto } from '../shared/dto/response.dto';
-import { CustomController } from '../shared/decorators/custom-control.decoretor';
-import { CustomControllerRoute } from '../shared/decorators/custom-route.decorator';
+import { CustomControllerRouteDecorators } from '../shared/decorators/custom-route.decorator';
 
-const { Get } = CustomControllerRoute('');
-@CustomController('')
-export class AppController {
+const { Get, Controller, ControllerApiType } =
+  CustomControllerRouteDecorators();
+type ControllerApiType = typeof ControllerApiType;
+@Controller('')
+export class AppController implements ControllerApiType {
   constructor(private readonly appService: AppService) {}
   // duplicate for reason
   @ApiResponse({
@@ -19,13 +20,13 @@ export class AppController {
     type: 'boolean',
   })
   @Get('hatcheck')
-  getCheck(): boolean {
+  hatcheck(): boolean {
     return true;
   }
 
   @ApiCustomResponse({})
-  @Get('helloForm')
-  getData(): DynamicFormControl<User>[] {
+  @Get('hello-form')
+  helloForm(): DynamicFormControl<User>[] {
     return JSON.parse(JSON.stringify(this.appService.getHelloFormConf()));
   }
 }
