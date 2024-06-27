@@ -39,7 +39,7 @@ remove-local-branches:
 
 # clone singale btanch
 clone-develop:
-	`git clone --single-branch --branch develop https://Fnxp1@dev.azure.com/Fnxp1/AwesomePortal/_git/awesome-portal-client`
+	`git clone --single-branch --branch develop <remote>`
 
 kill-json-server:
 	`Stop-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess -Force`
