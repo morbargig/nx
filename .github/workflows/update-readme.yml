@@ -36,6 +36,7 @@ jobs:
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           
+          
           # Use the MY_GITHUB_TOKEN to authenticate for pushing
           git add '**/README.md'
           git commit -m "Updated all README.md files with branch and repository URL" || echo "No changes to commit"
