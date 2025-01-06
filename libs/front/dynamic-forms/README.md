@@ -23,7 +23,6 @@ First, we will start with the basic concept of JSON structure. An object continu
 Supported file formats: .png, .svg, .html and .xml (default)
 
 #### locale:
-[Edit this diagram](
 
 [JSON structure diagram](./json-structure-diagram.drawio)
 [JSON structure diagram](https://app.diagrams.net/?url=../../raw/HEAD/json-structure-diagram.drawio)
