@@ -4,7 +4,7 @@ import { FormGroupData } from './form-group';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'fnx-nx-app-form-group',
+  selector: 'softbar-app-form-group',
   templateUrl: './form-group.component.html',
   styleUrls: ['./form-group.component.scss'],
 })

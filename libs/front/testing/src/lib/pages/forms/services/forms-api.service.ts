@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseHttpService } from '../../../services/base-http.service';
-import { DynamicFormControl } from '@fnx-nx/front/dynamic-forms';
-import { ControllerApiType, User } from '@fnx-nx/api-interfaces';
+import { DynamicFormControl } from '@softbar/front/dynamic-forms';
+import { ControllerApiType, User } from '@softbar/api-interfaces';
 
 @Injectable({
   providedIn: 'root',

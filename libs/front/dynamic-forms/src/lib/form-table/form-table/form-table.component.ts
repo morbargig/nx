@@ -5,22 +5,22 @@
 //   OnInit,
 // } from '@angular/core';
 // import { FormControl } from '@angular/forms';
-// import { PageDataResponse } from '@fnx-nx/api-interfaces';
+// import { PageDataResponse } from '@softbar/api-interfaces';
 // import { catchError, of, Subject, switchMap } from 'rxjs';
 // import { BaseFieldComponentDirective } from '../../forms/core/directives/base-field.directive';
 // import { takeWhile, tap } from 'rxjs/operators';
 // import { FormTableData } from './form-table-data';
-// import { TableComponent } from '@fnx-nx/front/dynamic-table';
+// import { TableComponent } from '@softbar/front/dynamic-table';
 
 // @Component({
-//   selector: 'fnx-nx-form-table',
+//   selector: 'softbar-form-table',
 //   template: `
-//     <fnx-nx-app-table
+//     <softbar-app-table
 //       [columns]="data?.columns"
 //       [tableBodyStyle]="data?.tableBodyStyle"
 //       [items]="(resultSubject | async)?.data"
 //     >
-//     </fnx-nx-app-table>
+//     </softbar-app-table>
 //   `,
 //   changeDetection: ChangeDetectionStrategy.OnPush,
 // })

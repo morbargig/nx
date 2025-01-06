@@ -4,7 +4,7 @@ import { Price } from '../../models/price.model';
 import { fixCustomCurrency } from '../../core/pipes/custom-currency.pipe';
 
 @Component({
-  selector: 'fnx-nx-app-price-cell',
+  selector: 'softbar-app-price-cell',
   //extends DefaultCellComponent html template
   templateUrl: '../default-cell/default-cell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

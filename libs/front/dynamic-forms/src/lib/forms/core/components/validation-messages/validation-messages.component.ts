@@ -53,7 +53,7 @@ type supportedDefaultValuationsErrors =
   | 'pattern';
 
 @Component({
-  selector: 'fnx-nx-app-validation-messages',
+  selector: 'softbar-app-validation-messages',
   templateUrl: './validation-messages.component.html',
   styleUrls: ['./validation-messages.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

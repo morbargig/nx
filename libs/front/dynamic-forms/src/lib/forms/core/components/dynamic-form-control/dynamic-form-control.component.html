@@ -32,14 +32,14 @@
         [type]="type"
       >
       </ng-container>
-      <fnx-nx-app-validation-messages
+      <softbar-app-validation-messages
         *ngIf="config?.validation?.length || config?.asyncValidation?.length"
         [control]="control"
         [filedLabel]="config?.label"
         [messages]="config?.errorMessages"
         class="relative"
       >
-      </fnx-nx-app-validation-messages>
+      </softbar-app-validation-messages>
     </div>
   </ng-container>
 </ng-template>

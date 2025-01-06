@@ -7,7 +7,7 @@
 >
   <div class="row {{ formRowCssClass }}">
     <ng-container *ngFor="let fieldConf of config">
-      <fnx-nx-dynamic-form-control
+      <softbar-dynamic-form-control
         *ngIf="fieldConf?.field"
         [dynamicControl]="fieldConf"
         [parentForm]="form"
@@ -16,15 +16,15 @@
           fieldConf?.bodyStyle?.dynamicFormControlComponent?.styleClass
         }}"
       >
-      </fnx-nx-dynamic-form-control>
+      </softbar-dynamic-form-control>
     </ng-container>
     <div [ngClass]="{ 'mb-3': !!errorMessages }">
-      <fnx-nx-app-validation-messages
+      <softbar-app-validation-messages
         *ngIf="!!validation?.length"
         [control]="form"
         [messages]="errorMessages"
       >
-      </fnx-nx-app-validation-messages>
+      </softbar-app-validation-messages>
     </div>
   </div>
   <ng-container *ngIf="!hideSubmitButton && !!form">

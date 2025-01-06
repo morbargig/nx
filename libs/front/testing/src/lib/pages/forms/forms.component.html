@@ -5,18 +5,18 @@
 
 <!-- <div style="border: 1px solid black; padding: 10px;">
     <h3>This Section is for the project developer </h3>
-    <fnx-nx-dynamic-form-control *ngIf="group && dy" [dynamicControl]="dy" [parentForm]="group">
-    </fnx-nx-dynamic-form-control>
+    <softbar-dynamic-form-control *ngIf="group && dy" [dynamicControl]="dy" [parentForm]="group">
+    </softbar-dynamic-form-control>
 
     <button class="btn btn-default" type="button" (click)="click()">Generate new form from the config object in the
         text-area</button>
 </div> -->
-<fnx-nx-dynamic-form-control
+<softbar-dynamic-form-control
   *ngIf="group && dy2"
   [dynamicControl]="dy2"
   [parentForm]="group"
 >
-</fnx-nx-dynamic-form-control>
+</softbar-dynamic-form-control>
 
 <button class="btn btn-default" type="button" (click)="click2()">
   Generate new form from the <strong>JSON </strong> in the text-area
@@ -31,10 +31,10 @@
 
 <!-- <h1 (click)="clickServer()">Generate new form from server</h1> -->
 
-<fnx-nx-app-dynamic-form-group
+<softbar-app-dynamic-form-group
   #formComponent
   *ngIf="config"
   [config]="$any(config)"
   (formOnSubmit)="formOnSubmit($event)"
 >
-</fnx-nx-app-dynamic-form-group>
+</softbar-app-dynamic-form-group>

@@ -12,7 +12,7 @@ import { NumRange } from '../../interfaces';
 import { DynamicSteppedForm } from '../../interfaces/dynamic-stepped-form';
 
 @Component({
-  selector: 'fnx-nx-app-form-stepper',
+  selector: 'softbar-app-form-stepper',
   templateUrl: './form-stepper.component.html',
   styleUrls: ['./form-stepper.component.scss'],
   encapsulation: ViewEncapsulation.None,

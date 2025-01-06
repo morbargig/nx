@@ -14,7 +14,7 @@ import { DynamicFormControl } from '../../interfaces/field-config';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder.service';
 
 @Component({
-  selector: 'fnx-nx-app-dynamic-form-group',
+  selector: 'softbar-app-dynamic-form-group',
   templateUrl: './dynamic-form-group.component.html',
   styleUrls: ['./dynamic-form-group.component.scss'],
 })

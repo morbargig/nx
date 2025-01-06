@@ -10,7 +10,7 @@ import { FormSelectData } from './form-select';
 import { BaseFieldComponentDirective } from '../../core/directives/base-field.directive';
 
 @Component({
-  selector: 'fnx-nx-app-form-select',
+  selector: 'softbar-app-form-select',
   templateUrl: './form-select.component.html',
   styleUrls: ['./form-select.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

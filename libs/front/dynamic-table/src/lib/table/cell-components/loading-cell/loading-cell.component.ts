@@ -3,7 +3,7 @@ import { DefaultCellComponent } from '../default-cell';
 import { LoadingCellDataModel } from './loading-cell-data.model';
 
 @Component({
-  selector: 'fnx-nx-loading-cell',
+  selector: 'softbar-loading-cell',
   template: `<div class="loading w-4/5 h-full"></div>`,
 })
 export class LoadingCellComponent<

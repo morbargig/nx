@@ -11,7 +11,7 @@ import { FormControl } from '@angular/forms';
 import { timer, firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'fnx-nx-app-form-array',
+  selector: 'softbar-app-form-array',
   templateUrl: './form-array.component.html',
   styleUrls: ['./form-array.component.scss'],
 })

@@ -3,7 +3,7 @@
 // import { CommonModule } from '@angular/common';
 // import { FrontDynamicFormsModule } from '../front-dynamic-forms.module';
 // import { FormTableComponent } from './form-table/form-table.component';
-// import { FrontDynamicTableModule } from '@fnx-nx/front/dynamic-table';
+// import { FrontDynamicTableModule } from '@softbar/front/dynamic-table';
 
 // const EXPORTED: NgModule['declarations'] = [FormTableComponent];
 

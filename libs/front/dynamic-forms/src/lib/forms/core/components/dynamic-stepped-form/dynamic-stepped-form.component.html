@@ -4,7 +4,7 @@
   class="bg-white rounded-md h-full dynamic-stepped-form"
   novalidate
 >
-  <fnx-nx-app-form-stepper
+  <softbar-app-form-stepper
     *ngIf="!!config?.length"
     #cdkStepper
     (selectionChange)="
@@ -28,7 +28,7 @@
           {{ step?.stepTitle }}
         </span>
       </ng-template>
-      <fnx-nx-app-dynamic-form-group
+      <softbar-app-dynamic-form-group
         #dyn
         [(form)]="form.controls['forms'].controls[i + '']"
         [config]="step.group"
@@ -38,7 +38,7 @@
         class="flex-1 overflow-y-auto"
         style="padding: 0rem 2rem; margin: 0 -2rem"
       >
-      </fnx-nx-app-dynamic-form-group>
+      </softbar-app-dynamic-form-group>
       <footer
         class="pt-[35px] flex justify-between border-med-gray-90 border-t"
       >
@@ -54,7 +54,7 @@
             />
             חזור
           </button>
-          <fnx-nx-app-validation-messages
+          <softbar-app-validation-messages
             *ngIf="
               (step?.validators?.length || step?.asyncValidators?.length) &&
                form.controls['forms'].controls[i + '']?.errors ;
@@ -64,7 +64,7 @@
             class="text-base font-normal text-accent-bright-red ml-auto pt-[0.625rem]"
             [control]="form.controls['forms'].controls[i + '']"
             [messages]="step?.errorMessages"
-          ></fnx-nx-app-validation-messages>
+          ></softbar-app-validation-messages>
           <ng-template #summaryTemp>
             <ng-container
               *ngIf="step?.summaryHtml$ | async as html; else disclaimerTemp"
@@ -104,5 +104,5 @@
         </ng-container>
       </footer>
     </cdk-step>
-  </fnx-nx-app-form-stepper>
+  </softbar-app-form-stepper>
 </form>

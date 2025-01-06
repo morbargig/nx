@@ -9,7 +9,7 @@ import { debounceTime, filter, startWith, switchMap } from 'rxjs/operators';
 import { LazyLoadEvent } from '../../core/interfaces/lazy-load-event';
 
 @Component({
-  selector: 'fnx-nx-form-autocomplete',
+  selector: 'softbar-form-autocomplete',
   templateUrl: './form-autocomplete.component.html',
   styleUrls: ['./form-autocomplete.component.scss'],
 })

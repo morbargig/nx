@@ -3,7 +3,7 @@ import { BaseCellComponent } from '../../directives/base-cell.directive';
 import { BaseCellData } from '../table.types.helpers';
 
 @Component({
-  selector: 'fnx-nx-app-default-cell',
+  selector: 'softbar-app-default-cell',
   templateUrl: './default-cell.component.html',
   styleUrls: ['./default-cell.component.scss'],
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property

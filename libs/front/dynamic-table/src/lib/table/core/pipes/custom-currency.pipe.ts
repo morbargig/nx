@@ -1,1 +1,1 @@
-export { fixCustomCurrency } from '@fnx-nx/front/ui-standalone-components';
+export { fixCustomCurrency } from '@softbar/front/ui-standalone-components';

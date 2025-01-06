@@ -7,7 +7,7 @@ export const ROUTES: Routes = [
     path: 'testing',
     // canLoad:[],
     loadChildren: () =>
-      import('@fnx-nx/front/testing').then((m) => m.FrontTestingModule),
+      import('@softbar/front/testing').then((m) => m.FrontTestingModule),
   },
   { path: '**', redirectTo: 'testing' },
 ];

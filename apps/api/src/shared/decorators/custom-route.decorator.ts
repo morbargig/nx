@@ -2,7 +2,7 @@ import {
   BFF_CONTROLLER_TYPE,
   BFF_ROUTES_TYPE,
   ControllerApiType,
-} from '@fnx-nx/api-interfaces';
+} from '@softbar/api-interfaces';
 import { applyDecorators } from '@nestjs/common';
 import { Get, Post, Put, Delete } from '@nestjs/common';
 import { CustomController } from './custom-control.decoretor';

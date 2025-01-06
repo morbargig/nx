@@ -12,7 +12,7 @@ import { BaseComponent } from '../../../../core/components/base-component.direct
 import { getValueInRange, isNumber } from '../../../../util';
 
 @Component({
-  selector: 'fnx-nx-app-table-paging',
+  selector: 'softbar-app-table-paging',
   templateUrl: './table-paging.component.html',
   styleUrls: ['./table-paging.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

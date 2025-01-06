@@ -1,3 +1,3 @@
-import { ISum } from '@fnx-nx/api-interfaces';
+import { ISum } from '@softbar/api-interfaces';
 
 export type Price = ISum;

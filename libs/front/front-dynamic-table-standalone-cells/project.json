@@ -2,7 +2,7 @@
   "name": "front-front-dynamic-table-standalone-cells",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/front/front-dynamic-table-standalone-cells/src",
-  "prefix": "fnx-nx",
+  "prefix": "softbar",
   "tags": [],
   "projectType": "library",
   "targets": {

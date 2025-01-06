@@ -2,7 +2,7 @@
   <input type="checkbox" class="radio-control-input" [disabled]="config?.disabled" [id]="id" [formControl]="control" />
   <label class="custom-control-label" [for]="id">
     <ng-container *ngIf="data?.classTemplate as Temp; else defaultLabelTemp">
-      <fnx-nx-dynamic-component [dynamicComponent]="Temp"></fnx-nx-dynamic-component>
+      <softbar-dynamic-component [dynamicComponent]="Temp"></softbar-dynamic-component>
     </ng-container>
     <ng-template #defaultLabelTemp>
       {{ data?.label }}

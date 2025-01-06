@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { DynamicFormControl } from '../interfaces/field-config';
 import { FormArray } from '@angular/forms';
-import { JsonObject, JsonValue } from '@fnx-nx/api-interfaces';
+import { JsonObject, JsonValue } from '@softbar/api-interfaces';
 import { FormArrayData } from '../../form-fields/form-array/form-array';
 import { FormGroupData } from '../../form-fields/form-group/form-group';
 

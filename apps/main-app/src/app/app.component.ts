@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'fnx-nx-root',
+  selector: 'softbar-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

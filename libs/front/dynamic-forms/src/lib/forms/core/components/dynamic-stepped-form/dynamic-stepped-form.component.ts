@@ -22,7 +22,7 @@ import { range } from 'lodash-es';
 import { StepFormGroup } from '../../interfaces/step-form-group';
 import { AbstractControl } from '@angular/forms';
 @Component({
-  selector: 'fnx-nx-app-dynamic-stepped-form',
+  selector: 'softbar-app-dynamic-stepped-form',
   templateUrl: './dynamic-stepped-form.component.html',
   styleUrls: ['./dynamic-stepped-form.component.scss'],
 })

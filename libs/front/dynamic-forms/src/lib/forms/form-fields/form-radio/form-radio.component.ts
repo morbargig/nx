@@ -11,7 +11,7 @@ import { BaseFieldComponentDirective } from '../../core/directives/base-field.di
 import { FormRadioData } from './form-radio-data';
 
 @Component({
-  selector: 'fnx-nx-app-form-button',
+  selector: 'softbar-app-form-button',
   templateUrl: './form-radio.component.html',
   styleUrls: ['./form-radio.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

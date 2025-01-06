@@ -25,10 +25,10 @@
       [id]="id + i"
     >
       <ng-container *ngIf="data?.classTemplate as Temp; else defaultLabelTemp">
-        <fnx-nx-dynamic-component
+        <softbar-dynamic-component
           [dynamicComponent]="Temp"
           [data]="{option, control}"
-        ></fnx-nx-dynamic-component>
+        ></softbar-dynamic-component>
         <!-- , control,  isSelectedFunc: data?.isSelectedFunc -->
       </ng-container>
       <ng-template #defaultLabelTemp>

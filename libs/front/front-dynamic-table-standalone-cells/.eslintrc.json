@@ -17,7 +17,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "fnx-nx",
+            "prefix": "softbar",
             "style": "kebab-case"
           }
         ]

@@ -1,4 +1,4 @@
-import { DynamicFormControl } from '@fnx-nx/front/dynamic-forms';
+import { DynamicFormControl } from '@softbar/front/dynamic-forms';
 import { User } from '../../api-interfaces';
 import { controlType } from './controllers';
 

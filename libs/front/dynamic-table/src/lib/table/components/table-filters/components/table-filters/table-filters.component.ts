@@ -47,7 +47,7 @@ export type ITableFilter<T = any> = {
 }[keyof T];
 
 @Component({
-  selector: 'fnx-nx-app-table-filters',
+  selector: 'softbar-app-table-filters',
   templateUrl: './table-filters.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./table-filters.component.scss'],

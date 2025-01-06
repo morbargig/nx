@@ -9,7 +9,7 @@ import { DefaultCellComponent } from '../default-cell/default-cell.component';
 import { ExtendCellDataModel } from './extends-cell-data.model';
 
 @Component({
-  selector: 'fnx-nx-app-extends-cell',
+  selector: 'softbar-app-extends-cell',
   templateUrl: './extends-cell.component.html',
   styleUrls: ['./extends-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

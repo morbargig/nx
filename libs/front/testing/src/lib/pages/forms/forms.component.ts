@@ -3,9 +3,9 @@ import { FormGroup, Validators, AbstractControl } from '@angular/forms';
 import {
   DynamicFormBuilderService,
   DynamicFormControl,
-} from '@fnx-nx/front/dynamic-forms';
+} from '@softbar/front/dynamic-forms';
 import { firstValueFrom, timer } from 'rxjs';
-import { JsonObject } from '@fnx-nx/api-interfaces';
+import { JsonObject } from '@softbar/api-interfaces';
 import { FormsApiService } from './services/forms-api.service';
 
 export interface User {
@@ -34,7 +34,7 @@ export interface User {
 }
 
 @Component({
-  selector: 'fnx-nx-forms',
+  selector: 'softbar-forms',
   templateUrl: './forms.component.html',
   styleUrls: ['./forms.component.scss'],
 })

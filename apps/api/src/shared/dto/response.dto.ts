@@ -1,4 +1,4 @@
-import { JsonObject, JsonType } from "@fnx-nx/api-interfaces";
+import { JsonObject, JsonType } from "@softbar/api-interfaces";
 import { ApiProperty } from "@nestjs/swagger";
 
 type ResponseDtoType<T = any, D = JsonType> = {

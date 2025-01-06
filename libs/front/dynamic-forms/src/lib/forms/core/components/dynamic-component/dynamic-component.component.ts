@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { DynamicComponentDirective } from '../../directives/dynamic-component.directive';
 
 @Component({
-  selector: 'fnx-nx-dynamic-component',
+  selector: 'softbar-dynamic-component',
   templateUrl: './dynamic-component.component.html',
   styleUrls: ['./dynamic-component.component.scss'],
 })

@@ -5,7 +5,7 @@ import { FormsComponent } from './pages/forms/forms.component';
 import {
   DynamicFormBuilderService,
   FrontDynamicFormsModule,
-} from '@fnx-nx/front/dynamic-forms';
+} from '@softbar/front/dynamic-forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';

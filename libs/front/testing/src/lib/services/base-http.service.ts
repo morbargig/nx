@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { BFF_ROUTES_TYPE } from '@fnx-nx/api-interfaces';
+import { BFF_ROUTES_TYPE } from '@softbar/api-interfaces';
 
 type SkipFirst<T extends any[]> = T extends [infer _First, ...infer Rest]
   ? Rest

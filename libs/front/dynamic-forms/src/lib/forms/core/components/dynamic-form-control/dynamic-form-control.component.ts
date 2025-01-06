@@ -29,7 +29,7 @@ import {
   lazyFieldLoadConfigure,
 } from '../../interfaces/field-config';
 @Component({
-  selector: 'fnx-nx-dynamic-form-control',
+  selector: 'softbar-dynamic-form-control',
   templateUrl: './dynamic-form-control.component.html',
   styleUrls: ['./dynamic-form-control.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

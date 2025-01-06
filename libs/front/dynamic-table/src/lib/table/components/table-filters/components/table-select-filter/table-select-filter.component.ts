@@ -13,7 +13,7 @@ import {
 } from '../table-filters/table-filters.component';
 
 @Component({
-  selector: 'fnx-nx-app-table-select-filter',
+  selector: 'softbar-app-table-select-filter',
   templateUrl: './table-select-filter.component.html',
   styleUrls: ['./table-select-filter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

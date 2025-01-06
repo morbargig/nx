@@ -281,110 +281,119 @@ export type FiledParentControl<
   ? NewFormArray<ChildControl>
   : NewFormGroup<T, ChildControl>;
 
-// interface User {
-//   name: string;
-//   age: number;
-//   test: string[];
-//   payment: { obj: { obj2: [{ obj3: string[][] }] }[] }[];
-//   friends: string[][];
-// }
+interface User {
+  name: `${number}`;
+  age: number;
+  test: string[];
+  payment: { obj: { obj2: [{ obj3: 'moshe'[][] }] }[] }[];
+  friends: 'jhsgdfkjhsdjkfhds'[][];
+}
 
-// const simpleForm: DynamicFormControl<User>[] = [
-//   {
-//     field: 'friends',
-//     type: 'FormArray',
-//     data: {
-//       formArrayConfig: {
-//         type: 'FormArray',
-//         field: '_',
-//         data: {
-//           formControlConfig: {
-//             type: 'Default',
-//           },
-//         },
-//       },
-//     },
-//   },
-//   {
-//     field: 'test',
-//     type: 'FormArray',
-//     bodyStyle: {},
-//     data: {
-//       formControlConfig: {
-//         type: 'Default',
-//         field: '_',
-//       },
-//     },
-//   },
-//   {
-//     field: 'payment',
-//     type: 'FormArray',
-//     data: {
-//       formGroupConfig: [
-//         {
-//           field: 'obj',
-//           type: 'FormArray',
-//           data: {
-//             formGroupConfig: [
-//               {
-//                 field: 'obj2',
-//                 type: 'FormArray',
-//                 data: {
-//                   formGroupConfig: [
-//                     {
-//                       field: 'obj3',
-//                       type: 'FormArray',
-//                       validation: [],
-//                       data: {
-//                         // formControlConfig: {
-//                         //   field: '_',
-//                         //   type: 'Default',
-//                         // },
-//                         formArrayConfig: {
-//                           field: '_',
-//                           type: 'FormArray',
-//                           data: {
-//                             // formGroupConfig: [],
-//                             // formArrayConfig: [],
-//                             formControlConfig: {
-//                               field: '_',
-//                               onChange: () => null,
-//                               type: 'Default',
-//                               data: {
-//                                 // formGroupConfig: [],
-//                                 // formControlConfig: {
-//                                 //   field: '_',
-//                                 //   type: 'FormArray',
-//                                 // },
-//                                 // formArrayConfig: [],
-//                               },
-//                             },
-//                           },
-//                         },
-//                       },
-//                     },
-//                   ],
-//                 },
-//               },
-//             ],
-//           },
-//         },
-//       ],
-//     },
-//   },
-//   {
-//     field: 'age',
-//     type: 'Default',
-//     onChange: ({ currentValue, control }) => {
-//       return;
-//     },
-//     value: 3,
-//     // data: {
-//     //   inputType: 'text',
-//     //   // title$: of(),
-//     // },
-//   },
-// ];
+const simpleForm: DynamicFormControl<User>[] = [
+  {
+    field:'age',
+    type:'DynamicLazy',
+    'bodyStyle': {
+      'field':{
+        'styleClassObj':{
+          'px-10': false
+        }
+      }
+    },
+  },
+  {
+    field: 'friends',
+    type: 'FormArray',
+    data: {
+      formArrayConfig: {
+        type: 'FormArray',
+        field: '_',
+        data: {
+          formControlConfig: {
+            type: 'Default',
+            onChange:({currentValue})=>null,
+          },
+        },
+      },
+    },
+  },
+  {
+    field: 'name',
+    type: 'Default',
+    bodyStyle: {},
+    onChange :({currentValue})=>null,
+    data: {
+    },
+  },
+  {
+    field: 'payment',
+    type: 'FormArray',
+    data: {
+      formGroupConfig: [
+        {
+          field: 'obj',
+          type: 'FormArray',
+          data: {
+            formGroupConfig: [
+              {
+                field: 'obj2',
+                type: 'FormArray',
+                data: {
+                  formGroupConfig: [
+                    {
+                      field: 'obj3',
+                      type: 'FormArray',
+                      validation: [],
+                      data: {
+                        // formControlConfig: {
+                        //   field: '_',
+                        //   type: 'Default',
+                        // },
+                        formArrayConfig: {
+                          field: '_',
+                          type: 'FormArray',
+                          data: {
+                            // formGroupConfig: [],
+                            // formArrayConfig: [],
+                            formControlConfig: {
+                              field: '_',
+                              onChange: ({currentValue}) => null,
+                              type: 'Default',
+                              data: {
+                                // formGroupConfig: [],
+                                // formControlConfig: {
+                                //   field: '_',
+                                //   type: 'FormArray',
+                                // },
+                                // formArrayConfig: [],
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  {
+    field: 'age',
+    type: 'Default',
+    onChange: ({ currentValue, control }) => {
+      return;
+    },
+    value: 3,
+    // data: {
+    //   inputType: 'text',
+    //   // title$: of(),
+    // },
+  },
+];
 
 // // TODO add json convertor
 // const obj = {

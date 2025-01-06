@@ -8,7 +8,7 @@ import { DatePipe } from '@angular/common';
 import { DateCellDataModel } from './date-cell-data.model';
 
 @Component({
-  selector: 'fnx-nx-app-date-cell',
+  selector: 'softbar-app-date-cell',
   //extends DefaultCellComponent html template
   templateUrl: '../default-cell/default-cell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

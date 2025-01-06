@@ -1,6 +1,6 @@
-import { User } from '@fnx-nx/api-interfaces';
+import { User } from '@softbar/api-interfaces';
 import { AppService } from './app.service';
-import { DynamicFormControl } from '@fnx-nx/front/dynamic-forms';
+import { DynamicFormControl } from '@softbar/front/dynamic-forms';
 import { ApiCustomResponse } from '../shared/decorators/api-paginated-response.decorator';
 import { ApiResponse } from '@nestjs/swagger';
 import { ResponseDto } from '../shared/dto/response.dto';

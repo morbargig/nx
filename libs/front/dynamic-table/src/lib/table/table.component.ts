@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { ITableColumn } from './cell-components/cell-components';
 import { ChangeDetectorRef } from '@angular/core';
-import { LazyLoadEvent } from '@fnx-nx/api-interfaces';
+import { LazyLoadEvent } from './components/table-filters/lazy-load-event.type';
 
 export type tableElStyleObj = {
   styleClass?: string;
@@ -27,7 +27,7 @@ type tableElements = 'table' | 'thead' | 'tr' | 'th' | 'td' | 'tbody';
 export type tableBodyStylesObj = tableElementsStyleObj<tableElements>;
 
 @Component({
-  selector: 'fnx-nx-app-table',
+  selector: 'softbar-app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

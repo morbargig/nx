@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { JsonPrimitive } from '@fnx-nx/api-interfaces';
+import { JsonPrimitive } from '@softbar/api-interfaces';
 import {
   LazyLoadEvent,
   FilterInsideObject,

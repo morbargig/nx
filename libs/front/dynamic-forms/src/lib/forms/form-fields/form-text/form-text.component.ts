@@ -5,7 +5,7 @@ import { BaseFieldComponentDirective } from '../../core/directives/base-field.di
 import { FormTextData } from './form-text';
 import { FormControl } from '@angular/forms';
 @Component({
-  selector: 'fnx-nx-app-form-text',
+  selector: 'softbar-app-form-text',
   templateUrl: './form-text.component.html',
   styleUrls: ['./form-text.component.scss'],
 })
