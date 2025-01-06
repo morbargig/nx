@@ -1,0 +1,40 @@
+name: Update All README Files Dynamically
+
+on:
+  push:
+    paths:
+      - '**/README.md'  # This will match any README.md file in any directory
+
+jobs:
+  update-readmes:
+    runs-on: ubuntu-latest  # or self-hosted if you have a custom runner
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get the current branch and repository information
+        run: |
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Repository URL: https://github.com/${{ github.repository }}"
+
+      - name: Update all README.md files
+        run: |
+          # Loop over all README.md files in the repository
+          for readme in $(find . -type f -name 'README.md'); do
+            echo "Updating $readme"
+            
+            # Get the current branch and repository URL
+            BRANCH=${{ github.ref_name }}
+            REPO_URL="https://github.com/${{ github.repository }}"
+
+            # Replace placeholder with the branch name and repository URL
+            sed -i "s|{{BRANCH}}|$BRANCH|g" "$readme"
+            sed -i "s|{{REPO_URL}}|$REPO_URL|g" "$readme"
+          done
+
+          # Commit the changes
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add '**/README.md'
+          git commit -m "Updated all README.md files with branch and repository URL" || echo "No changes to commit"
+          git push
