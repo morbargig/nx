@@ -24,8 +24,8 @@ Supported file formats: .png, .svg, .html and .xml (default)
 
 #### locale:
 
-[JSON structure diagram](./json-structure-diagram.drawio)
-[JSON structure diagram](https://app.diagrams.net/?url=../../raw/HEAD/json-structure-diagram.drawio)
+[JSON structure diagram](./json-structure-diagram.dio)
+[JSON structure diagram](https://app.diagrams.net/?url=../../raw/HEAD/json-structure-diagram.dio)
 
 #### remote:
 
