@@ -28,6 +28,8 @@ Supported file formats: .png, .svg, .html and .xml (default)
 <br>
 <a href="https://app.diagrams.net/#H{{REPO_URL}}{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio" target="_blank" >Edit</a>
 
+
+
 {{BRANCH}}
 {{REPO_URL}}
 
