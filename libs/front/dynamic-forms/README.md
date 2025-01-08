@@ -67,8 +67,8 @@ this is the typescript interface of how to build any
 valid form using the Agent form-builder and angular-reactive-forms
 
 now lets take a look about the wizard typescript interface
-{{BRANCH}}
-{{REPO_URL}}
+main
+https://github.com/morbargig/nx
 
 [WizardPageConfig](./src/lib/forms/core/interfaces/step-form-group.ts)
 
