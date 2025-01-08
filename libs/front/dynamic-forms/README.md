@@ -32,7 +32,6 @@ Now, let's look on the JSON data which the wizard should represent:
 <br>
 <a href="https://app.diagrams.net/#H{{REPO_PATH}}/{{BRANCH}}/libs/front/dynamic-forms/wizard-structure-diagram.drawio.svg" target="_blank" >Edit</a>
 
-
 ```json
 // wizard object
 {
