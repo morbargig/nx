@@ -24,9 +24,14 @@ Supported file formats: .png, .svg, .html and .xml (default)
 
 #### locale:
 
-![Diagram]({{REPO_URL}}/blob/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.svg)
+![Diagram]({{REPO_URL}}/blob/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio.svg)
 <br>
-<a href="https://app.diagrams.net/#H{{REPO_PATH}}/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.svg" target="_blank" >Edit</a>
+<a href="https://app.diagrams.net/#H{{REPO_PATH}}/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio.svg" target="_blank" >Edit</a>
+
+![Diagram](https://github.com/morbargig/CV-mfe-micro-front-end/blob/main/diagram.drawio.svg)
+<br>
+<a href="https://app.diagrams.net/#Hmorbargig%2FCV-mfe-micro-front-end%2Fmain%2Fdiagram.drawio.svg" target="_blank" >Edit</a>
+
 
 {{BRANCH}}
 {{REPO_URL}}
@@ -44,6 +49,9 @@ Now, let's look on the JSON data which the wizard should represent:
 #### remote:
 
 [Wizard structure diagram](https://github.morbargig/nx?path=libs/front/dynamic-forms/wizard-structure-diagram.drawio&_a=preview)
+
+
+
 
 ```json
 // wizard object
