@@ -38,5 +38,5 @@ jobs:
           # Use the MY_GITHUB_TOKEN to authenticate for pushing
           git add '**/README.md'
           git commit -m "Updated all README.md files with branch and repository URL" || echo "No changes to commit 22"
-          git push https://x-access-token:${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
-          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
+          git push origin ${{ github.ref_name }} || echo "No changes to push 22"
