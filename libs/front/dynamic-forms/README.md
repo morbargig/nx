@@ -14,15 +14,15 @@ First, we will start with the basic concept of JSON structure. An object continu
 2. Object which will recourse the state
 3. Array will point on list of (primitive, object, array) which can recourse the state
 
-![JSON structure diagram]({{REPO_URL}}/blob/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio.svg)
+![JSON structure diagram](https://github.com/morbargig/nx/blob/main/libs/front/dynamic-forms/json-structure-diagram.drawio.svg)
 <br>
-<a href="https://app.diagrams.net/#H{{REPO_PATH}}/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio.svg" target="_blank" >Edit</a>
+<a href="https://app.diagrams.net/#Hmorbargig/nx/main/libs/front/dynamic-forms/json-structure-diagram.drawio.svg" target="_blank" >Edit</a>
 
 Now, let's look on the JSON data which the wizard should represent:
 
-![Wizard structure diagram]({{REPO_URL}}/blob/{{BRANCH}}/libs/front/dynamic-forms/wizard-structure-diagram.drawio.svg)
+![Wizard structure diagram](https://github.com/morbargig/nx/blob/main/libs/front/dynamic-forms/wizard-structure-diagram.drawio.svg)
 <br>
-<a href="https://app.diagrams.net/#H{{REPO_PATH}}/{{BRANCH}}/libs/front/dynamic-forms/wizard-structure-diagram.drawio.svg" target="_blank" >Edit</a>
+<a href="https://app.diagrams.net/#Hmorbargig/nx/main/libs/front/dynamic-forms/wizard-structure-diagram.drawio.svg" target="_blank" >Edit</a>
 
 ```json
 // wizard object
