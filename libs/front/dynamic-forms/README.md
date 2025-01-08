@@ -24,9 +24,12 @@ Supported file formats: .png, .svg, .html and .xml (default)
 
 #### locale:
 
-[JSON structure diagram 1](./json-structure-diagram.drawio)
-[JSON structure diagram 2](https://app.diagrams.net/?url=./json-structure-diagram.drawio)
-[JSON structure diagram 3](https://app.diagrams.net/?url=raw/HEAD/json-structure-diagram.drawio)
+![Diagram]({{REPO_URL}}/blob/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio)
+<br>
+<a href="https://app.diagrams.net/#H{{REPO_URL}}{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio" target="_blank" >Edit</a>
+
+{{BRANCH}}
+{{REPO_URL}}
 
 #### remote:
 
@@ -67,8 +70,6 @@ this is the typescript interface of how to build any
 valid form using the Agent form-builder and angular-reactive-forms
 
 now lets take a look about the wizard typescript interface
-{{BRANCH}}
-{{REPO_URL}}
 
 [WizardPageConfig](./src/lib/forms/core/interfaces/step-form-group.ts)
 
