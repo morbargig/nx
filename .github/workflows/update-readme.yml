@@ -26,9 +26,11 @@ jobs:
             # Get the current branch and repository URL
             BRANCH=${{ github.ref_name }}
             REPO_URL="https://github.com/${{ github.repository }}"
+            REPO_PATH="${{ github.repository }}"
 
             # Replace placeholder with the branch name and repository URL
             sed -i "s|{{BRANCH}}|$BRANCH|g" "$readme"
+            sed -i "s|{{REPO_PATH}}|$REPO_PATH|g" "$readme"
             sed -i "s|{{REPO_URL}}|$REPO_URL|g" "$readme"
           done
 

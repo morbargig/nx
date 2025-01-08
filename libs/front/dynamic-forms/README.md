@@ -26,7 +26,7 @@ Supported file formats: .png, .svg, .html and .xml (default)
 
 ![Diagram]({{REPO_URL}}/blob/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio)
 <br>
-<a href="https://app.diagrams.net/#H{{REPO_URL}}/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio" target="_blank" >Edit</a>
+<a href="https://app.diagrams.net/#H{{REPO_PATH}}/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio" target="_blank" >Edit</a>
 
 
 
