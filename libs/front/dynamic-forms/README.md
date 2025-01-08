@@ -24,9 +24,9 @@ Supported file formats: .png, .svg, .html and .xml (default)
 
 #### locale:
 
-![Diagram]({{REPO_URL}}/blob/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio)
+![Diagram]({{REPO_URL}}/blob/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.svg)
 <br>
-<a href="https://app.diagrams.net/#H{{REPO_PATH}}/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.drawio" target="_blank" >Edit</a>
+<a href="https://app.diagrams.net/#H{{REPO_PATH}}/{{BRANCH}}/libs/front/dynamic-forms/json-structure-diagram.svg" target="_blank" >Edit</a>
 
 {{BRANCH}}
 {{REPO_URL}}
