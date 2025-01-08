@@ -37,6 +37,6 @@ jobs:
           git config --local user.email "morbargig@gmail.com"
           # Use the MY_GITHUB_TOKEN to authenticate for pushing
           git add '**/README.md'
-          git commit -m "Updated all README.md files with branch and repository URL" || echo "No changes to commit 22"
+          git commit -m "Updated all README.md files with branch and repository URL" || echo "No changes to commit"
           git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} 
           git push origin ${{ github.ref_name }} || echo "No changes to push 22"
