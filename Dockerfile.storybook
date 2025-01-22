@@ -12,7 +12,3 @@ FROM nginx:1.17.1-alpine
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /usr/src/app/dist/storybook/front-dynamic-forms /usr/share/nginx/html
 EXPOSE 8080
-
-# COPY if [ "$BASE_IMAGE" = "external" ] ; then COPY --from=BUILD $TMP_LOCATION/*.properties $DEPLOYMENT_LOCATION \
-# 			   ; COPY --from=BUILD $TMP_LOCATION/*.xml $DEPLOYMENT_LOCATION \
-# 			   ; COPY standalone.conf /opt/wildfly/bin ; fi
