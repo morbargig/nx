@@ -6,15 +6,20 @@ import {
   OnInit,
   ChangeDetectorRef,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BaseFieldComponentDirective } from '../../core/directives/base-field.directive';
 import { FormRadioData } from './form-radio-data';
+import { DynamicComponentComponent } from '../../core/components/dynamic-component/dynamic-component.component';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'softbar-app-form-button',
   templateUrl: './form-radio.component.html',
   styleUrls: ['./form-radio.component.scss'],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports:[DynamicComponentComponent,MatRadioGroup,MatRadioButton,ReactiveFormsModule,CommonModule]
 })
 export class FormRadioComponent<T = any, K extends keyof T = keyof T>
   extends BaseFieldComponentDirective<T, FormRadioData<T, K>, K, FormControl>

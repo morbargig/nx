@@ -3,7 +3,7 @@ import { User } from '../../api-interfaces';
 import { controlType } from './controllers';
 
 export const BFF_APP_CONTROL_ROUTES = {
-  hatcheck: {
+  'health-check': {
     method: 'get',
     response: null as boolean,
   },

@@ -9,18 +9,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/front/dynamic-table"],
       "options": {
-        "jestConfig": "libs/front/dynamic-table/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/front/dynamic-table/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/front/dynamic-table/**/*.ts",
-          "libs/front/dynamic-table/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": []

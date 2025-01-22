@@ -1,2 +1,2 @@
-export * from './lib/front-dynamic-forms.module';
-// export * from './lib/front-dynamic-forms-table.module';
+// export * from './lib/front-dynamic-forms.module';
+export * from './lib/forms'

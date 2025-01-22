@@ -6,16 +6,18 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import type { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { debounceTime, takeWhile } from 'rxjs/operators';
-import {
+import type {
   BaseFieldData,
   Field,
   FieldConfigObj,
   FiledParentControl,
 } from '../interfaces/field-config';
 
-@Directive()
+@Directive({
+  standalone:true
+})
 export abstract class BaseFieldComponentDirective<
   T = any,
   D extends BaseFieldData<T, K> = BaseFieldData<T>,

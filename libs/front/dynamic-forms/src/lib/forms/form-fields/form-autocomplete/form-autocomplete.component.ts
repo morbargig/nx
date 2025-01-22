@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, scan, tap } from 'rxjs/operators';
 import { BaseFieldComponentDirective } from '../../core/directives/base-field.directive';
@@ -7,11 +7,18 @@ import { KeyValuePair } from '../../core/interfaces/key-value-pair';
 import { FormAutocompleteData } from './form-autocomplete-data';
 import { debounceTime, filter, startWith, switchMap } from 'rxjs/operators';
 import { LazyLoadEvent } from '../../core/interfaces/lazy-load-event';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { OptionsScrollDirective } from '../../core/directives/options-scroll.directive';
+import { HighlighterPipe } from '../../core/pipes/highlighter.pipe';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'softbar-form-autocomplete',
+  standalone: true,
   templateUrl: './form-autocomplete.component.html',
   styleUrls: ['./form-autocomplete.component.scss'],
+  imports:[AsyncPipe, MatFormFieldModule,ReactiveFormsModule,MatAutocompleteModule,OptionsScrollDirective,HighlighterPipe]
 })
 export class FormAutocompleteComponent<T = any, K extends keyof T = keyof T>
   extends BaseFieldComponentDirective<
@@ -27,7 +34,7 @@ export class FormAutocompleteComponent<T = any, K extends keyof T = keyof T>
   override ngOnInit(): void {
     super.ngOnInit();
     // this.getInitList();
-    this.data.getOption;
+    // this.data.getOption;
     // Note: listen for search text changes
     const filter$: Observable<string> = this.control?.valueChanges.pipe(
       startWith(''),

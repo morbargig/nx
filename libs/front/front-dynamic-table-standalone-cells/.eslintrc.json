@@ -9,7 +9,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "fnxNx",
+            "prefix": "softBar",
             "style": "camelCase"
           }
         ],

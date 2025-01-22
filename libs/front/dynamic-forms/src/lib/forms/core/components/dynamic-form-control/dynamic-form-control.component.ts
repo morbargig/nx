@@ -22,17 +22,25 @@ import { FieldEvent } from '../../interfaces/events';
 import { BaseFieldComponentDirective } from '../../directives/base-field.directive';
 import { merge, tap, Observable, BehaviorSubject } from 'rxjs';
 import { OnInit, AfterViewInit } from '@angular/core';
-import {
-  DynamicFormControl,
+import  {
   FormFieldsDic,
   FormFieldType,
   lazyFieldLoadConfigure,
 } from '../../interfaces/field-config';
+import type {
+  DynamicFormControl,
+} from '../../interfaces/field-config';
+import { CommonModule } from '@angular/common';
+import { SafePipe } from '../../pipes/safe.pipe';
+import { DynamicFieldDirective } from '../../directives/dynamic-field.directive';
+import { ValidationMessagesComponent } from '../validation-messages/validation-messages.component';
 @Component({
   selector: 'softbar-dynamic-form-control',
+  standalone: true,
   templateUrl: './dynamic-form-control.component.html',
   styleUrls: ['./dynamic-form-control.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports:[CommonModule,SafePipe,DynamicFieldDirective,ValidationMessagesComponent]
 })
 export class DynamicFormControlComponent<T = any>
   implements OnInit, AfterViewInit, OnDestroy

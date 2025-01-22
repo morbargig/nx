@@ -5,7 +5,7 @@ import { MatAutocomplete } from '@angular/material/autocomplete';
 describe('OptionsScrollDirective', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MatAutocomplete],
+      imports: [MatAutocomplete],
     }).compileComponents();
   });
 

@@ -21,9 +21,10 @@ import { DynamicFormBuilderService } from '../services/dynamic-form-builder.serv
 import { firstValueFrom, timer } from 'rxjs';
 
 @Directive({
-  selector: '[fnxNxDynamicField]',
+  standalone: true,
+  selector: '[softBarDynamicField]',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['id', 'parentForm', 'config: fnxNxDynamicField'],
+  inputs: ['id', 'parentForm', 'config: softBarDynamicField'],
 })
 export class DynamicFieldDirective<
     T = any,

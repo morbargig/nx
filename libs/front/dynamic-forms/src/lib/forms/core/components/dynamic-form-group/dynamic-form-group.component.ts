@@ -8,15 +8,20 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { FormGroup, ValidatorFn } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { DynamicFormStepMode } from '../../interfaces/dynamic-stepped-form';
 import { DynamicFormControl } from '../../interfaces/field-config';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder.service';
+import { CommonModule } from '@angular/common';
+import { DynamicFormControlComponent } from '../dynamic-form-control/dynamic-form-control.component';
+import { ValidationMessagesComponent } from '../validation-messages/validation-messages.component';
 
 @Component({
   selector: 'softbar-app-dynamic-form-group',
+  standalone: true,
   templateUrl: './dynamic-form-group.component.html',
   styleUrls: ['./dynamic-form-group.component.scss'],
+  imports:[CommonModule,ReactiveFormsModule,DynamicFormControlComponent,ValidationMessagesComponent]
 })
 export class DynamicFormGroupComponent<T = any> implements OnInit {
   @ViewChild('submitBtn', { static: false })

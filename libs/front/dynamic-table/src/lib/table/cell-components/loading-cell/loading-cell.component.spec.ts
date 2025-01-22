@@ -8,7 +8,7 @@ describe('LoadingCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoadingCellComponent],
+      imports: [LoadingCellComponent],
     }).compileComponents();
 
     fixture =

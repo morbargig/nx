@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ViewContainerRef } from '@angular/core';
 import {
   Directive,
@@ -11,15 +9,14 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[fnxNxDynamicComponent]',
-  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  // inputs: ['type: fnxNxDynamicComponent'],
+  selector: '[softBarDynamicComponent]',
+  standalone: true,
 })
 export class DynamicComponentDirective<T = any, C extends Type<T> = Type<T>>
   implements OnInit, OnDestroy
 {
   public component: ComponentRef<T>;
-  @Input() public fnxNxDynamicComponent: C;
+  @Input() public softBarDynamicComponent: C;
   @Input() public data: T;
 
   constructor(
@@ -35,11 +32,11 @@ export class DynamicComponentDirective<T = any, C extends Type<T> = Type<T>>
   }
 
   private createComponent() {
-    if (!this.fnxNxDynamicComponent) {
+    if (!this.softBarDynamicComponent) {
       return;
     }
     this.component = this.container.createComponent<T>(
-      this.fnxNxDynamicComponent
+      this.softBarDynamicComponent
     );
     Object.keys(this.data || {})?.forEach(
       (k) => (this.component.instance[k] = this.data?.[k])

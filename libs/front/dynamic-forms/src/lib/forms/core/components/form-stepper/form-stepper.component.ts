@@ -10,13 +10,16 @@ import { CdkStepper, CdkStep } from '@angular/cdk/stepper';
 import { Directionality } from '@angular/cdk/bidi';
 import { NumRange } from '../../interfaces';
 import { DynamicSteppedForm } from '../../interfaces/dynamic-stepped-form';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'softbar-app-form-stepper',
   templateUrl: './form-stepper.component.html',
+  standalone: true,
   styleUrls: ['./form-stepper.component.scss'],
   encapsulation: ViewEncapsulation.None,
   providers: [{ provide: CdkStepper, useExisting: FormStepperComponent }],
+  imports:[CommonModule]
 })
 export class FormStepperComponent extends CdkStepper {
   @HostBinding('class') public class: string = ((ngClass = 'block h-full') =>

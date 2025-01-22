@@ -3,14 +3,15 @@ import { DynamicComponentDirective } from '../../directives/dynamic-component.di
 
 @Component({
   selector: 'softbar-dynamic-component',
+  standalone: true,
   templateUrl: './dynamic-component.component.html',
   styleUrls: ['./dynamic-component.component.scss'],
+  imports:[DynamicComponentDirective]
 })
 export class DynamicComponentComponent<T = any>
-  implements Pick<DynamicComponentDirective, 'fnxNxDynamicComponent' | 'data'>
+  implements Pick<DynamicComponentDirective, 'softBarDynamicComponent' | 'data'>
 {
-  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('dynamicComponent')
-  fnxNxDynamicComponent: DynamicComponentDirective<T>['fnxNxDynamicComponent'];
+  softBarDynamicComponent: DynamicComponentDirective<T>['softBarDynamicComponent'];
   @Input() data: DynamicComponentDirective<T>['data'];
 }

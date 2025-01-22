@@ -16,7 +16,8 @@ import {
   takeWhile,
 } from 'rxjs/operators';
 import { merge } from 'rxjs';
-import { KeyValue } from '@angular/common';
+import { CommonModule, KeyValue } from '@angular/common';
+import { MatError } from '@angular/material/form-field';
 
 export interface TranslateSelectItem {
   /**
@@ -56,7 +57,9 @@ type supportedDefaultValuationsErrors =
   selector: 'softbar-app-validation-messages',
   templateUrl: './validation-messages.component.html',
   styleUrls: ['./validation-messages.component.scss'],
+  standalone :  true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports:[CommonModule,MatError]
 })
 export class ValidationMessagesComponent implements OnInit, OnDestroy {
   public errorMessages: TranslateSelectItem[];

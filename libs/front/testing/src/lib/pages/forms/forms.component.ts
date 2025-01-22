@@ -2,11 +2,16 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators, AbstractControl } from '@angular/forms';
 import {
   DynamicFormBuilderService,
+  DynamicFormControlComponent,
+  DynamicFormGroupComponent
+} from '@softbar/front/dynamic-forms';
+import type {
   DynamicFormControl,
 } from '@softbar/front/dynamic-forms';
 import { firstValueFrom, timer } from 'rxjs';
-import { JsonObject } from '@softbar/api-interfaces';
+import type { JsonObject } from '@softbar/api-interfaces';
 import { FormsApiService } from './services/forms-api.service';
+import { CommonModule } from '@angular/common';
 
 export interface User {
   job: {
@@ -37,6 +42,12 @@ export interface User {
   selector: 'softbar-forms',
   templateUrl: './forms.component.html',
   styleUrls: ['./forms.component.scss'],
+  standalone:true,
+  imports:[
+    CommonModule,
+    DynamicFormControlComponent,
+    DynamicFormGroupComponent,
+    ]
 })
 export class FormsComponent implements OnInit {
   constructor(

@@ -4,7 +4,7 @@ import { SafePipe } from './safe.pipe';
 
 const DIRECTIVES: NgModule['declarations'] = [LogPipe, SafePipe];
 @NgModule({
-  declarations: [...DIRECTIVES],
+  imports: [...DIRECTIVES],
   exports: [...DIRECTIVES],
 })
 export class FrontDynamicFormsPipeModule {}

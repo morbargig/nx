@@ -3,17 +3,23 @@ import {
   ChangeDetectorRef,
   Component,
   HostBinding,
+  NgModule,
   OnInit,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormSelectData } from './form-select';
 import { BaseFieldComponentDirective } from '../../core/directives/base-field.directive';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'softbar-app-form-select',
   templateUrl: './form-select.component.html',
   styleUrls: ['./form-select.component.scss'],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports:[MatFormFieldModule,MatSelectModule,ReactiveFormsModule,NgClass]
   // encapsulation: ViewEncapsulation.None,
 })
 export class FormSelectComponent<T = any, K extends keyof T = keyof T>

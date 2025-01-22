@@ -9,18 +9,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/front/dynamic-forms"],
       "options": {
-        "jestConfig": "libs/front/dynamic-forms/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/front/dynamic-forms/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/front/dynamic-forms/**/*.ts",
-          "libs/front/dynamic-forms/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     },
     "storybook": {
       "executor": "@storybook/angular:start-storybook",

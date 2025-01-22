@@ -3,9 +3,14 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { BaseFieldComponentDirective } from '../../core/directives/base-field.directive';
 import { FormTextData } from './form-text';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule, NgClass } from '@angular/common';
+import { MatHint } from '@angular/material/form-field';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 @Component({
   selector: 'softbar-app-form-text',
+  standalone: true,
+  imports:[CommonModule,ReactiveFormsModule,MatHint,CdkTextareaAutosize],
   templateUrl: './form-text.component.html',
   styleUrls: ['./form-text.component.scss'],
 })

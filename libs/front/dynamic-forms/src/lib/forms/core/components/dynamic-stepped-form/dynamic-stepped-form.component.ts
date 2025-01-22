@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   ChangeDetectorRef,
   Component,
@@ -13,7 +11,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
 import { DynamicSteppedForm } from '../../interfaces/dynamic-stepped-form';
-import { CdkStepper } from '@angular/cdk/stepper';
+import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { Directionality } from '@angular/cdk/bidi';
 import { BehaviorSubject, firstValueFrom, timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
@@ -21,10 +19,18 @@ import { StepperService } from '../../services/stepper.service';
 import { range } from 'lodash-es';
 import { StepFormGroup } from '../../interfaces/step-form-group';
 import { AbstractControl } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ValidationMessagesComponent } from '../validation-messages/validation-messages.component';
+import { FormStepperComponent } from '../form-stepper/form-stepper.component';
+import { DynamicFormGroupComponent } from '../dynamic-form-group/dynamic-form-group.component';
+import { SafePipe } from '../../pipes/safe.pipe';
+
 @Component({
   selector: 'softbar-app-dynamic-stepped-form',
+  standalone :  true,
   templateUrl: './dynamic-stepped-form.component.html',
   styleUrls: ['./dynamic-stepped-form.component.scss'],
+  imports:[CommonModule,CdkStepperModule,ValidationMessagesComponent,FormStepperComponent,DynamicFormGroupComponent,SafePipe]
 })
 export class DynamicSteppedFormComponent
   extends CdkStepper

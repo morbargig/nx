@@ -1,8 +1,7 @@
 import { Routes } from '@angular/router';
-import { AppComponent } from './app.component';
 
 export const ROUTES: Routes = [
-  // { path: '', component: AppComponent },
+  { path: '', loadComponent: ()=>  import('./app.component').then(m => m.AppComponent) },
   {
     path: 'testing',
     // canLoad:[],

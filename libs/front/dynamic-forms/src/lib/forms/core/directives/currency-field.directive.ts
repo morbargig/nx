@@ -10,7 +10,8 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Directive({
-  selector: '[fnxNxCurrencyFormatter]',
+  selector: '[softBarCurrencyFormatter]',
+  standalone: true,
 })
 export class CurrencyFormatterDirective implements OnDestroy, AfterViewInit {
   private static formatter: Intl.NumberFormat = new Intl.NumberFormat('he-IL', {

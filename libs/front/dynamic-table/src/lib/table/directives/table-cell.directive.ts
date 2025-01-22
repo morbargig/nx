@@ -18,11 +18,11 @@ import {
 import { BaseCellComponent } from './base-cell.directive';
 
 @Directive({
-  selector: '[fnxNxTableCell]',
+  selector: '[softBarTableCell]',
 })
 export class TableCellDirective<T = any> implements ITableCell<T>, OnInit {
   public component: ComponentRef<ITableCell<T>>;
-  @Input('fnxNxTableCell') public col: ITableColumn<T>;
+  @Input('softBarTableCell') public col: ITableColumn<T>;
   @Input() public item: T;
   @Output() public extends: EventEmitter<boolean> = new EventEmitter<boolean>();
 

@@ -1,19 +1,22 @@
-/* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArrayData } from './form-array';
-import { AbstractControlOptions, FormArray, FormGroup } from '@angular/forms';
+import { AbstractControlOptions, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BaseFieldComponentDirective } from '../../core/directives/base-field.directive';
 import { DynamicFormControl } from '../../core/interfaces/field-config';
 import { DynamicFormStepMode } from '../../core/interfaces/dynamic-stepped-form';
 import { DynamicFormBuilderService } from '../../core/services/dynamic-form-builder.service';
 import { FormControl } from '@angular/forms';
 import { timer, firstValueFrom } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { DynamicFormControlComponent } from '../../core/components/dynamic-form-control/dynamic-form-control.component';
+import { ValidationMessagesComponent } from '../../core/components/validation-messages/validation-messages.component';
 
 @Component({
   selector: 'softbar-app-form-array',
+  standalone: true,
   templateUrl: './form-array.component.html',
   styleUrls: ['./form-array.component.scss'],
+  imports:[CommonModule,ReactiveFormsModule,DynamicFormControlComponent,ValidationMessagesComponent]
 })
 export class FormArrayComponent<T = any, K extends keyof T = keyof T>
   extends BaseFieldComponentDirective<T, FormArrayData<T, K>, K, FormArray>

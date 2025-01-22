@@ -1,9 +1,25 @@
 {
   "recommendations": [
     "angular.ng-template",
-    "nrwl.angular-console",
-    "esbenp.prettier-vscode",
+    "streetsidesoftware.code-spell-checker",
+    "hediet.vscode-drawio",
+    "dbaeumer.vscode-eslint",
+    "ambooth.git-rename",
+    "eamodio.gitlens",
+    "oderwat.indent-rainbow",
     "firsttris.vscode-jest-runner",
-    "dbaeumer.vscode-eslint"
+    "ms-vscode.makefile-tools",
+    "pkief.material-icon-theme",
+    "quicktype.quicktype",
+    "esbenp.prettier-vscode",
+    "cipchk.cssrem",
+    "natqe.reload",
+    "bradlc.vscode-tailwindcss",
+    "pmneo.tsimporter",
+    "zignd.html-css-class-completion",
+    "nrwl.angular-console",
+    "gruntfuggly.todo-tree",
+    "2gua.rainbow-brackets",
+    "ms-vscode-remote.remote-containers"
   ]
 }

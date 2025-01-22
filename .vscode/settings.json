@@ -1,0 +1,9 @@
+{
+  "svn.ignoreMissingSvnWarning": true,
+  "cSpell.words": ["integ", "preprod", "unlistener", "Workato"],
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript"
+  },
+  "makefile.configureOnOpen": false
+  // ,"tailwindCSS.experimental.classRegex": [["/\\*tw\\*/ ([^;]*);", "'([^']*)'"]]
+}

@@ -7,9 +7,7 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "allowedCommonJsDependencies": [],
         "outputPath": "dist/apps/main-app",
@@ -36,9 +34,7 @@
             "output": "assets/front/dynamic-table"
           }
         ],
-        "styles": [
-          "apps/main-app/src/styles.scss"
-        ],
+        "styles": ["apps/main-app/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -79,10 +75,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "main-app:build:production"
+          "buildTarget": "main-app:build:production"
         },
         "development": {
-          "browserTarget": "main-app:build:development"
+          "buildTarget": "main-app:build:development"
         }
       },
       "defaultConfiguration": "development",
@@ -93,26 +89,17 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "main-app:build"
+        "buildTarget": "main-app:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "apps/main-app/**/*.ts",
-          "apps/main-app/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/apps/main-app"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/apps/main-app"],
       "options": {
-        "jestConfig": "apps/main-app/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "apps/main-app/jest.config.ts"
       },
       "storybook": {
         "executor": "@storybook/angular:start-storybook",
@@ -130,9 +117,7 @@
       },
       "build-storybook": {
         "executor": "@storybook/angular:build-storybook",
-        "outputs": [
-          "{options.outputPath}"
-        ],
+        "outputs": ["{options.outputPath}"],
         "options": {
           "outputDir": "dist/storybook/main-app",
           "configDir": "apps/main-app/.storybook",

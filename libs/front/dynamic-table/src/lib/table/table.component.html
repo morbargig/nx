@@ -162,7 +162,7 @@
                 </ng-template>
                 <ng-container
                   *ngIf="!colTempRef; else colTempRefTemp"
-                  [fnxNxTableCell]="col"
+                  [softBarTableCell]="col"
                   [item]="item"
                   (extends)="
                     (!!extendsColumns?.length || !!getExtendsColumnsArr) &&
@@ -225,7 +225,7 @@
               [attr.aria-label]="col.label"
             >
               <div class="extends-div">
-                <ng-container [fnxNxTableCell]="col" [item]="extendItem">
+                <ng-container [softBarTableCell]="col" [item]="extendItem">
                 </ng-container>
               </div>
             </td>
@@ -274,7 +274,7 @@
                 [ngClass]="{ inActive: !panelOpenState[i] }"
               >
                 <div class="extends-div">
-                  <ng-container [fnxNxTableCell]="col" [item]="extendItem">
+                  <ng-container [softBarTableCell]="col" [item]="extendItem">
                   </ng-container>
                 </div>
               </td>

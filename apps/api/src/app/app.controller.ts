@@ -19,8 +19,8 @@ export class AppController implements ControllerApiType {
   @ApiResponse({
     type: 'boolean',
   })
-  @Get('hatcheck')
-  hatcheck(): boolean {
+  @Get('health-check')
+  healthCheck(): boolean {
     return true;
   }
 

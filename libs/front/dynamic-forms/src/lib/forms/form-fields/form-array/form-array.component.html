@@ -1,10 +1,3 @@
-<div
-  *ngIf="parentForm"
-  class="dynamic-field form-input"
-  style="border: 1px solid black"
-  [formGroup]="$any(parentForm)"
->
-  <!-- {{ parentForm | log }} -->
   <table class="table" style="margin: 0">
     <ng-container
       *ngIf="
@@ -328,7 +321,6 @@
       </tbody>
     </ng-container>
   </table>
-</div>
 
 <ng-template #defaultFormArrayValidationMessages>
   <softbar-app-validation-messages
@@ -395,4 +387,4 @@
       [showCancelButton]="true" cancelText="Reset" [submitText]="'Apply'" (onSubmit)="applyFilters($event)"
       (onCancel)="resetFilters()">
     </ideo-dynamic-form-group>
-  </ng-template> -->
+  </ng-template> --> 

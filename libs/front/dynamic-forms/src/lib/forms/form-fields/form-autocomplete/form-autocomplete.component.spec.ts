@@ -7,7 +7,7 @@ describe('FormAutocompleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FormAutocompleteComponent],
+      imports: [FormAutocompleteComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent<FormAutocompleteComponent<any>>(
