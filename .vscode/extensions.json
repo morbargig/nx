@@ -20,6 +20,7 @@
     "nrwl.angular-console",
     "gruntfuggly.todo-tree",
     "2gua.rainbow-brackets",
-    "ms-vscode-remote.remote-containers"
+    "ms-vscode-remote.remote-containers",
+    "openai.openai-chatgpt-adhoc"
   ]
 }

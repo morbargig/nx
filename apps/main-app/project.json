@@ -16,7 +16,6 @@
           "output": "404.html"
         },
         "main": "apps/main-app/src/main.ts",
-        "polyfills": "apps/main-app/src/polyfills.ts",
         "tsConfig": "apps/main-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "baseHref": "/nx/",

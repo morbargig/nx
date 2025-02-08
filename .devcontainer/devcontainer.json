@@ -6,6 +6,13 @@
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
 	"features": {
 		"ghcr.io/meaningful-ooo/devcontainer-features/fish:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"openai.openai-chatgpt-adhoc"
+			]
+		}
 	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.

@@ -1,10 +1,8 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "affected": {
-    "defaultBase": "main"
-  },
+  "defaultBase": "main",
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "pnpm"
   },
   "generators": {
     "@nx/angular:application": {
