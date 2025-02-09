@@ -1,0 +1,21 @@
+{
+  "name": "softbar-ngx-translate",
+ "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+   "sourceRoot": "libs/front/translate/src",
+  "prefix": "softbar",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "angular/translate/jest.config.ts"
+      }
+    },
+    
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

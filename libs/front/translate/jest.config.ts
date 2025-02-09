@@ -1,5 +1,5 @@
 export default {
-  displayName: 'front-dynamic-table',
+  displayName: 'softbar-ngx-translate',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   transform: {
