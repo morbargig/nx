@@ -224,6 +224,7 @@ export class FormsComponent implements OnInit {
       console.log('config:', this.config);
     });
   }
+  
   generate() {
     switch (this.selectedTab) {
       case Tabs.DynamicFormConfigJSON: {

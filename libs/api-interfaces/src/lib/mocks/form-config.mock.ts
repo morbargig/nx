@@ -1,5 +1,5 @@
 import { DynamicFormControl } from '@softbar/front/dynamic-forms';
-import { User } from '../api-interfaces';
+import { User } from './user';
 
 export const formConfig: DynamicFormControl<User>[] = [
   {
