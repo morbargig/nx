@@ -1,13 +1,7 @@
 {
-  "cSpell.words": [
-    "integ",
-    "preprod",
-    "softbar",
-    "unlistener",
-    "Workato"
-  ],
+  "cSpell.words": ["softbar"],
   "tailwindCSS.includeLanguages": {
     "typescript": "javascript"
-  },
+  }
   // ,"tailwindCSS.experimental.classRegex": [["/\\*tw\\*/ ([^;]*);", "'([^']*)'"]]
 }

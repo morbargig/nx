@@ -7,12 +7,7 @@ import {
 } from '@softbar/front/dynamic-forms';
 import type { DynamicFormControl } from '@softbar/front/dynamic-forms';
 import { firstValueFrom, timer, BehaviorSubject } from 'rxjs';
-import type {
-  JsonObject,
-  JsonType,
-  JsonValue,
-  User,
-} from '@softbar/api-interfaces';
+import type { JsonType, JsonValue, User } from '@softbar/api-interfaces';
 // import { FormsApiService } from './services/forms-api.service';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -119,12 +114,12 @@ export class FormsComponent implements OnInit {
     placeholder: JSON.stringify([
       {
         type: 'Default',
-        field: 'demo',
+        field: 'description',
         label: 'Description',
         placeholder: 'Description',
         data: { rows: 5 },
       },
-    ] as DynamicFormControl<{ demo: '' }>[]),
+    ] as DynamicFormControl<{ description: '' }>[]),
     validation: [Validators.required, Validators.minLength(10)],
     errorMessages: {
       required: 'Required',
@@ -224,7 +219,7 @@ export class FormsComponent implements OnInit {
       console.log('config:', this.config);
     });
   }
-  
+
   generate() {
     switch (this.selectedTab) {
       case Tabs.DynamicFormConfigJSON: {

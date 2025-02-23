@@ -26,8 +26,8 @@ async function bootstrap() {
 
   app.enableCors();
   app.use((req, res, next) => {
-    res.header('X-powered-by', 'Phoenix Power');
-    res.header('Server', 'Agents Server');
+    res.header('X-powered-by', 'Softbar Power');
+    res.header('Server', 'Demo-Api Server');
     res.header('Access-Control-Allow-Methods', 'GET,POST');
     // res.header('Access-Control-Allow-Origin', '*');
     // res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
@@ -53,16 +53,16 @@ bootstrap();
 
 function setupOpenApi(app: INestApplication, swaggerPath: string) {
   const docBuilderConfig = new DocumentBuilder()
-    .setTitle('Agents BFF (Backend for Frontend)')
+    .setTitle('Api')
     .setDescription(
       'Represents the middleware api services for the agents project'
     )
     .setVersion('1.0')
-    // // .addTag('Java Api', 'Java is a Rest Api for personal info project', {
-    // //   'description': "Java Swagger",
-    // //   url: `${serverConfig['java-api'].baseURL}:${serverConfig['java-api'].port || 80}/javaapi/swagger-ui.html`
+    // // .addTag('Api', 'Rest Api', {
+    // //   'description': "Api Swagger",
+    // //   url: `${serverConfig['api'].baseURL}:${serverConfig['api'].port || 80}/api/swagger-ui.html`
     // // })
-    // // .setExternalDoc('Dexter API', `${serverConfig['dexter-api'].baseURL}:${serverConfig['dexter-api'].port || 80}/dexterapi/swagger/`)
+    // // .setExternalDoc('API', `${serverConfig['api'].baseURL}:${serverConfig['api'].port || 80}/api/swagger/`)
     // .addBearerAuth(
     //   {
     //     type: 'http',
@@ -77,14 +77,10 @@ function setupOpenApi(app: INestApplication, swaggerPath: string) {
     .build();
   const document = SwaggerModule.createDocument(app, docBuilderConfig);
   const swaggerCustomOptions: SwaggerCustomOptions = {
-    customSiteTitle: 'Agents BFF Api',
+    customSiteTitle: 'Api',
     explorer: true,
     swaggerOptions: {
       persistAuthorization: true,
-      // oauth2RedirectUrl: 'http://localhost:4200/', // should come from server
-      // oauth: {
-      //   clientId: 'rerkOPlxNvRFsbOvAZUvuqEpEUgmOeYZ', // should come from server
-      // }
     },
   };
   SwaggerModule.setup(swaggerPath, app, document, swaggerCustomOptions);
