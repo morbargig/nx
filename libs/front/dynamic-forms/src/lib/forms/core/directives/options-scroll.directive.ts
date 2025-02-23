@@ -17,7 +17,7 @@ export interface IAutoCompleteScrollEvent {
   standalone: true,
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'mat-autocomplete[optionsScroll]',
-  // selector: '[softBarOptionsScroll]'
+  // selector: '[softbarOptionsScroll]'
 })
 export class OptionsScrollDirective implements OnDestroy {
   private _thresholdPercent = 0.8;

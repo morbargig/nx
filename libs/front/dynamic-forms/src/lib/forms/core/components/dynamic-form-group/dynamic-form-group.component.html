@@ -5,7 +5,7 @@
   class="dynamic-form-group {{ formCssClass }}"
   novalidate
 >
-  <div class="row {{ formRowCssClass }}">
+  <div class="{{ formRowCssClass }}">
     <ng-container *ngFor="let fieldConf of config">
       <softbar-dynamic-form-control
         *ngIf="fieldConf?.field"
@@ -18,28 +18,27 @@
       >
       </softbar-dynamic-form-control>
     </ng-container>
-    <div [ngClass]="{ 'mb-3': !!errorMessages }">
-      <softbar-app-validation-messages
-        *ngIf="!!validation?.length"
-        [control]="form"
-        [messages]="errorMessages"
-      >
-      </softbar-app-validation-messages>
-    </div>
+    <softbar-app-validation-messages
+      *ngIf="!!validation?.length"
+      [control]="form"
+      [messages]="errorMessages"
+      [ngClass]="{ 'mb-3': !!errorMessages }"
+    >
+    </softbar-app-validation-messages>
   </div>
   <ng-container *ngIf="!hideSubmitButton && !!form">
     <button
       role="button"
       *ngIf="!submitting; else submittingIndicator"
       [disabled]="!form.valid"
-      class="btn btn-default"
+      class="btn btn-default my-2"
       translate
       type="submit"
     >
-      {{ submitText || 'שמור' }}
+      {{ submitText || 'Save' }}
     </button>
     <ng-template #submittingIndicator>
-      <button [disabled]="true" class="btn btn-primary">
+      <button [disabled]="true" class="btn btn-primary my-2">
         <div class="lds-dual-ring"></div>
       </button>
     </ng-template>
@@ -47,10 +46,10 @@
   <button
     (click)="cancel()"
     *ngIf="!!showCancelButton && !!form"
-    class="btn btn-info"
+    class="btn btn-info mx-2 my-2"
     translate
     type="button"
   >
-    {{ cancelText || 'בטל' }}
+    {{ cancelText || 'Cancel' }}
   </button>
 </form>

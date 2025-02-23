@@ -16,6 +16,16 @@ import { FormGroupData } from '../../form-fields/form-group/form-group';
 })
 export class DynamicFormBuilderService {
   constructor(private fb: FormBuilder) {}
+  private splitAndCapitalize(str: string): string {
+    const words = str.match(/^[a-z]+|[A-Z][a-z]*/g) || [];
+    // Capitalize first word
+    if (words.length > 0) {
+      words[0] =
+        words[0].charAt(0).toUpperCase() + words[0].slice(1).toLowerCase();
+    }
+    return words.join(' ');
+  }
+
   buildChild<T = any>(c: DynamicFormControl<T>): AbstractControl {
     switch (c.type) {
       case 'FormArray': {
@@ -127,10 +137,17 @@ export class DynamicFormBuilderService {
         break;
       }
       case 'FormGroup': {
-        const config: DynamicFormControl[] = <DynamicFormControl[]>(
+        const configs: DynamicFormControl[] = <DynamicFormControl[]>(
           state.data?.formConfig
         );
-        return this.recursionBuildGroup(config);
+        const bodyStyle: DynamicFormControl['bodyStyle'] = {
+          label: {
+            styleClass: 'hidden',
+          },
+        };
+        return this.recursionBuildGroup(
+          configs.map((i) => ({ ...i, bodyStyle }))
+        );
         break;
       }
       default: {
@@ -151,9 +168,7 @@ export class DynamicFormBuilderService {
     ) =>
       ({
         field: l ? l : '_',
-        ...(l
-          ? { label: `${l?.[0]?.toString()?.toUpperCase()}${l.substring(1)}` }
-          : {}),
+        ...(l ? { label: this.splitAndCapitalize(l) } : {}),
         type: 'FormArray',
         data: {
           formControlConfig: {
@@ -187,9 +202,7 @@ export class DynamicFormBuilderService {
             field: l ? l : '_',
             ...(l
               ? {
-                  label: `${l?.[0]?.toString()?.toUpperCase()}${l.substring(
-                    1
-                  )}`,
+                  label: this.splitAndCapitalize(l),
                 }
               : {}),
             type: 'FormArray',
@@ -198,18 +211,23 @@ export class DynamicFormBuilderService {
             } as FormArrayData<{ _: string[] }>,
           } as DynamicFormControl;
         } else if (json?.[0] !== null) {
+          const bodyStyle: DynamicFormControl['bodyStyle'] = {
+            label: {
+              styleClass: 'hidden',
+            },
+          };
           return {
             field: l ? l : '_',
             ...(l
               ? {
-                  label: `${l?.[0]?.toString()?.toUpperCase()}${l.substring(
-                    1
-                  )}`,
+                  label: this.splitAndCapitalize(l),
                 }
               : {}),
             type: 'FormArray',
             data: {
-              formGroupConfig: this.fromJsonToConfigRecursion(json?.[0]),
+              formGroupConfig: this.fromJsonToConfigRecursion(json?.[0]).map(
+                (i) => ({ ...i, bodyStyle })
+              ),
             } as FormArrayData<{ _: object }>,
           } as DynamicFormControl;
         } else {
@@ -223,13 +241,12 @@ export class DynamicFormBuilderService {
   }
 
   fromJsonToConfigRecursion(json: JsonObject) {
-    // debugger;
     const returnDefault = (json: any, i: any) =>
       ({
         field: i,
         type: 'Default',
         value: json?.[i],
-        label: `${i?.[0]?.toString()?.toUpperCase()}${i.substring(1)}`,
+        label: this.splitAndCapitalize(i),
         data: {
           inputType: {
             string: 'text',
@@ -255,7 +272,7 @@ export class DynamicFormBuilderService {
           } else if (json?.[i] !== null) {
             return {
               field: i,
-              label: `${i?.[0]?.toString()?.toUpperCase()}${i.substring(1)}`,
+              label: this.splitAndCapitalize(i),
               type: 'FormGroup',
               data: {
                 formConfig: this.fromJsonToConfigRecursion(json?.[i] as any),

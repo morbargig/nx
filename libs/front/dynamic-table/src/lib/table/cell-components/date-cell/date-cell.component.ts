@@ -3,15 +3,19 @@ import {
   ChangeDetectorRef,
   Component,
 } from '@angular/core';
-import { DefaultCellComponent } from '../default-cell/default-cell.component';
+import {
+  DefaultCellComponent,
+  imports,
+} from '../default-cell/default-cell.component';
 import { DatePipe } from '@angular/common';
 import { DateCellDataModel } from './date-cell-data.model';
 
 @Component({
   selector: 'softbar-app-date-cell',
-  //extends DefaultCellComponent html template
   templateUrl: '../default-cell/default-cell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports,
 })
 export class DateCellComponent<
   T = any,
@@ -25,6 +29,9 @@ export class DateCellComponent<
     super(cd);
   }
   override generateDataValue() {
-    return this.datePipe.transform(super.generateDataValue(), this.data?.format ?? 'dd.MM.yy');
+    return this.datePipe.transform(
+      super.generateDataValue(),
+      this.data?.format ?? 'dd.MM.yy'
+    );
   }
 }

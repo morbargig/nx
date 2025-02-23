@@ -165,7 +165,7 @@ workspace.json
 <br>
 <a href="https://app.diagrams.net/#Hmorbargig%2Fnx%2Fmain%2FJenkins%2FJenkins.drawio.svg" target="_blank" >Edit</a>
 
-# softBar
+# softbar
 
 This project was generated using [Nx](https://nx.dev).
 

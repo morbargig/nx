@@ -18,11 +18,12 @@ import {
 import { BaseCellComponent } from './base-cell.directive';
 
 @Directive({
-  selector: '[softBarTableCell]',
+  selector: '[softbarTableCell]',
+  standalone:true
 })
 export class TableCellDirective<T = any> implements ITableCell<T>, OnInit {
   public component: ComponentRef<ITableCell<T>>;
-  @Input('softBarTableCell') public col: ITableColumn<T>;
+  @Input('softbarTableCell') public col: ITableColumn<T>;
   @Input() public item: T;
   @Output() public extends: EventEmitter<boolean> = new EventEmitter<boolean>();
 

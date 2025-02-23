@@ -1,6 +1,6 @@
 import { DynamicFormControl } from '@softbar/front/dynamic-forms';
-import { User } from '../../api-interfaces';
 import { controlType } from './controllers';
+import { User } from '../../mocks';
 
 export const BFF_APP_CONTROL_ROUTES = {
   'health-check': {

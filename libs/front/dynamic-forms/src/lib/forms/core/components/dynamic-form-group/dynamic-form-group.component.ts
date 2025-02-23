@@ -8,7 +8,13 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidatorFn,
+} from '@angular/forms';
 import { DynamicFormStepMode } from '../../interfaces/dynamic-stepped-form';
 import { DynamicFormControl } from '../../interfaces/field-config';
 import { DynamicFormBuilderService } from '../../services/dynamic-form-builder.service';
@@ -21,13 +27,18 @@ import { ValidationMessagesComponent } from '../validation-messages/validation-m
   standalone: true,
   templateUrl: './dynamic-form-group.component.html',
   styleUrls: ['./dynamic-form-group.component.scss'],
-  imports:[CommonModule,ReactiveFormsModule,DynamicFormControlComponent,ValidationMessagesComponent]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    DynamicFormControlComponent,
+    ValidationMessagesComponent,
+  ],
 })
 export class DynamicFormGroupComponent<T = any> implements OnInit {
-  @ViewChild('submitBtn', { static: false })
-  public submitBtn: ElementRef<HTMLButtonElement>;
+  // @ViewChild('submitBtn', { static: false })
+  // public submitBtn: ElementRef<HTMLButtonElement>;
 
-  @Input() public config: DynamicFormControl<any>[] = [];
+  @Input() public config: DynamicFormControl<T>[] = [];
   @Input() public mode: DynamicFormStepMode = DynamicFormStepMode.TableCell;
   @Input() public validation: ValidatorFn[];
   @Input() public errorMessages?: { [error: string]: string };
@@ -73,15 +84,23 @@ export class DynamicFormGroupComponent<T = any> implements OnInit {
   }
 
   public cancel() {
-    this.form.reset();
+    function clearFormGroup(formGroup: FormGroup) {
+      Object.keys(formGroup.controls).forEach((key) => {
+        const control = formGroup.get(key);
+
+        if (control instanceof FormControl) {
+          control.reset(); // Reset the FormControl
+        } else if (control instanceof FormGroup) {
+          clearFormGroup(control); // Recursively clear FormGroup
+        } else if (control instanceof FormArray) {
+          control.clear(); // Clear all items from FormArray
+        }
+      });
+    }
+    clearFormGroup(this.form);
     this.form.markAsPristine();
     this.formOnCancel.emit(true);
   }
-
-  // public submit() {
-  //   debugger;
-  //   this.submitBtn?.nativeElement.click();
-  // }
 
   public handleSubmit() {
     this.form.updateValueAndValidity();

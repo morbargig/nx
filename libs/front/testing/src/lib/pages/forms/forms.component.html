@@ -1,40 +1,66 @@
 <h2 style="font-size: 25px; font-weight: bold">
-  Welcome to testing forms here you can build form to any object that you like
+  Welcome to testing forms - here you can build form dynamically from
+  configuration or from any JSON
 </h2>
 <br />
 
-<!-- <div style="border: 1px solid black; padding: 10px;">
-    <h3>This Section is for the project developer </h3>
-    <softbar-dynamic-form-control *ngIf="group && dy" [dynamicControl]="dy" [parentForm]="group">
+<mat-tab-group (selectedTabChange)="selectedTabChange($event?.tab?.textLabel)">
+  <mat-tab [label]="tabs.DataJSON">
+    <softbar-dynamic-form-control
+      *ngIf="group && dynamicFormDataObjectString"
+      [dynamicControl]="dynamicFormDataObjectString"
+      [parentForm]="group"
+    >
     </softbar-dynamic-form-control>
+  </mat-tab>
+  <mat-tab [label]="tabs.DynamicFormConfigJSON">
+    <softbar-dynamic-form-control
+      *ngIf="group && dynamicFormForDynamicFormConfigObjectString"
+      [dynamicControl]="dynamicFormForDynamicFormConfigObjectString"
+      [parentForm]="group"
+    >
+    </softbar-dynamic-form-control>
+  </mat-tab>
+</mat-tab-group>
 
-    <button class="btn btn-default" type="button" (click)="click()">Generate new form from the config object in the
-        text-area</button>
-</div> -->
-<softbar-dynamic-form-control
-  *ngIf="group && dy2"
-  [dynamicControl]="dy2"
-  [parentForm]="group"
->
-</softbar-dynamic-form-control>
+<div class="flex py-3">
+  <button class="btn btn-default" type="button" (click)="generate()">
+    Generate
+  </button>
+  <button
+    class="btn btn-default mx-5"
+    type="button"
+    (click)="applyPlaceholder()"
+  >
+    Apply Placeholder
+  </button>
+  <button class="btn btn-default" type="button" (click)="reset()">
+    Clear Source
+  </button>
+</div>
 
-<button class="btn btn-default" type="button" (click)="click2()">
-  Generate new form from the <strong>JSON </strong> in the text-area
-</button>
-<button
-  class="btn btn-default"
-  type="button"
-  (click)="formComponent?.form?.reset()"
->
-  Clear Form
-</button>
+<div class="flex py-3">
+  <button class="btn btn-default" type="button" (click)="getOriginalState()">
+    Restore Original Form
+  </button>
+  <button class="btn btn-default mx-5" type="button" (click)="copyFormConfig()">
+    Copy Form Config
+  </button>
+</div>
 
-<!-- <h1 (click)="clickServer()">Generate new form from server</h1> -->
+<hr class="my-4" />
 
+<h3 class="py-4">
+  <strong> The tested Form: </strong>
+</h3>
 <softbar-app-dynamic-form-group
+  cancelText="Cancel"
+  submitText="Save"
   #formComponent
   *ngIf="config"
   [config]="$any(config)"
   (formOnSubmit)="formOnSubmit($event)"
+  [hideSubmitButton]="!config?.length"
+  [showCancelButton]="!!config?.length"
 >
 </softbar-app-dynamic-form-group>

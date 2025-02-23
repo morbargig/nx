@@ -9,9 +9,9 @@ import { DynamicComponentDirective } from '../../directives/dynamic-component.di
   imports:[DynamicComponentDirective]
 })
 export class DynamicComponentComponent<T = any>
-  implements Pick<DynamicComponentDirective, 'softBarDynamicComponent' | 'data'>
+  implements Pick<DynamicComponentDirective, 'softbarDynamicComponent' | 'data'>
 {
   @Input('dynamicComponent')
-  softBarDynamicComponent: DynamicComponentDirective<T>['softBarDynamicComponent'];
+  softbarDynamicComponent: DynamicComponentDirective<T>['softbarDynamicComponent'];
   @Input() data: DynamicComponentDirective<T>['data'];
 }

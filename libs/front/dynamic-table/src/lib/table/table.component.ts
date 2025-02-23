@@ -13,6 +13,11 @@ import {
 import { ITableColumn } from './cell-components/cell-components';
 import { ChangeDetectorRef } from '@angular/core';
 import { LazyLoadEvent } from './components/table-filters/lazy-load-event.type';
+import { TableCellDirective } from './directives/table-cell.directive';
+import { LoadingCellComponent } from './cell-components/loading-cell/loading-cell.component';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { FilterHiddenPipe } from './pipes/filter-hidden.pipe';
 
 export type tableElStyleObj = {
   styleClass?: string;
@@ -30,7 +35,15 @@ export type tableBodyStylesObj = tableElementsStyleObj<tableElements>;
   selector: 'softbar-app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    TableCellDirective,
+    LoadingCellComponent,
+    TranslateModule,
+    FilterHiddenPipe,
+  ],
 })
 export class TableComponent<
   /** table item type */ T = any,

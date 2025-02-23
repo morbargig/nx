@@ -1,23 +1,11 @@
 <div class="w-full table-wrapper rounded-md">
-  <table
-    class="w-full"
-    [ngClass]="getElStyleClassString('table')"
-    [attr.aria-label]="
-      tableAriaLabel +
-      'לניווט לחץ על מקש החץ למטה ולאחר מכן רק על החץ הימני במקלדת עד לסוף הטבלה'
-    "
-  >
+  <table class="w-full" [ngClass]="getElStyleClassString('table')">
     <thead
       *ngIf="!!shoHeader"
       [ngClass]="getElStyleClassString('thead')"
       class="bg-gradient-to-b rounded-t-md from-white via-white"
     >
-      <tr
-        [attr.aria-label]="
-          'הניווט מתבצע בעזרת החץ הימני לניווט בין התאים בשורה'
-        "
-        [tabindex]="'-1'"
-      >
+      <tr [tabindex]="'-1'">
         <th
           class="desktop:py-1.4375rem desktop:px-1rem desktop:first:pr-2.125rem desktop:last:pl-2.125rem py-5 px-2 first:pr-4 last:pl-4 first:rounded-tr-md last:rounded-tl-md"
           [class]="'text-med-gray'"
@@ -60,7 +48,6 @@
               *ngIf="col?.sortable"
               (click)="onSort(col?.field)"
               class="pr-1.5 pl-0 print:hidden"
-              [attr.aria-label]="'לחץ למיון הטבלה'"
               [ngClass]="{ 'text-dark-gray': !!currentSort?.[col?.field] }"
             >
               <!--              <app-icon [iconName]="getIcon(col?.field)" [size]="24"></app-icon>-->
@@ -103,6 +90,11 @@
           "
         >
           <td
+            *ngFor="
+              let col of (!notFoundMode ? columns : notFoundColumns)
+                | filterHidden;
+              let lastTd = last
+            "
             class="text-lg align-middle desktop:py-2.0625rem desktop:px-1rem desktop:first:pr-2.125rem desktop:last:pl-2.125rem py-5 first:pr-4 last:pl-4"
             [class]="
               ' ' +
@@ -138,10 +130,6 @@
             [attr.aria-label]="col.label"
             [ngStyle]="getElStyle('td', col?.bodyStyle?.td?.style)"
             [attr.colspan]="col?.colspan!?.({val: item ? item[col.field] : null ,item:item}) ?? 1"
-            *ngFor="
-              let col of !notFoundMode ? columns : notFoundColumns;
-              let lastTd = last
-            "
             [hidden]="!!col.hidden"
           >
             <span class="sr-only">
@@ -162,7 +150,7 @@
                 </ng-template>
                 <ng-container
                   *ngIf="!colTempRef; else colTempRefTemp"
-                  [softBarTableCell]="col"
+                  [softbarTableCell]="col"
                   [item]="item"
                   (extends)="
                     (!!extendsColumns?.length || !!getExtendsColumnsArr) &&
@@ -225,7 +213,7 @@
               [attr.aria-label]="col.label"
             >
               <div class="extends-div">
-                <ng-container [softBarTableCell]="col" [item]="extendItem">
+                <ng-container [softbarTableCell]="col" [item]="extendItem">
                 </ng-container>
               </div>
             </td>
@@ -274,7 +262,7 @@
                 [ngClass]="{ inActive: !panelOpenState[i] }"
               >
                 <div class="extends-div">
-                  <ng-container [softBarTableCell]="col" [item]="extendItem">
+                  <ng-container [softbarTableCell]="col" [item]="extendItem">
                   </ng-container>
                 </div>
               </td>

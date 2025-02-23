@@ -38,15 +38,15 @@ input[type='radio'] {
 
       .mat-radio-checked {
         .mat-radio-label {
-          color: theme('colors.primary-orange');
+          color: theme('colors.primary');
         }
 
         .mat-radio-outer-circle {
-          border-color: theme('colors.primary-orange') !important;
+          border-color: theme('colors.primary') !important;
         }
         .mat-radio-inner-circle {
-          background-color: theme('colors.primary-orange') !important;
-          color: theme('colors.primary-orange') !important;
+          background-color: theme('colors.primary') !important;
+          color: theme('colors.primary') !important;
         }
       }
     }
@@ -56,14 +56,14 @@ input[type='radio'] {
     }
 
     .mat-radio-outer-circle {
-      border-color: theme('colors.primary-blue') !important;
+      border-color: theme('colors.primary') !important;
       height: 0.9375rem !important;
       width: 0.9375rem !important;
     }
 
     .mat-radio-inner-circle {
-      background-color: theme('colors.primary-blue') !important;
-      color: theme('colors.primary-orange') !important;
+      background-color: theme('colors.primary') !important;
+      color: theme('colors.primary') !important;
       transition: none !important;
       height: 0.44rem !important;
       width: 0.44rem !important;

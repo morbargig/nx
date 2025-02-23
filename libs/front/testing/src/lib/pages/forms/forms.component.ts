@@ -1,445 +1,213 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators, AbstractControl } from '@angular/forms';
 import {
   DynamicFormBuilderService,
   DynamicFormControlComponent,
-  DynamicFormGroupComponent
+  DynamicFormGroupComponent,
 } from '@softbar/front/dynamic-forms';
+import type { DynamicFormControl } from '@softbar/front/dynamic-forms';
+import { firstValueFrom, timer, BehaviorSubject } from 'rxjs';
 import type {
-  DynamicFormControl,
-} from '@softbar/front/dynamic-forms';
-import { firstValueFrom, timer } from 'rxjs';
-import type { JsonObject } from '@softbar/api-interfaces';
-import { FormsApiService } from './services/forms-api.service';
+  JsonObject,
+  JsonType,
+  JsonValue,
+  User,
+} from '@softbar/api-interfaces';
+// import { FormsApiService } from './services/forms-api.service';
 import { CommonModule } from '@angular/common';
+import { MatTabsModule } from '@angular/material/tabs';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+} from '@angular/material/dialog';
 
-export interface User {
-  job: {
-    title: string;
-    salary: number;
-    coworkers: { name: string; phoneNumber: number }[];
-  };
-  matrix: string[][];
-  roles: string[];
-  test: { t: { b: string } };
-  name: string;
-  age: number;
-  friends: {
-    name: string;
-    phoneNumber: number;
-    bestFriend: { name: string; phoneNumber: number };
-    friends: {
-      name: string;
-      phoneNumber: number;
-      friends: { name: string; phoneNumber: number }[];
-    }[];
-  }[];
-  // description: string;
-  // payment: [{ obj: [{ obj2: [{ obj3: number[][] }] }] }];
+enum Tabs {
+  'DataJSON' = 'Generate form from any data JSON string',
+  'DynamicFormConfigJSON' = 'Generate form from Dynamic Form Config Arr as JSON string',
 }
 
 @Component({
   selector: 'softbar-forms',
   templateUrl: './forms.component.html',
   styleUrls: ['./forms.component.scss'],
-  standalone:true,
-  imports:[
+  standalone: true,
+  imports: [
     CommonModule,
     DynamicFormControlComponent,
     DynamicFormGroupComponent,
-    ]
+    MatTabsModule,
+  ],
 })
 export class FormsComponent implements OnInit {
   constructor(
-    private formsApiService: FormsApiService,
-    private dfb: DynamicFormBuilderService
+    // private formsApiService: FormsApiService,
+    private dfb: DynamicFormBuilderService,
+    private dialog: MatDialog
   ) {}
   @ViewChild('formComponent', { static: false })
-  public formComponent: any;
+  public formComponent: DynamicFormGroupComponent;
+  tabs: typeof Tabs = Tabs;
+  selectedTab: Tabs;
   group = new FormGroup(
     <
       {
-        DynamicFormConfigurationObject?: AbstractControl<string>;
-        DynamicFormObjectValue?: AbstractControl<string>;
+        dynamicFormForDynamicFormConfigObjectString?: AbstractControl<string>;
+        dynamicFormDataObjectString?: AbstractControl<string>;
       }
     >{}
   );
   config: DynamicFormControl<User>[];
-  /** = [
-    {
-      type: 'Default',
-      field: 'username',
-      label: 'UserName',
-      placeholder: 'UserName',
+  readonly mockUser: User = {
+    job: {
+      title: 'Software Engineer',
+      salary: 85000,
+      coworkers: [
+        { name: 'Alice', phoneNumber: 1234567890 },
+        { name: 'Bob', phoneNumber: 9876543210 },
+      ],
     },
-    {
-      type: 'Default',
-      field: 'password',
-      label: 'Password',
-      placeholder: 'Password',
-      // validation: [Validators.required, Validators.maxLength(10)],
-      // validation: ['Validators.required'],
-      data: { inputType: 'password' },
-    },
-    {
-      type: 'Default',
-      field: 'date',
-      label: 'Date',
-      placeholder: 'Date',
-      data: { inputType: 'datetime-local' },
-    },
-    {
-      type: 'Default',
-      field: 'description',
-      label: 'Description',
-      placeholder: 'Description',
-      data: { rows: 5 },
-    },
-  ];
-*/
-  dy: DynamicFormControl<any> =
-    // { DynamicFormConfigurationObject: string, '_': string }
-    {
-      type: 'Default',
-      field: 'DynamicFormConfigurationObject',
-      label: 'From Config',
-      placeholder: (
-        [
-          {
-            type: 'Default',
-            field: 'description',
-            label: 'Description',
-            placeholder: 'Description',
-            data: { rows: 5 },
-          },
-        ] as DynamicFormControl<any>[]
-      ).toString(),
-      validation: [Validators.required, Validators.minLength(10)],
-      errorMessages: {
-        required: 'Required',
-        minlength: 'minlength',
-      },
-      data: {
-        rows: 5,
-      },
-    };
-  dy2: DynamicFormControl<any> =
-    // { DynamicFormConfigurationObject: string, '_': string }
-    {
-      type: 'Default',
-      field: 'DynamicFormObjectValue',
-      label: 'Any Valid JSON',
-      placeholder: JSON.stringify({
-        job: {
-          title: 'Developer',
-          salary: '22',
-          coworkers: [
-            {
-              name: 'omri',
-              phoneNumber: '1',
-            },
-            {
-              name: 'oren',
-              phoneNumber: '2',
-            },
-          ],
+    isHappy: true,
+    matrix: [
+      ['A1', 'B1', 'C1'],
+      ['A2', 'B2', 'C2'],
+      ['A3', 'B3', 'C3'],
+    ],
+    roles: ['Admin', 'Editor', 'User'],
+    name: 'John Doe',
+    age: 30,
+    friends: [
+      {
+        name: 'David',
+        phoneNumber: 1112223333,
+        bestFriend: {
+          name: 'Michael',
+          phoneNumber: 4445556666,
         },
-        matrix: [
-          ['1', '2', '3', null],
-          ['2', '4'],
-        ],
-        roles: ['10', '20', '30'],
         friends: [
           {
-            name: 'nik',
-            phoneNumber: '1',
+            name: 'Sarah',
+            phoneNumber: 7778889999,
             friends: [
-              {
-                name: 'zalina',
-                phoneNumber: '2',
-                friends: [
-                  {
-                    name: 'alon',
-                    phoneNumber: '3',
-                  },
-                  {
-                    name: 'anabel',
-                    phoneNumber: '4',
-                  },
-                ],
-              },
-              {
-                name: 'ortal',
-                phoneNumber: '5',
-                friends: [
-                  {
-                    name: 'ziv',
-                    phoneNumber: '6',
-                  },
-                  {
-                    name: 'adi',
-                    phoneNumber: '7',
-                  },
-                ],
-              },
+              { name: 'Emily', phoneNumber: 2223334444 },
+              { name: 'Chris', phoneNumber: 5556667777 },
+            ],
+          },
+          {
+            name: 'Daniel',
+            phoneNumber: 8889990000,
+            friends: [
+              { name: 'Ethan', phoneNumber: 9990001111 },
+              { name: 'Sophia', phoneNumber: 1110009999 },
             ],
           },
         ],
-        age: '24',
-        name: 'Mor Bargig',
-      } as JsonObject),
-      validation: [Validators.required, Validators.minLength(10)],
-      errorMessages: {
-        required: 'Required',
-        minlength: 'minlength',
       },
-      data: {
-        rows: 5,
-      },
-    };
-  hello$ = this.formsApiService.helloForm();
-  formOnSubmit(event: any) {
-    alert(JSON.stringify(event));
+    ],
+  };
+
+  selectedTabChange(textLabel: string) {
+    this.selectedTab = textLabel as Tabs;
   }
-  clickServer() {
-    firstValueFrom(this.hello$).then((x) => {
+
+  readonly dynamicFormForDynamicFormConfigObjectString: DynamicFormControl<{
+    dynamicFormForDynamicFormConfigObjectString: DynamicFormControl[] & string;
+  }> = {
+    type: 'Default',
+    field: 'dynamicFormForDynamicFormConfigObjectString',
+    label: 'From Config',
+    placeholder: JSON.stringify([
+      {
+        type: 'Default',
+        field: 'demo',
+        label: 'Description',
+        placeholder: 'Description',
+        data: { rows: 5 },
+      },
+    ] as DynamicFormControl<{ demo: '' }>[]),
+    validation: [Validators.required, Validators.minLength(10)],
+    errorMessages: {
+      required: 'Required',
+      minlength: 'minlength',
+    },
+    data: {
+      rows: 5,
+    },
+  };
+  readonly dynamicFormDataObjectString: DynamicFormControl<{
+    dynamicFormDataObjectString: JsonValue & string;
+  }> = {
+    type: 'Default',
+    field: 'dynamicFormDataObjectString',
+    label: 'Any Valid JSON',
+    placeholder: JSON.stringify(this.mockUser),
+    validation: [Validators.required, Validators.minLength(10)],
+    errorMessages: {
+      required: 'Required',
+      minlength: 'minlength',
+    },
+    data: {
+      rows: 5,
+    },
+  };
+
+  // defaultForm$ = this.formsApiService.helloForm();
+  defaultForm$ = this.hardCodedDynamicFormConfigSetup();
+  hardCodedDynamicFormConfigSetup(): BehaviorSubject<
+    DynamicFormControl<User>[]
+  > {
+    return new BehaviorSubject<DynamicFormControl<User>[]>(
+      this.dfb.fromJsonToConfigRecursion(this.mockUser as any)
+    );
+  }
+
+  showDialog(data: JsonType) {
+    this.dialog.open(JsonDialogComponent, {
+      data: { json: JSON.stringify(data, null, 2) }, // Pass cellData as JSON
+      width: '500px',
+    });
+  }
+  formOnSubmit(event: any) {
+    this.showDialog(event);
+  }
+
+  getOriginalState() {
+    firstValueFrom(this.defaultForm$).then((x) => {
       this.config = null;
       firstValueFrom(timer(0))
         .then(() => {
           this.config = x;
         })
         .catch(() =>
-          alert(`something want wrong!
+          console.error(`something want wrong!
           server is not available at the time`)
         );
     });
   }
-  ngOnInit(): void {
-    this.config = [
-      {
-        field: 'job',
-        label: 'Job',
-        type: 'FormGroup',
-        data: {
-          formConfig: [
-            { field: 'title', label: 'Title', type: 'Default' },
-            {
-              field: 'salary',
-              type: 'Default',
-              label: 'Salary',
-            },
-            {
-              type: 'FormArray',
-              field: 'coworkers',
-              label: 'Coworkers',
-              data: {
-                formGroupConfig: [
-                  {
-                    type: 'Default',
-                    field: 'name',
-                    label: 'Name',
-                  },
-                  {
-                    type: 'Default',
-                    field: 'phoneNumber',
-                    label: 'Phone',
-                    data: {
-                      inputType: 'tel',
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        },
-      },
-      {
-        field: 'matrix',
-        type: 'FormArray',
-        label: 'Matrix',
-        placeholder: 'Matrix',
-        data: {
-          formArrayConfig: {
-            field: '_',
-            type: 'FormArray',
-            label: 'Matrix',
-            placeholder: 'Matrix',
-            data: {
-              formControlConfig: {
-                field: '_',
-                type: 'Default',
-                label: 'Matrix',
-                placeholder: 'Matrix',
-              },
-            },
-          },
-        },
-      },
-      {
-        field: 'roles',
-        type: 'FormArray',
-        label: 'Roles',
-        placeholder: 'Roles',
-        data: {
-          formControlConfig: {
-            field: '_',
-            type: 'Default',
-            label: 'Role',
-            placeholder: 'Role',
-            data: {
-              // inputType: 'number',
-              // title$: of(),
-            },
-          },
-        },
-      },
-      {
-        field: 'friends',
-        type: 'FormArray',
-        // onChange: ({ currentValue }) =>
-        //   currentValue[0].friends[0].friends[0].phoneNumber,
-        label: 'Friends List',
-        data: {
-          formGroupConfig: [
-            {
-              type: 'Default',
-              field: 'name',
-              label: 'Name',
-              // onChange: ({currentValue}) => null,
-            },
-            {
-              type: 'Default',
-              field: 'phoneNumber',
-              label: 'Phone',
-              data: {
-                inputType: 'tel',
-              },
-              // onChange: ({currentValue}) => null,
-            },
-            {
-              type: 'FormArray',
-              field: 'friends',
-              label: 'Friend Friends List',
-              data: {
-                formGroupConfig: [
-                  {
-                    type: 'Default',
-                    field: 'name',
-                    label: 'Name',
-                  },
-                  {
-                    type: 'Default',
-                    field: 'phoneNumber',
-                    label: 'Phone',
-                    data: {
-                      inputType: 'tel',
-                    },
-                  },
-                  {
-                    type: 'FormArray',
-                    field: 'friends',
-                    label: 'Friend Friends List',
-                    data: {
-                      formGroupConfig: [
-                        {
-                          type: 'Default',
-                          field: 'name',
-                          label: 'Name',
-                        },
-                        {
-                          type: 'Default',
-                          field: 'phoneNumber',
-                          label: 'Phone',
-                          data: {
-                            inputType: 'tel',
-                          },
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
-              // onChange: ({currentValue}) => null,
-            },
-          ],
-        },
-      },
-      {
-        field: 'age',
-        type: 'Default',
-        label: 'Age',
-        placeholder: 'Age',
-        data: {
-          inputType: 'number',
-          // title$: of(),
-        },
-      },
-      {
-        field: 'name',
-        type: 'Default',
-        label: 'Name',
-        placeholder: 'Name',
-        data: {
-          inputType: 'text',
-          // title$: of(),
-        },
-      },
-    ];
-    // console.log(this.config);
-    // console.log([
-    //   {
-    //     type: 'Default',
-    //     field: 'username',
-    //     label: 'UserName',
-    //     placeholder: 'UserName',
-    //   },
-    //   {
-    //     type: 'Default',
-    //     field: 'password',
-    //     label: 'Password',
-    //     placeholder: 'Password',
-    //     // validation: [Validators.required, Validators.maxLength(10)],
-    //     // validation: ['Validators.required'],
-    //     data: { inputType: 'password' },
-    //   },
-    //   {
-    //     type: 'Default',
-    //     field: 'date',
-    //     label: 'Date',
-    //     placeholder: 'Date',
-    //     data: { inputType: 'datetime-local' },
-    //   },
-    //   {
-    //     type: 'Default',
-    //     field: 'description',
-    //     label: 'Description',
-    //     placeholder: 'Description',
-    //     data: { rows: 5 },
-    //   },
-    // ]);
-    // firstValueFrom(this.hello$).then((x) => {
-    //   this.config = x;
-    //   // console.log(this.dfb.recursionBuildForm(x[0]));
-    // });
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+
+  copyFormConfig() {
+    this.showDialog(this.config as any);
   }
-  click() {
-    debugger;
+
+  ngOnInit(): void {
+    this.getOriginalState();
+  }
+  generateFromDynamicFormConfigJSON() {
     this.config = null;
     firstValueFrom(timer(0)).then(() => {
       this.config = JSON.parse(
         JSON.stringify(
           new Function(
             `return ${
-              this.group.getRawValue().DynamicFormConfigurationObject || '{}'
+              this.group.getRawValue()
+                .dynamicFormForDynamicFormConfigObjectString || '{}'
             }`
           )()
         ) || ''
       );
     });
   }
-  click2() {
+  generateFromDataJSON() {
     this.config = null;
     firstValueFrom(timer(0)).then(() => {
       this.config = this.dfb.fromJsonToConfigRecursion(
@@ -447,7 +215,7 @@ export class FormsComponent implements OnInit {
           JSON.stringify(
             new Function(
               `return ${
-                this.group.getRawValue().DynamicFormObjectValue || '{}'
+                this.group.getRawValue().dynamicFormDataObjectString || '{}'
               }`
             )()
           )
@@ -455,5 +223,82 @@ export class FormsComponent implements OnInit {
       );
       console.log('config:', this.config);
     });
+  }
+  generate() {
+    switch (this.selectedTab) {
+      case Tabs.DynamicFormConfigJSON: {
+        this.generateFromDynamicFormConfigJSON();
+        break;
+      }
+      case Tabs.DataJSON:
+      default: {
+        this.generateFromDataJSON();
+        break;
+      }
+    }
+  }
+
+  applyPlaceholder() {
+    switch (this.selectedTab) {
+      case Tabs.DynamicFormConfigJSON: {
+        this.group.controls?.dynamicFormForDynamicFormConfigObjectString?.setValue(
+          this.dynamicFormForDynamicFormConfigObjectString.placeholder
+        );
+        break;
+      }
+      case Tabs.DataJSON:
+      default: {
+        this.group.controls?.dynamicFormDataObjectString?.setValue(
+          this.dynamicFormDataObjectString.placeholder
+        );
+        break;
+      }
+    }
+  }
+
+  reset(): void {
+    switch (this.selectedTab) {
+      case Tabs.DynamicFormConfigJSON: {
+        this.group.controls?.dynamicFormForDynamicFormConfigObjectString?.reset();
+        break;
+      }
+      case Tabs.DataJSON:
+      default: {
+        this.group.controls?.dynamicFormDataObjectString?.reset();
+        break;
+      }
+    }
+  }
+}
+
+import { Clipboard } from '@angular/cdk/clipboard';
+import { MatIconModule } from '@angular/material/icon';
+
+@Component({
+  selector: 'json-dialog',
+  template: `
+    <h1 mat-dialog-title>JSON Preview</h1>
+
+    <div mat-dialog-content>
+      <pre>{{ data.json }}</pre>
+    </div>
+    <div mat-dialog-actions class="flex !justify-between">
+      <button mat-icon-button (click)="copyToClipboard()">
+        <mat-icon>content_copy</mat-icon>
+      </button>
+      <button m mat-dialog-close>Close</button>
+    </div>
+  `,
+  standalone: true,
+  imports: [MatDialogModule, MatIconModule],
+})
+export class JsonDialogComponent {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { json: string },
+    private clipboard: Clipboard
+  ) {}
+
+  copyToClipboard() {
+    this.clipboard.copy(this.data.json);
   }
 }

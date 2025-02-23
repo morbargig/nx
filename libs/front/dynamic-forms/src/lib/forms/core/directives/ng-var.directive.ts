@@ -7,7 +7,7 @@
 // } from '@angular/core';
 
 // @Directive({
-//   selector: '[softBarNgVar]',
+//   selector: '[softbarNgVar]',
 // })
 // export class NgVarDirective<T = unknown> {
 //   // https://github.com/angular/angular/blob/main/packages/common/src/directives/ng_if.ts

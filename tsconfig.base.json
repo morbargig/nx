@@ -15,11 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@softbar-ngx-translate": ["libs/front/translate/src/index.ts"],
       "@softbar/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@softbar/front/dynamic-forms": ["libs/front/dynamic-forms/src/index.ts"],
       "@softbar/front/dynamic-table": ["libs/front/dynamic-table/src/index.ts"],
-      "@softbar/front/testing": ["libs/front/testing/src/index.ts"],
-      "@softbar-ngx-translate": ["libs/front/translate/src/index.ts"]
+      "@softbar/front/testing": ["libs/front/testing/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

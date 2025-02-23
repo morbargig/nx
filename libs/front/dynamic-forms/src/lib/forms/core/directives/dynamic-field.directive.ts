@@ -22,9 +22,9 @@ import { firstValueFrom, timer } from 'rxjs';
 
 @Directive({
   standalone: true,
-  selector: '[softBarDynamicField]',
+  selector: '[softbarDynamicField]',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['id', 'parentForm', 'config: softBarDynamicField'],
+  inputs: ['id', 'parentForm', 'config: softbarDynamicField'],
 })
 export class DynamicFieldDirective<
     T = any,

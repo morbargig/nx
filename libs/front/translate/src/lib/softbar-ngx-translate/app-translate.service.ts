@@ -140,7 +140,6 @@ export class AppTranslateService<
       defaultLanguage;
     this.translateService.addLangs(supportedLanguages);
     this.translateService.setDefaultLang(defaultLanguage);
-    debugger
     return firstValueFrom(this.use(mainLang));
   }
 

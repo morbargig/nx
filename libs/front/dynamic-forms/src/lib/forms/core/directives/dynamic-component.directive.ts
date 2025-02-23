@@ -9,14 +9,14 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[softBarDynamicComponent]',
+  selector: '[softbarDynamicComponent]',
   standalone: true,
 })
 export class DynamicComponentDirective<T = any, C extends Type<T> = Type<T>>
   implements OnInit, OnDestroy
 {
   public component: ComponentRef<T>;
-  @Input() public softBarDynamicComponent: C;
+  @Input() public softbarDynamicComponent: C;
   @Input() public data: T;
 
   constructor(
@@ -32,11 +32,11 @@ export class DynamicComponentDirective<T = any, C extends Type<T> = Type<T>>
   }
 
   private createComponent() {
-    if (!this.softBarDynamicComponent) {
+    if (!this.softbarDynamicComponent) {
       return;
     }
     this.component = this.container.createComponent<T>(
-      this.softBarDynamicComponent
+      this.softbarDynamicComponent
     );
     Object.keys(this.data || {})?.forEach(
       (k) => (this.component.instance[k] = this.data?.[k])

@@ -9,7 +9,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "softBar",
+            "prefix": "softbar",
             "style": "camelCase"
           }
         ],

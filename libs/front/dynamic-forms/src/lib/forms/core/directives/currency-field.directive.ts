@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Directive({
-  selector: '[softBarCurrencyFormatter]',
+  selector: '[softbarCurrencyFormatter]',
   standalone: true,
 })
 export class CurrencyFormatterDirective implements OnDestroy, AfterViewInit {

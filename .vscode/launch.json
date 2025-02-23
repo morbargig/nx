@@ -7,7 +7,7 @@
 
 
     {
-      "name": "Api (NestJS BFF)",
+      "name": "Api",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "npx",
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "name": "Api (NestJS BFF) Mock",
+      "name": "Api Mock",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "npx",

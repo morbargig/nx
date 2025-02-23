@@ -29,7 +29,7 @@
 
   //text in the input(type-select)
   ::ng-deep.mat-select-min-line {
-    color: theme('colors.dark-gray');
+    color: theme('colors.primary');
     font-family: 'ploni';
     font-size: 1.3rem !important;
   }
@@ -43,7 +43,7 @@
   //border of input
 
   ::ng-deep.mat-form-field-appearance-outline .mat-form-field-outline {
-    color: theme('colors.primary-blue-70') !important;
+    color: theme('colors.primary') !important;
   }
 
   //border width
@@ -57,7 +57,7 @@
   /* focused color */
   ::ng-deep.mat-form-field-appearance-outline.mat-focused
     .mat-form-field-outline-thick {
-    color: theme('colors.primary-blue') !important;
+    color: theme('colors.primary') !important;
   }
 
   ::ng-deep.mat-error {
@@ -78,11 +78,11 @@
   ::ng-deep
     .mat-form-field-appearance-outline.mat-focused
     .mat-form-field-label {
-    color: theme('colors.med-gray');
+    color: theme('colors.primary');
   }
 
   ::ng-deep.mat-form-field-invalid .mat-input-element {
-    caret-color: theme('colors.primary-blue') !important;
+    caret-color: theme('colors.primary') !important;
   }
 
   ::ng-deep.mat-form-field.mat-form-field-invalid .mat-form-field-label {

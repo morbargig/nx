@@ -1,1 +1,1 @@
-export {fixCustomCurrency} from './custom-currency.pipe'
+export {SafePipe} from './safe.pipe'

@@ -7,11 +7,15 @@ import {
 } from '@angular/core';
 import { DefaultCellComponent } from '../default-cell/default-cell.component';
 import { ExtendCellDataModel } from './extends-cell-data.model';
+import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'softbar-app-extends-cell',
   templateUrl: './extends-cell.component.html',
   styleUrls: ['./extends-cell.component.scss'],
+  standalone:true,
+  imports:[CommonModule,TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExtendsCellComponent<

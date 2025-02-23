@@ -2,13 +2,13 @@
   .mat-option {
     &:hover {
       * {
-        @apply text-secondary-blue;
+        @apply text-secondary;
       }
     }
 
     &.mat-active {
       * {
-        @apply text-secondary-blue;
+        @apply text-secondary;
       }
     }
   }

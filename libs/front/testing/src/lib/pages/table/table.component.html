@@ -1,0 +1,74 @@
+<h2 style="font-size: 25px; font-weight: bold">
+  Welcome to testing table, here you can edit the table structure and data
+</h2>
+<br />
+
+<mat-tab-group>
+  <mat-tab [label]="tabs.Columns">
+    <softbar-app-dynamic-form-group
+      *ngIf="columnsDynamicFormConfig"
+      [config]="[$any(columnsDynamicFormConfig)]"
+      cancelText="Reset Edit Mode"
+      submitText="Apply Columns"
+      #formComponent
+      (formOnSubmit)="formOnSubmitEditColumns($any($event))"
+      [(form)]="group"
+      [hideSubmitButton]="!columnsDynamicFormConfig"
+      [showCancelButton]="!!columnsDynamicFormConfig"
+    >
+    </softbar-app-dynamic-form-group>
+
+    <div class="flex py-3">
+      <!-- <button class="btn btn-default" type="button" (click)="generate()">
+        Generate
+      </button> -->
+      <button
+        class="btn btn-default"
+        type="button"
+        (click)="applyCurrentColumnsEditMode()"
+      >
+        Edit Original Columns
+      </button>
+      <!-- <button class="btn btn-default" type="button" (click)="reset()">
+      Clear Source
+    </button> -->
+    </div>
+  </mat-tab>
+  <mat-tab [label]="tabs.Items">
+    <softbar-app-dynamic-form-group
+      *ngIf="itemsDynamicFormConfig"
+      [config]="[itemsDynamicFormConfig]"
+      cancelText="Reset Edit Mode"
+      submitText="Apply Items"
+      #formComponent
+      (formOnSubmit)="formOnSubmitEditItems($any($event))"
+      [(form)]="group"
+      [hideSubmitButton]="!itemsDynamicFormConfig"
+      [showCancelButton]="!!itemsDynamicFormConfig"
+    >
+    </softbar-app-dynamic-form-group>
+  </mat-tab>
+</mat-tab-group>
+
+<hr class="my-4" />
+<h3>
+  <strong> The table Form: </strong>
+</h3>
+<div class="flex py-3">
+  <button
+    class="btn btn-default"
+    type="button"
+    (click)="columns = $any(originalColumn)"
+  >
+    Restore Original Columns
+  </button>
+  <button
+    class="btn btn-default mx-5"
+    type="button"
+    (click)="items = originalItems"
+  >
+    Restore Original Items
+  </button>
+</div>
+
+<softbar-app-table [columns]="columns" [items]="items"> </softbar-app-table>

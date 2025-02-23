@@ -1,74 +1,32 @@
-::ng-deep {
-  .mat-form-field-appearance-outline .mat-form-field-outline {
-    outline: none;
-  }
-  .mat-select-arrow-wrapper {
-    background-image: url('../../../../assets/front/dynamic-forms/down.svg') !important;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-  .mat-option.mat-active {
-    font-family: 'ploni';
-  }
-
-  .mat-select-arrow {
-    opacity: 0;
-  }
-  .mat-select-min-line {
-    @apply text-primary-blue;
-  }
+.mat-mdc-form-field-infix {
+  padding: 0 !important;
+  min-height: unset !important;
+  width: unset !important;
 }
-::ng-deep .mat-form-field-flex > .mat-form-field-infix {
-  padding: 0.4em 0px !important;
+.mat-mdc-text-field-wrapper {
+  padding: 0 !important;
 }
-::ng-deep .mat-form-field-label-wrapper {
-  top: -1.4em;
+.mdc-line-ripple {
+  display: none !important;
 }
 
-::ng-deep
-  .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
-  .mat-form-field-label {
-  transform: translateY(-1.1em) scale(0.75);
-  width: 133.33333%;
+.mat-mdc-select-panel {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ccc !important;
 }
 
-//text in the input(type-select)
-::ng-deep.mat-select-min-line {
-  color: theme('colors.primary-blue') !important;
-  font-family: 'ploni';
-  font-size: 1.3rem !important;
+.mat-mdc-option {
+  background-color: #f8f9fa !important;
+  color: #212529 !important;
+  padding: 10px !important;
 }
 
-//font and size of the placeholder label
-
-::ng-deep.mat-form-field label {
-  font-family: 'ploni';
+.mat-mdc-option:hover {
+  background-color: #e2e6ea !important;
 }
 
-//border of input
-
-::ng-deep.mat-form-field-appearance-outline .mat-form-field-outline {
-  color: theme('colors.primary-blue-70') !important;
+.mat-mdc-option[aria-disabled='true'] {
+  background-color: #e9ecef !important;
+  color: #6c757d !important;
 }
-
-//border width
-
-::ng-deep.mat-form-field ::ng-deep .mat-form-field-outline-start,
-.mat-form-field ::ng-deep .mat-form-field-outline-gap,
-.mat-form-field ::ng-deep .mat-form-field-outline-end {
-  border-width: 0.125rem !important;
-}
-
-::ng-deep.mat-select-panel {
-  border: solid theme('colors.primary-blue') 1px;
-  &::-webkit-scrollbar {
-    width: 0px;
-  }
-}
-
-::ng-deep.mat-option-text{
-  font-family: 'ploni';
-  font-size: 1.25rem;
-}
-

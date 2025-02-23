@@ -1,6 +1,5 @@
 import { DefaultCellComponent } from './default-cell/default-cell.component';
 import { LinkCellComponent } from './link-cell/link-cell.component';
-import { PriceCellComponent } from './price-cell/price-cell.component';
 import {
   Component,
   EventEmitter,
@@ -14,6 +13,8 @@ import { PillCellComponent } from './pill-cell/pill-cell.component';
 import { DateCellComponent } from './date-cell/date-cell.component';
 import { LoadingCellComponent } from './loading-cell/loading-cell.component';
 import { BaseCellData } from './table.types.helpers';
+import { BooleanCellComponent } from './boolean-cell/boolean-cell.component';
+import { JsonCellComponent } from './json-cell/json-cell.component';
 
 type componentWithData<
   T = any,
@@ -36,8 +37,9 @@ export function lazyCellLoadConfigure<
 
 export enum TableColumnType {
   Default,
+  Boolean,
+  Json,
   Link,
-  Price,
   Extends,
   Pill,
   Date,
@@ -49,11 +51,12 @@ class TableCellClassType<T = any, K extends keyof T = keyof T> {
   TableCellDicType = {
     Default: DefaultCellComponent as Type<DefaultCellComponent<T, K>>,
     Link: LinkCellComponent,
-    Price: PriceCellComponent,
     Extends: ExtendsCellComponent as Type<ExtendsCellComponent<T, K>>,
     Pill: PillCellComponent,
     Date: DateCellComponent as Type<DateCellComponent<T, K>>,
     Loading: LoadingCellComponent as Type<LoadingCellComponent<T, K>>,
+    Boolean: BooleanCellComponent as Type<BooleanCellComponent<T, K>>,
+    Json: JsonCellComponent as Type<JsonCellComponent<T, K>>,
     DynamicLazy: null as any,
   } as const satisfies {
     [key in keyof typeof TableColumnType]-?: Type<BaseCellComponent<any, any>>;
@@ -70,9 +73,10 @@ export const TableCellDic = {
   Pill: PillCellComponent,
   Date: DateCellComponent,
   Link: LinkCellComponent,
-  Price: PriceCellComponent,
   Extends: ExtendsCellComponent,
   Loading: LoadingCellComponent,
+  Boolean: BooleanCellComponent,
+  Json: JsonCellComponent,
   DynamicLazy: undefined as any,
 } as const satisfies TableCellComponentType;
 

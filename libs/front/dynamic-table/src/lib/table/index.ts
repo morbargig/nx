@@ -6,4 +6,5 @@ export {
   tableElStyleObj,
 } from './table.component';
 export * from './core/pipes';
-export * from './models';
+export * from './components/table-filters/lazy-load-event.type';
+
