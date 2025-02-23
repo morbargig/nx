@@ -86,12 +86,6 @@
         "host": "0.0.0.0"
       }
     },
-    "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "buildTarget": "main-app:build"
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint"
     },

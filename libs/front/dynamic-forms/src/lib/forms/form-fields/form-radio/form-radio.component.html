@@ -26,7 +26,7 @@
     >
       <ng-container *ngIf="data?.classTemplate as Temp; else defaultLabelTemp">
         <softbar-dynamic-component
-          [dynamicComponent]="Temp"
+          [softbarDynamicComponent]="Temp"
           [data]="{option, control}"
         ></softbar-dynamic-component>
         <!-- , control,  isSelectedFunc: data?.isSelectedFunc -->

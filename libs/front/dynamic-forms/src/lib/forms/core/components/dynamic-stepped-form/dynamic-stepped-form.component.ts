@@ -101,6 +101,7 @@ export class DynamicSteppedFormComponent
   }
 
   override ngOnDestroy() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-extra-non-null-assertion
     super.ngOnDestroy!?.();
     this.isAlive = false;
     if (this.useStepperService) {
@@ -219,6 +220,7 @@ export class DynamicSteppedFormComponent
       this.stepperService.CDRefEvent.pipe(
         takeWhile(() => this.isAlive)
       ).subscribe((event) => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-extra-non-null-assertion
         this.cd?.[event]!?.();
       });
     }

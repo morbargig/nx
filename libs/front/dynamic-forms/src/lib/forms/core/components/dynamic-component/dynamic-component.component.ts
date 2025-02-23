@@ -6,12 +6,13 @@ import { DynamicComponentDirective } from '../../directives/dynamic-component.di
   standalone: true,
   templateUrl: './dynamic-component.component.html',
   styleUrls: ['./dynamic-component.component.scss'],
-  imports:[DynamicComponentDirective]
+  imports: [DynamicComponentDirective],
 })
 export class DynamicComponentComponent<T = any>
-  implements Pick<DynamicComponentDirective, 'softbarDynamicComponent' | 'data'>
+  implements
+    Pick<DynamicComponentDirective, 'softbarDynamicComponent' | 'data'>
 {
-  @Input('dynamicComponent')
+  @Input()
   softbarDynamicComponent: DynamicComponentDirective<T>['softbarDynamicComponent'];
   @Input() data: DynamicComponentDirective<T>['data'];
 }

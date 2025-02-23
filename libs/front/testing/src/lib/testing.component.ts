@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-testing',
   standalone: true,
   imports: [CommonModule],
+  providers: [{ provide: ActivatedRoute }],
   template: `
     <h1 class="text-4xl">
       Welcome to testing softbar applications infrastructures

@@ -4,7 +4,7 @@ import {
   ValidatorFn,
   AbstractControl,
 } from '@angular/forms';
-import { JsonPrimitive } from '@softbar/api-interfaces';
+import type { JsonPrimitive } from '@softbar/api-interfaces';
 import {
   BaseFieldData,
   DynamicFormControl,

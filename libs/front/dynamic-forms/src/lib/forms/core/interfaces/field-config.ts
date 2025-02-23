@@ -13,7 +13,6 @@ import { FormArrayComponent } from '../../form-fields/form-array/form-array.comp
 import { FormGroupComponent } from '../../form-fields/form-group/form-group.component';
 import { CustomSubscribable } from './base';
 import { FormRadioComponent } from '../../form-fields/form-radio/form-radio.component';
-import { FormAutocompleteComponent } from '../../form-fields/form-autocomplete/form-autocomplete.component';
 import { FormCheckboxComponent } from '../../form-fields/form-checkbox/form-checkbox.component';
 import { BaseFieldComponentDirective } from '../directives/base-field.directive';
 import { FormSelectComponent } from '../../form-fields/form-select/form-select.component';
@@ -51,7 +50,7 @@ export enum FormFieldType {
   /** this component made to answer object types */
   FormGroup,
   FormRadio,
-  FormAutocomplete,
+  // FormAutocomplete,
   FormCheckbox,
   FormSelect,
   DynamicLazy,
@@ -63,9 +62,9 @@ class FormsFieldClassType<T = any, K extends keyof T = keyof T> {
     FormArray: FormArrayComponent as Type<FormArrayComponent<T, K>>,
     FormGroup: FormGroupComponent as Type<FormGroupComponent<T, K>>,
     FormRadio: FormRadioComponent as Type<FormRadioComponent<T, K>>,
-    FormAutocomplete: FormAutocompleteComponent as Type<
-      FormAutocompleteComponent<T, K>
-    >,
+    // FormAutocomplete: FormAutocompleteComponent as Type<
+    //   FormAutocompleteComponent<T, K>
+    // >,
     FormCheckbox: FormCheckboxComponent as Type<FormCheckboxComponent<T, K>>,
     FormSelect: FormSelectComponent as Type<FormSelectComponent<T, K>>,
     DynamicLazy: null as any,
@@ -86,7 +85,7 @@ export const FormFieldsDic = {
   FormArray: FormArrayComponent,
   FormGroup: FormGroupComponent,
   FormRadio: FormRadioComponent,
-  FormAutocomplete: FormAutocompleteComponent,
+  // FormAutocomplete: FormAutocompleteComponent,
   FormCheckbox: FormCheckboxComponent,
   FormSelect: FormSelectComponent,
   DynamicLazy: undefined as any,
@@ -291,14 +290,14 @@ interface User {
 
 const simpleForm: DynamicFormControl<User>[] = [
   {
-    field:'age',
-    type:'DynamicLazy',
-    'bodyStyle': {
-      'field':{
-        'styleClassObj':{
-          'px-10': false
-        }
-      }
+    field: 'age',
+    type: 'DynamicLazy',
+    bodyStyle: {
+      field: {
+        styleClassObj: {
+          'px-10': false,
+        },
+      },
     },
   },
   {
@@ -311,7 +310,7 @@ const simpleForm: DynamicFormControl<User>[] = [
         data: {
           formControlConfig: {
             type: 'Default',
-            onChange:({currentValue})=>null,
+            onChange: ({ currentValue }) => null,
           },
         },
       },
@@ -321,9 +320,8 @@ const simpleForm: DynamicFormControl<User>[] = [
     field: 'name',
     type: 'Default',
     bodyStyle: {},
-    onChange :({currentValue})=>null,
-    data: {
-    },
+    onChange: ({ currentValue }) => null,
+    data: {},
   },
   {
     field: 'payment',
@@ -357,7 +355,7 @@ const simpleForm: DynamicFormControl<User>[] = [
                             // formArrayConfig: [],
                             formControlConfig: {
                               field: '_',
-                              onChange: ({currentValue}) => null,
+                              onChange: ({ currentValue }) => null,
                               type: 'Default',
                               data: {
                                 // formGroupConfig: [],

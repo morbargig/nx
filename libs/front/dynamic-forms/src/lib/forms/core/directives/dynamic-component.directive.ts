@@ -24,6 +24,7 @@ export class DynamicComponentDirective<T = any, C extends Type<T> = Type<T>>
   ) {}
 
   public ngOnDestroy() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-extra-non-null-assertion
     this?.component?.instance?.['ngOnDestroy']!?.();
   }
 

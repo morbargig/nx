@@ -60,7 +60,6 @@ export class JsonCellComponent<
 import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
-  selector: 'json-dialog',
   template: `
     <h1 mat-dialog-title>JSON Preview</h1>
     <div mat-dialog-content>

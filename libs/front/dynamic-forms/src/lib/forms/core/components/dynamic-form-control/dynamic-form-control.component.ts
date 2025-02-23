@@ -164,7 +164,7 @@ export class DynamicFormControlComponent<T = any>
             )
           );
         }
-        merge(...eventArr?.filter((x) => x))
+        merge(...eventArr.filter((x) => x))
           .pipe(takeWhile(() => this.isActive))
           .subscribe(() => this.cd.detectChanges());
       });

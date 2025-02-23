@@ -196,9 +196,9 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
 
   public removeConfig(index: number) {
     const ctrl = this.control?.at(index);
-    this.config?.data?.onRemove!?.({ val: ctrl.value, ctrl });
+    this.config?.data?.onRemove?.({ val: ctrl.value, ctrl });
     this.control.removeAt(index);
-    this.config?.onChange!?.({
+    this.config?.onChange?.({
       currentValue: this.control.value,
       control: this.control,
     });
@@ -294,7 +294,7 @@ export class FormArrayComponent<T = any, K extends keyof T = keyof T>
     //   .subscribe(() => {
     //     newControl?.patchValue(state);
     //   });
-    this.config?.onChange!?.({
+    this.config?.onChange?.({
       currentValue: this.control.value,
       control: this.control,
     });

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PillCellComponent } from './pill-cell.component';
+import { ActivatedRoute } from '@angular/router';
 
 describe('PillCellComponent', () => {
   let component: PillCellComponent;
@@ -8,6 +9,9 @@ describe('PillCellComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PillCellComponent],
+      providers: [
+        { provide: ActivatedRoute, useValue: { snapshot: { params: {} } } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PillCellComponent);

@@ -271,7 +271,6 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'json-dialog',
   template: `
     <h1 mat-dialog-title>JSON Preview</h1>
 

@@ -1,6 +1,6 @@
 # Nx App
 
-### infrestrector code for nx workspace and angular infrestrector libs and more
+### infrastructures code for nx workspace and angular infrastructures libs and more
 
 - <app-name> refer to app or lib (app/lib names can be found in workspace.json)
 

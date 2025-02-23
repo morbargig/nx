@@ -3,7 +3,6 @@ import { ResponseDto } from '../dto/response.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import {
   getSchemaPath,
-  ApiCreatedResponse,
   ApiResponseMetadata,
   ApiExtraModels,
 } from '@nestjs/swagger';
@@ -42,6 +41,7 @@ export const ApiCustomResponse = <TModel extends object>({
   {
     return applyDecorators(
       // ...recursiveFixModelsLegacy<TModel>(dependencies),
+      // eslint-disable-next-line @typescript-eslint/ban-types
       ...(dtoClass ? [ApiExtraModels(dtoClass as Function)] : []),
       ApiResponse({
         description,

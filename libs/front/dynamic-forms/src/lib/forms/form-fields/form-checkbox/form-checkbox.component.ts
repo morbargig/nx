@@ -22,7 +22,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
       <label class="custom-control-label" [for]="id">
         <ng-container>
           <softbar-dynamic-component
-            [dynamicComponent]="Temp"
+            [softbarDynamicComponent]="Temp"
           ></softbar-dynamic-component>
         </ng-container>
         <ng-template #defaultLabelTemp>

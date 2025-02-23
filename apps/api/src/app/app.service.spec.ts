@@ -1,5 +1,4 @@
 import { Test } from '@nestjs/testing';
-
 import { AppService } from './app.service';
 
 describe('AppService', () => {
@@ -13,9 +12,9 @@ describe('AppService', () => {
     service = app.get<AppService>(AppService);
   });
 
-  describe('getData', () => {
-    it('should return "Welcome to api!"', () => {
-      expect(service.getHelloFormConf()).toBeTruthy();
+  describe('healthCheck', () => {
+    it('should return true', () => {
+      expect(service.healthCheck).toBeTruthy();
     });
   });
 });
