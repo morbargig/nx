@@ -18,18 +18,11 @@ import { LoadingCellComponent } from './cell-components/loading-cell/loading-cel
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FilterHiddenPipe } from './pipes/filter-hidden.pipe';
-
-export type tableElStyleObj = {
-  styleClass?: string;
-  style?: { [k: string]: string };
-  styleClassObj?: { [k: string]: boolean };
-};
-type tableElementsStyleObj<T extends string = ''> = {
-  [key in T]?: tableElStyleObj;
-};
-type tableElements = 'table' | 'thead' | 'tr' | 'th' | 'td' | 'tbody';
-
-export type tableBodyStylesObj = tableElementsStyleObj<tableElements>;
+import {
+  tableBodyStylesObj,
+  tableElements,
+  tableElStyleObj,
+} from './styles/styles';
 
 @Component({
   selector: 'softbar-app-table',

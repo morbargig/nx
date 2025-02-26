@@ -7,7 +7,6 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { ExtendsCellComponent } from './extends-cell/extends-cell.component';
-import { tableElStyleObj } from '../table.component';
 import { BaseCellComponent } from '../directives/base-cell.directive';
 import { PillCellComponent } from './pill-cell/pill-cell.component';
 import { DateCellComponent } from './date-cell/date-cell.component';
@@ -15,6 +14,7 @@ import { LoadingCellComponent } from './loading-cell/loading-cell.component';
 import { BaseCellData } from './table.types.helpers';
 import { BooleanCellComponent } from './boolean-cell/boolean-cell.component';
 import { JsonCellComponent } from './json-cell/json-cell.component';
+import { tableElStyleObj } from '../styles/styles';
 
 type componentWithData<
   T = any,
