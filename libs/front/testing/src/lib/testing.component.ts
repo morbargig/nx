@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 @Component({
   standalone: true,
   imports: [CommonModule],
-  providers: [{ provide: ActivatedRoute }],
   template: `
     <h1 class="text-4xl">
       Welcome to testing softbar applications infrastructures

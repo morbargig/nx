@@ -71,4 +71,10 @@
   </button>
 </div>
 
-<softbar-app-table [columns]="columns" [items]="items"> </softbar-app-table>
+<softbar-app-table
+  [columns]="columns"
+  [extendsColumns]="eColumns"
+  [items]="items"
+  [getExtendsData]="getExtendsData"
+>
+</softbar-app-table>

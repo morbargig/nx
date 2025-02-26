@@ -317,8 +317,22 @@ export class TestingTableComponent {
       label: 'Is Happy',
       type: 'Boolean',
     },
+    {
+      field: 'job',
+      label: 'More Data',
+      type: 'Extends',
+    },
   ];
   columns: ITableColumn<entityType>[] = this.originalColumn as any;
+  eColumns: ITableColumn<entityType['job']>[] = [
+    {
+      field: 'title',
+      type: 'Default',
+    },
+  ];
+  getExtendsData: TableComponent<entityType, entityType['job']>['getExtendsData'] = (
+    i?
+  ) => i.job;
 
   formOnSubmitEditColumns(event: { __: entityColumnsType[] }) {
     this.columns = event.__ as any;
