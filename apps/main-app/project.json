@@ -83,7 +83,8 @@
           "entry": "apps/main-app/src/server.ts"
         },
         "prerender": true,
-        "browser": "apps/main-app/src/main.ts"
+        "browser": "apps/main-app/src/main.ts",
+        "tsConfig": "apps/main-app/tsconfig.ssr.json"
       }
     },
     "serve": {
