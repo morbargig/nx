@@ -14,14 +14,12 @@ import {
       <router-outlet></router-outlet>
     </div>
   `,
-  styleUrls: ['./app.component.scss'],
   imports: [RouterModule, AppMainAppTranslateModule],
 })
 export class AppComponent {
   constructor(
-    private appMainAppTranslationService: AppMainAppTranslationService
-  ) // private appTranslateService: AppTranslateService<
-  //   [AppMainAppTranslationService]
+    private appMainAppTranslationService: AppMainAppTranslationService // private appTranslateService: AppTranslateService<
+  ) //   [AppMainAppTranslationService]
   // >,
   {}
   get translation() {

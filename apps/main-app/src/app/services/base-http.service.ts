@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import type {
-  BFF_ROUTES_TYPE,
+import {
   ExtractPaths,
+  BFF_ROUTES_TYPE,
   ResolvePath,
 } from '@softbar-bff-routes';
 

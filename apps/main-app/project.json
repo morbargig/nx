@@ -2,26 +2,26 @@
   "name": "main-app",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/main-app/src",
   "prefix": "softbar",
+  "sourceRoot": "apps/main-app/src",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "allowedCommonJsDependencies": [],
         "outputPath": "dist/apps/main-app",
-        "index": {
-          "input": "apps/main-app/src/index.html",
-          "output": "404.html"
-        },
+        "polyfills": ["zone.js"],
+        "index": "apps/main-app/src/index.html",
         "main": "apps/main-app/src/main.ts",
         "tsConfig": "apps/main-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "baseHref": "/nx/",
         "assets": [
-          "apps/main-app/src/favicon.ico",
-          "apps/main-app/src/assets",
+          {
+            "glob": "**/*",
+            "input": "apps/main-app/public"
+          },
           {
             "input": "libs/front/dynamic-forms/src/assets/front/dynamic-forms",
             "glob": "**/*",
@@ -38,7 +38,6 @@
       },
       "configurations": {
         "production": {
-          "sourceMap": false,
           "budgets": [
             {
               "type": "initial",
@@ -47,8 +46,8 @@
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
             }
           ],
           "fileReplacements": [
@@ -60,15 +59,32 @@
           "outputHashing": "all"
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
+          "sourceMap": true
         }
       },
       "defaultConfiguration": "production"
+    },
+    "ssr": {
+      "executor": "@angular-devkit/build-angular:application",
+      "configurations": {
+        "production": {
+          "buildTarget": "main-app:build:production"
+        },
+        "development": {
+          "buildTarget": "main-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "server": "apps/main-app/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/main-app/src/server.ts"
+        },
+        "prerender": true,
+        "browser": "apps/main-app/src/main.ts"
+      }
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
@@ -82,8 +98,13 @@
       },
       "defaultConfiguration": "development",
       "options": {
-        "proxyConfig": "apps/main-app/proxy.conf.json",
         "host": "0.0.0.0"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "main-app:build"
       }
     },
     "lint": {
@@ -91,44 +112,19 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/main-app"],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/main-app/jest.config.ts"
-      },
-      "storybook": {
-        "executor": "@storybook/angular:start-storybook",
-        "options": {
-          "port": 4400,
-          "configDir": "apps/main-app/.storybook",
-          "browserTarget": "main-app:build",
-          "compodoc": false
-        },
-        "configurations": {
-          "ci": {
-            "quiet": true
-          }
-        }
-      },
-      "build-storybook": {
-        "executor": "@storybook/angular:build-storybook",
-        "outputs": ["{options.outputPath}"],
-        "options": {
-          "outputDir": "dist/storybook/main-app",
-          "configDir": "apps/main-app/.storybook",
-          "browserTarget": "main-app:build",
-          "compodoc": false
-        },
-        "configurations": {
-          "ci": {
-            "quiet": true
-          }
-        }
-      },
-      "deploy": {
-        "builder": "angular-cli-ghpages:deploy",
-        "options": {}
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "main-app:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/main-app/browser",
+        "spa": true
       }
     }
-  },
-  "tags": []
+  }
 }

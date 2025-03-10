@@ -14,7 +14,7 @@
           {
             "type": "attribute",
             "prefix": "softbar",
-            "style": "camelCase"
+                   "style": "camelCase"
           }
         ],
         "@angular-eslint/component-selector": [
@@ -22,7 +22,7 @@
           {
             "type": "element",
             "prefix": "softbar",
-            "style": "kebab-case"
+              "style": "kebab-case"
           }
         ]
       }

@@ -73,8 +73,7 @@ import { CommonModule } from '@angular/common';
   ],
 })
 export class TestingComponent implements AfterViewInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   // Lazy load FormsComponent
   formsComponent$ = import('./pages/forms/forms.component').then(

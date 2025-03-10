@@ -1,7 +1,7 @@
 {
   "name": "softbar-bff-routes",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/full-stack/softbar-bff-routes/src",
+  "sourceRoot": "libs/full-stack/bff-routes/src",
   "projectType": "library",
   "targets": {
     "lint": {

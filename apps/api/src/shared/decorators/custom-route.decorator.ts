@@ -2,8 +2,8 @@ import { applyDecorators } from '@nestjs/common';
 import { Get, Post, Put, Delete } from '@nestjs/common';
 import { CustomController } from './custom-control.decoretor';
 import {
-  BFF_CONTROLLER_TYPE,
   BFF_ROUTES_TYPE,
+  BFF_CONTROLLER_TYPE,
   ControllerApiType,
 } from '@softbar-bff-routes';
 
