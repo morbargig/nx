@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmain_app=self.webpackChunkmain_app||[]).push([[872],{7872:(n,a,s)=>{s.r(a),s.d(a,{default:()=>u});const u={APPS_MAIN_APP_APP:{h1:"infrastructures demo application softbar"}}}}]);
