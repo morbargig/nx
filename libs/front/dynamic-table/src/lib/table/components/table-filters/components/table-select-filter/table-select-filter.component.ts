@@ -3,20 +3,29 @@ import {
   Component,
   forwardRef,
   Input,
-  AfterViewInit,
   ChangeDetectorRef,
+  AfterViewInit,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import {
-  ITableFilterOption,
-  ITableFilter,
-} from '../table-filters/table-filters.component';
+import { ITableFilterOption, ITableFilter } from '../table-filters/helpers';
+import { CommonModule } from '@angular/common';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'softbar-app-table-select-filter',
-  templateUrl: './table-select-filter.component.html',
-  styleUrls: ['./table-select-filter.component.scss'],
+  template: `<div [matMenuTriggerFor]="dropDownMenu" class="cursor-pointer">
+      <span>{{ selectedOption?.label || 'Select...' }}</span>
+    </div>
+    <mat-menu #dropDownMenu="matMenu">
+      <ng-container *ngFor="let option of options">
+        <button mat-menu-item (click)="handleChange(option)">
+          {{ option.label }}
+        </button>
+      </ng-container>
+    </mat-menu> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CommonModule, MatMenuModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -26,12 +35,12 @@ import {
   ],
 })
 export class TableSelectFilterComponent<T = any>
-  implements AfterViewInit, ControlValueAccessor
+  implements ControlValueAccessor, AfterViewInit
 {
   constructor(private cd: ChangeDetectorRef) {}
   public isMenuOpen: boolean;
   public selectedOption: ITableFilterOption<T>;
-  private _filterCtl: ITableFilter<T>;
+  @Input({ required: true }) filterCtl: ITableFilter<T>;
 
   private onTouched: (...args: any[]) => any = () => null;
   private onChanged: (...args: any[]) => any = () => null;
@@ -40,15 +49,8 @@ export class TableSelectFilterComponent<T = any>
     return this.filterCtl?.options;
   }
 
-  @Input() public set filterCtl(v: ITableFilter<T>) {
-    this._filterCtl = v;
-  }
-  public get filterCtl(): ITableFilter<T> {
-    return this._filterCtl;
-  }
-
   ngAfterViewInit() {
-    this.handleChange(this.filterCtl.initialValue());
+    this.handleChange(this.filterCtl?.initialValue?.());
   }
 
   public toggleOpen() {

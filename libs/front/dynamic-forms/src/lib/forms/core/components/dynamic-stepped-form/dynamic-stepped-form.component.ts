@@ -16,7 +16,6 @@ import { Directionality } from '@angular/cdk/bidi';
 import { BehaviorSubject, firstValueFrom, timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { StepperService } from '../../services/stepper.service';
-import { range } from 'lodash-es';
 import { StepFormGroup } from '../../interfaces/step-form-group';
 import { AbstractControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -24,6 +23,7 @@ import { ValidationMessagesComponent } from '../validation-messages/validation-m
 import { FormStepperComponent } from '../form-stepper/form-stepper.component';
 import { DynamicFormGroupComponent } from '../dynamic-form-group/dynamic-form-group.component';
 import { SafePipe } from '../../pipes/safe.pipe';
+import { range } from '../../../../utils/range.func';
 
 @Component({
   selector: 'softbar-app-dynamic-stepped-form',

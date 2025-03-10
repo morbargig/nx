@@ -1,93 +1,75 @@
 <div
-  class="flex pt-[5.6563rem] pb-[4.625rem] text-lg font-medium leading-6 underline-offset-2"
+  class="flex pt-20 pb-16 text-lg font-medium leading-6 underline-offset-2 items-center justify-center space-x-4"
   *ngIf="pages"
 >
+  <!-- Previous Page Button -->
   <div
-    class="w-8 h-8 md:mr-0 md:ml-3 border-2 bg-white rounded-full flex items-center justify-around"
+    class="w-12 h-12 border-2 bg-white rounded-full flex items-center justify-center transition-all duration-200"
     (click)="selectPage(pageNum - 1); $event.preventDefault()"
     [attr.tabindex]="previousDisabled() ? '-1' : '0'"
     [attr.aria-disabled]="previousDisabled() ? 'true' : null"
-    [attr.aria-label]="previousDisabled() ? 'לא זמין' : 'לעמוד הקודם'"
+    [attr.aria-label]="nextDisabled() ? 'not available' : 'prev page'"
     [ngClass]="
       previousDisabled()
-        ? 'opacity-30 border-med-gray text-med-gray cursor-default'
-        : 'border-primary-blue-70 text-primary-blue cursor-pointer'
+        ? 'opacity-30 border-gray-400 text-gray-400 cursor-default'
+        : 'border-blue-600 text-blue-600 hover:bg-blue-100 cursor-pointer'
     "
     role="button"
   >
-    <!--    <app-icon-->
-    <!--      class="h-4 w-4"-->
-    <!--      [customClass]="!startPosition ? 'gray' : 'transform rotate-180'"-->
-    <!--      [iconName]="iconClass.chevronRight"-->
-    <!--    >-->
-    <!--    </app-icon>-->
-    <img
-      class="rotate-90"
-      src="./assets/front/dynamic-table/btn-table-extend-close.svg"
-    />
+    <mat-icon>arrow_back</mat-icon>
   </div>
-  <div
-    class="flex center items-center text-center justify-center text-dark-gray"
-  >
-    <div
-      *ngFor="let pageNumber of pages; let i = index"
-      class="md:mx-1 caption-1"
-    >
-      <div *ngIf="isEllipsis(pageNumber)">…</div>
-      <div *ngIf="!isEllipsis(pageNumber)">
-        <div class="cursor-pointer" 
-            (click)="selectPage(pageNumber)"
-            [attr.aria-label]="pageNumber === pageNum ? 'עמוד נוכחי' + pageNumber : 'מעבר לעמוד ' + pageNumber"
-            tabindex="0"
-            role="button"
-            >
-          <span
-            class="w-8 mx-4"
-            [ngClass]="{
-              'underline text-primary-blue': pageNumber === pageNum
-            }"
-            >{{ pageNumber }}</span
-          >
+
+  <!-- Page Numbers -->
+  <div class="flex items-center justify-center text-gray-700 space-x-2">
+    <div *ngFor="let pageNumber of pages; let i = index" class="text-center">
+      <div *ngIf="isEllipsis(pageNumber)" class="px-2">…</div>
+      <div
+        *ngIf="!isEllipsis(pageNumber)"
+        class="cursor-pointer transition-all duration-200"
+      >
+        <div
+          (click)="selectPage(pageNumber)"
+          [attr.aria-label]="
+            pageNumber === pageNum
+              ? 'current page' + pageNumber
+              : 'go to page ' + pageNumber
+          "
+          tabindex="0"
+          role="button"
+          class="w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold"
+          [ngClass]="{
+            'bg-blue-600 text-white': pageNumber === pageNum,
+            'text-blue-600 hover:bg-blue-100': pageNumber !== pageNum
+          }"
+        >
+          {{ pageNumber }}
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Next Page Button -->
   <div
-    class="w-8 h-8 md:mr-0 md:ml-3 border-2 bg-white rounded-full flex items-center justify-around"
+    class="w-12 h-12 border-2 bg-white rounded-full flex items-center justify-center transition-all duration-200"
     [ngClass]="
       nextDisabled()
-        ? 'opacity-30 border-med-gray text-med-gray cursor-default'
-        : 'border-primary-blue-70 text-primary-blue cursor-pointer'
+        ? 'opacity-30 border-gray-400 text-gray-400 cursor-default'
+        : 'border-blue-600 text-blue-600 hover:bg-blue-100 cursor-pointer'
     "
     (click)="selectPage(pageNum + 1); $event.preventDefault()"
     [attr.tabindex]="nextDisabled() ? '-1' : '0'"
     [attr.aria-disabled]="nextDisabled() ? 'true' : null"
-    [attr.aria-label]="nextDisabled() ? 'לא זמין' : 'לעמוד הבא'"
+    [attr.aria-label]="nextDisabled() ? 'not available' : 'next page'"
     role="button"
   >
-    <!--    <app-icon class="h-4 w-4" [iconName]="iconClass.chevronLeft"></app-icon>-->
-    <img
-      class="rotate-[270deg]"
-      src="./assets/front/dynamic-table/btn-table-extend-close.svg"
-    />
+    <mat-icon>arrow_forward</mat-icon>
   </div>
-  <div
-    class="pr-6 text-sm text-dark-gray font-normal flex center items-center text-center justify-center"
-  >
+
+  <!-- Total Records Info -->
+  <div class="text-sm text-gray-600 font-normal flex items-center">
     <span>{{ currentRecordsFrom() }}</span>
     -
     <span>{{ currentRecordsTo() }}</span>
-    &nbsp; תוצאות מתוך
-    {{ totalRecords }}
+    &nbsp; Total Records {{ totalRecords }}
   </div>
-  <!--  {{-->
-  <!--    console.log({-->
-  <!--      totalRecords: totalRecords,-->
-  <!--      pageSize: pageSize,-->
-  <!--      pagesLength: pagesLength,-->
-  <!--      pages: pages,-->
-  <!--      pageNum: pageNum,-->
-  <!--      startPosition: startPosition-->
-  <!--    })-->
-  <!--  }}-->
 </div>

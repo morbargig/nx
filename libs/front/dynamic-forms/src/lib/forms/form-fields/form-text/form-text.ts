@@ -8,20 +8,31 @@ export interface FormTextData<T = any, K extends keyof T = keyof T>
   cols?: number;
   step?: number;
   enterClicked?: (val: any, ctrl: AbstractControl) => void;
-  inputType?:
-    | 'hidden'
-    | 'text'
-    | 'password'
-    | 'number'
-    | 'datetime-local'
-    | 'date'
-    | 'month'
-    | 'week'
-    | 'time'
-    | 'tel'
-    | 'color'
-    | 'label'
-    | 'separator';
+  inputType?: ValidInputType;
 
   // public keyFilter: DefaultMasks;
 }
+
+type ValidInputType =
+  | 'button'
+  | 'checkbox'
+  | 'color'
+  | 'date'
+  | 'datetime-local'
+  | 'email'
+  | 'file'
+  | 'hidden'
+  | 'image'
+  | 'month'
+  | 'number'
+  | 'password'
+  | 'radio'
+  | 'range'
+  | 'reset'
+  | 'search'
+  | 'submit'
+  | 'tel'
+  | 'text'
+  | 'time'
+  | 'url'
+  | 'week';

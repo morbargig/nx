@@ -1,11 +1,11 @@
+import { applyDecorators } from '@nestjs/common';
+import { Get, Post, Put, Delete } from '@nestjs/common';
+import { CustomController } from './custom-control.decoretor';
 import {
   BFF_CONTROLLER_TYPE,
   BFF_ROUTES_TYPE,
   ControllerApiType,
-} from '@softbar/api-interfaces';
-import { applyDecorators } from '@nestjs/common';
-import { Get, Post, Put, Delete } from '@nestjs/common';
-import { CustomController } from './custom-control.decoretor';
+} from '@softbar-bff-routes';
 
 export function CustomRoute<C extends keyof BFF_ROUTES_TYPE>(
   path: keyof BFF_ROUTES_TYPE[C],

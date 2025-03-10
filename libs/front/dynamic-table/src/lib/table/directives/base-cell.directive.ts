@@ -57,9 +57,8 @@ export abstract class BaseCellComponent<
   // }
   @HostBinding('class') private get baseCellClasses(): string {
     const elStyle = this.col?.styleFunc
-      ? this.col.styleFunc(this.value)
+      ? this.col.styleFunc({ val: this.value, item: this.item })
       : this.col?.bodyStyle?.['cell-component'];
-
     return (
       (elStyle?.styleClass ?? '') +
       ' ' +

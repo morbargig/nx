@@ -13,7 +13,7 @@ import {
   StepFormGroupGetRawValue,
   WizardPageConfig,
 } from '../interfaces/step-form-group';
-import { range } from 'lodash-es';
+import { range } from '../../../utils/range.func';
 type KeysUnMatching<T, V> = { [K in keyof T]-?: T[K] extends V ? never : K }[keyof T];
 
 @Injectable({

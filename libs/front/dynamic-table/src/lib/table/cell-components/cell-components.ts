@@ -185,8 +185,11 @@ interface ITableColumnObj<
       ) => tableElStyleObj)
     | (() => tableElStyleObj);
   styleFunc?:
-    | ((this: ITableColumnObj<T, DModel, K>, item?: T[K]) => tableElStyleObj)
-    | ((item?: T[K]) => tableElStyleObj);
+    | ((
+        this: ITableColumnObj<T, DModel, K>,
+        args: { val: T[K]; item?: T }
+      ) => tableElStyleObj)
+    | ((args: { val: T[K]; item?: T }) => tableElStyleObj);
 
   /** if the table represents data of items like users so 'birthday' is one of the user filed that can display on the table */
   // parseColObj?: ({

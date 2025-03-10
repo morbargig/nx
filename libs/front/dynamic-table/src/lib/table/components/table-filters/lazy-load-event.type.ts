@@ -6,8 +6,8 @@ export interface LazyLoadEvent<T = any> {
   pageNum?: number;
   pageSize?: number;
   filters?: FilterObject<T>[];
-  sort: keyof T
-  sortDirection?:'ASC' | 'DESC' 
+  sort?: keyof T;
+  sortDirection?: 'ASC' | 'DESC';
 }
 
 export interface FilterDataResponse<T = any> {

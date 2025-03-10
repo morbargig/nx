@@ -10,11 +10,14 @@ import { LazyLoadEvent } from '../../../table-filters/lazy-load-event.type';
 import { firstValueFrom, timer } from 'rxjs';
 import { BaseComponent } from '../../../../core/components/base-component.directive';
 import { getValueInRange, isNumber } from '../../../../util';
+import { CommonModule } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'softbar-app-table-paging',
   templateUrl: './table-paging.component.html',
-  styleUrls: ['./table-paging.component.scss'],
+  imports: [CommonModule, MatIcon],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TablePagingComponent

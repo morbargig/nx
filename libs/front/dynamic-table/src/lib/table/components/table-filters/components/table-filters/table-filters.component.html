@@ -1,14 +1,41 @@
 <form
   *ngIf="form"
   [formGroup]="form"
-  class="pb-4 whitespace-nowrap overflow-auto"
+  class="pb-4 whitespace-nowrap overflow-auto flex flex-wrap gap-4 items-center"
 >
   <form
     *ngFor="let ctl of filters"
     [formGroup]="filterControl(ctl?.key)"
-    class="inline-block ml-40px desktop:ml-34px"
+    class="flex gap-4 items-center"
+    [ngClass]="ctl?.hidden ? 'hidden' : ''"
   >
-    <softbar-app-table-select-filter formControlName="value" [filterCtl]="ctl">
-    </softbar-app-table-select-filter>
+    @switch (ctl?.filterType) { @case ('select') {
+    <softbar-app-table-select-filter
+      [formControlName]="'value'"
+      [filterCtl]="ctl"
+    />
+    } @case ('multiSelect') {
+    <softbar-app-table-multi-select-filter
+      [formControlName]="'value'"
+      [filterCtl]="ctl"
+    />
+    } @default {
+    <softbar-table-select-input
+      [ctl]="ctl"
+      [matchModeFormControl]="$any(filterControl(ctl?.key).get('matchMode'))"
+      [inputFormControl]="$any(filterControl(ctl?.key).get('value'))"
+    />
+    } }
   </form>
+
+  <!-- Reset Filters Button -->
+  @if (showResetFilters) {
+  <button
+    type="button"
+    class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+    (click)="form.reset()"
+  >
+    {{ showResetFilters && typeof showResetFilters === 'string' ? showResetFilters : 'Reset' }}
+  </button>
+  }
 </form>

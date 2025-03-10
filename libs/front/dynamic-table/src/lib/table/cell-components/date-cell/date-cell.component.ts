@@ -16,6 +16,7 @@ import { DateCellDataModel } from './date-cell-data.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports,
+  providers: [DatePipe],
 })
 export class DateCellComponent<
   T = any,

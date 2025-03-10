@@ -1,0 +1,25 @@
+<mat-form-field appearance="outline" class="full-width">
+  <mat-label>{{ ctl?.label }}</mat-label>
+  <div matSuffix class="dropdown-container">
+    <button mat-button [matMenuTriggerFor]="menu">
+      {{ selectedMode?.label || 'Select Filter' }}
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+  </div>
+  <input
+    [type]="ctl?.type || 'text'"
+    [formControl]="inputFormControl"
+    matInput
+    placeholder="Type here..."
+  />
+</mat-form-field>
+
+<mat-menu #menu="matMenu">
+  <button
+    mat-menu-item
+    *ngFor="let mode of ctl.matchModes"
+    (click)="setMatchMode(mode)"
+  >
+    {{ mode.label }}
+  </button>
+</mat-menu>

@@ -1,3 +1,10 @@
+
+@use '@angular/material' as mat;
+
+@include mat.core();
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

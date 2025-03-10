@@ -1,12 +1,10 @@
 import {
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnInit,
   Output,
   TemplateRef,
-  ViewChild,
 } from '@angular/core';
 import {
   FormArray,

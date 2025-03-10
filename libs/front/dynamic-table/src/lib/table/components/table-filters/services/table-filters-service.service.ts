@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { JsonPrimitive } from '@softbar/api-interfaces';
 import {
   LazyLoadEvent,
   FilterInsideObject,
@@ -7,6 +6,7 @@ import {
   FilterObject,
   FilterDataResponse,
 } from '../lazy-load-event.type';
+import { JsonPrimitive } from '@softbar/api-interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -15,39 +15,41 @@ export class TableFiltersServiceService {
   private static filterByMatchMode<T>(i: T, f: FilterObject<T>, k: keyof T) {
     {
       const filterObj: FilterInsideObject<T[keyof T]> = f[k];
+      // const matchMode = MatchMode[filterObj.matchMode];
+      if (!filterObj?.matchMode) return true;
       switch (filterObj.matchMode) {
         case MatchMode.Equals: {
           return i?.[k] == filterObj.value;
           break;
         }
         case MatchMode.NotEquals: {
-          return i?.[k] != filterObj.value;
+          return !(i?.[k] == filterObj.value);
           break;
         }
         case MatchMode.LessThan: {
           if (typeof filterObj.value == 'number') {
-            return i?.[k] < filterObj.value;
+            return Number(i?.[k]) < filterObj.value;
             break;
           }
           break;
         }
         case MatchMode.LessThanOrEquals: {
           if (typeof filterObj.value == 'number') {
-            return i?.[k] <= filterObj.value;
+            return Number(i?.[k]) <= filterObj.value;
             break;
           }
           break;
         }
         case MatchMode.GreaterThan: {
           if (typeof filterObj.value == 'number') {
-            return i?.[k] > filterObj.value;
+            return Number(i?.[k]) > filterObj.value;
             break;
           }
           break;
         }
         case MatchMode.GreaterThanOrEquals: {
           if (typeof filterObj.value == 'number') {
-            return i?.[k] >= filterObj.value;
+            return Number(i?.[k]) >= filterObj.value;
             break;
           }
           break;
@@ -160,11 +162,11 @@ export class TableFiltersServiceService {
           break;
         }
         default: {
-          return false;
+          return true;
           break;
         }
       }
-      return null;
+      return true;
     }
   }
 
@@ -185,7 +187,7 @@ export class TableFiltersServiceService {
         evt.pageNum * evt.pageSize,
         (evt.pageNum + 1) * evt.pageSize
       ),
-      totalRecords: filteredItems?.length,
+      totalRecords: filteredItems?.length ?? 0,
     };
   };
 }

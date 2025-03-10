@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
-/* eslint-disable @typescript-eslint/member-ordering */
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,6 +15,7 @@ import { LoadingCellComponent } from './cell-components/loading-cell/loading-cel
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FilterHiddenPipe } from './pipes/filter-hidden.pipe';
+
 import {
   tableBodyStylesObj,
   tableElements,
@@ -151,6 +149,7 @@ export class TableComponent<
   getExtendsDataItems = (
     items: T[] | undefined = this.items
   ): E[] | undefined =>
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-extra-non-null-assertion
     items?.map((item, index) => this.getExtendsData!?.(item, index));
   panelOpenState: boolean[] = [];
   togglePanel = (index: number, state?: boolean) => {
@@ -160,17 +159,19 @@ export class TableComponent<
     }
     this.extend.emit({ index: index, isOpen: state });
   };
-
   // more items
   showAll?: boolean;
   @Input() showLimitNumber?: number;
   @Input() showMoreTextsObj?: { more: string; less: string } = {
-    more: 'כל הפריטים',
-    less: 'הסתר',
+    more: 'show all',
+    less: 'less',
   };
   moreItems = (): void => {
     this.showAll = !this.showAll;
   };
+  @Input({ required: false }) trStyleFunc?: (
+    item?: T
+  ) => tableElStyleObj['styleClass'];
 
   // not-found cell
   @Input() notFoundColumn?: ITableColumn<T>;

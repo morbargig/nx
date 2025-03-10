@@ -1,9 +1,9 @@
 name: Update All README Files Dynamically
 
-on:
-  push:
-    paths:
-      - '**/README.md'  # This will match any README.md file in any directory
+# on:
+#   push:
+#     paths:
+#       - '**/README.md'  # This will match any README.md file in any directory
 
 jobs:
   update-readmes:

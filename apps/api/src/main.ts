@@ -19,7 +19,7 @@ async function bootstrap() {
     //   }
     // }] : [])
   );
-  const globalPrefix = '/api';
+  const globalPrefix = 'api';
   const swaggerPath = `${globalPrefix}/swagger`;
   app.setGlobalPrefix(globalPrefix);
   setupOpenApi(app, swaggerPath);
